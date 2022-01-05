@@ -7,6 +7,7 @@ module com.example.lab_gui {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires junit;
+    requires org.apache.pdfbox;
 
     opens com.example.lab_gui to javafx.fxml;
     exports com.example.lab_gui;

@@ -17,7 +17,14 @@ import Validate.MessageValidator;
 import Validate.UserValidator;
 import Validate.Validator;
 import Service.*;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -336,7 +343,7 @@ public class Controller {
             if(message.getFrom() == id1 && message.getTo() == id2) {
                 if(message.getId_reply() != null) {
                     Message message1 = messageService.findRecord(message.getId_reply());
-                    messages_filtered.add("Reply la " + message1.getMessage());
+                    messages_filtered.add("Reply la \"" + message1.getMessage() + "\"");
                 }
                 messages_filtered.add(user1.getFirstName() + ": " + message.getMessage());
             }
@@ -646,6 +653,83 @@ public class Controller {
         objects.add(username);
         objects.add(password);
         userService.createRecord(objects);
+    }
+
+    public void friendsAndMessagesBetweenADate(int id, Date date_start, Date date_end, File file_dest)
+            throws IOException, SQLException {
+        PDDocument document = new PDDocument();
+        PDPage pdPageFriendships = new PDPage();
+        document.addPage(pdPageFriendships);
+
+        List<FriendshipDTO> friendships = getAllTypesOfFriendshipsOf(id);
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, pdPageFriendships);
+
+        contentStream.beginText();
+
+        contentStream.setLeading(14.5f);
+
+        contentStream.newLineAtOffset(25, 725);
+        contentStream.setFont(PDType1Font.TIMES_BOLD, 15);
+        contentStream.showText("Friendships:");
+        contentStream.setFont(PDType1Font.TIMES_ITALIC, 12);
+        for(FriendshipDTO friendship : friendships) {
+            if(friendship.getDate().getTime() >= date_start.getTime() &&
+                    friendship.getDate().getTime() <= date_end.getTime()) {
+                contentStream.newLine();
+                String text;
+                if(friendship.getId() == id)
+                    text =
+                            friendship.getFirst_name() + " " +
+                            friendship.getStatus() + " " +
+                            friendship.getDate().toString();
+                else
+                    text =
+                            friendship.getSecond_name() + " " +
+                            friendship.getStatus() + " " +
+                            friendship.getDate().toString() ;
+                text = text.replace("\n", "").replace("\r", "");
+                contentStream.showText(text);
+            }
+        }
+
+        contentStream.endText();
+        contentStream.close();
+
+        PDPage pdPageMessages = new PDPage();
+        document.addPage(pdPageMessages);
+
+        List<Message> messages = (List<Message>) getMessages();
+
+        contentStream = new PDPageContentStream(document, pdPageMessages);
+
+        contentStream.beginText();
+
+        contentStream.setLeading(14.5f);
+
+        contentStream.newLineAtOffset(25, 725);
+        contentStream.setFont(PDType1Font.TIMES_BOLD, 15);
+        contentStream.showText("Messages:");
+        contentStream.setFont(PDType1Font.TIMES_ITALIC, 12);
+        for(Message message : messages) {
+            if(
+                    message.getTo() == id &&
+                    message.getDate().getTime() >= date_start.getTime() &&
+                    message.getDate().getTime() <= date_end.getTime())  {
+                String text = userService.findRecord(message.getFrom()) + " " +
+                        message.getMessage() + " " +
+                        message.getDate();
+                text = text.replace("\n", "").replace("\r", "");
+                contentStream.newLine();
+                contentStream.showText(text);
+            }
+        }
+
+        contentStream.endText();
+        contentStream.close();
+
+        document.save(file_dest);
+        document.close();
     }
 }
 
