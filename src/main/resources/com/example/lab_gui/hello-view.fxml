@@ -17,7 +17,7 @@
          <children>
             <AnchorPane>
                <children>
-                  <TableView fx:id="friendshipTable" onMouseClicked="#select_friendship" prefHeight="400.0" prefWidth="226.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="friendshipTable" onMouseClicked="#selectFriendship" prefHeight="400.0" prefWidth="226.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                         <TableColumn fx:id="relationColumn" prefWidth="60.79998850822449" resizable="false" text="Relation" />
                       <TableColumn fx:id="userColumn" prefWidth="104.79998397827148" resizable="false" text="User" />
@@ -42,7 +42,7 @@
                               <Font name="Times New Roman" size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="selectedUser" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#try_to_find_user_by_ID" prefHeight="67.0" prefWidth="243.0" style="-fx-background-color: cyan;">
+                        <TextField fx:id="selectedUser" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#tryToFindUserByID" prefHeight="67.0" prefWidth="243.0" style="-fx-background-color: cyan;">
                            <effect>
                               <InnerShadow />
                            </effect></TextField>
@@ -50,7 +50,7 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <TableView fx:id="userTable" onMouseClicked="#selected_user" prefHeight="150.0" prefWidth="342.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;">
+            <TableView fx:id="userTable" onMouseClicked="#selectedUser" prefHeight="150.0" prefWidth="342.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;">
               <columns>
                 <TableColumn fx:id="userID" prefWidth="36.80006265640259" resizable="false" text="ID" />
                   <TableColumn fx:id="userFirstName" prefWidth="153.60003662109375" resizable="false" text="First Name" />
@@ -62,11 +62,11 @@
             </TableView>
             <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="317.0" style="-fx-background-color: cyan;">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#reveal_potential_friends" prefHeight="26.0" prefWidth="290.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Add friend" textAlignment="CENTER" />
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#reveal_current_friends" prefHeight="26.0" prefWidth="278.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: Midnightblue;" text="Remove friend" textAlignment="CENTER" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealPotentialFriends" prefHeight="26.0" prefWidth="290.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Add friend" textAlignment="CENTER" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealCurrentFriends" prefHeight="26.0" prefWidth="278.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: Midnightblue;" text="Remove friend" textAlignment="CENTER" />
                </children>
             </HBox>
-            <TableView fx:id="hiddenTable" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#set_passive_user" prefHeight="157.0" prefWidth="342.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" visible="false">
+            <TableView fx:id="hiddenTable" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#setPassiveUser" prefHeight="157.0" prefWidth="342.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" visible="false">
               <columns>
                 <TableColumn fx:id="hiddenID" prefWidth="31.999924063682556" resizable="false" text="ID" />
                   <TableColumn fx:id="hiddenFirstName" prefWidth="156.7999267578125" resizable="false" text="First Name" />
@@ -78,7 +78,7 @@
             </TableView>
             <HBox fx:id="changeStatusSection" prefHeight="29.0" prefWidth="342.0" style="-fx-border-color: midnightblue; -fx-background-color: cyan;" visible="false">
                <children>
-                  <Button fx:id="changeFriendStatus" mnemonicParsing="false" onAction="#change_status_of_friendship" prefHeight="26.0" prefWidth="128.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Unfriend/Befriend" />
+                  <Button fx:id="changeFriendStatus" mnemonicParsing="false" onAction="#changeStatusOfFriendship" prefHeight="26.0" prefWidth="128.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Unfriend/Befriend" />
                   <Label fx:id="passiveUserName" alignment="CENTER" prefHeight="30.0" prefWidth="266.0" style="-fx-background-color: cyan;" text="PersonName">
                      <effect>
                         <InnerShadow />
@@ -110,7 +110,7 @@
                      <children>
                         <AnchorPane HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="sendMessageButton" mnemonicParsing="false" onAction="#send_message" prefHeight="54.0" prefWidth="66.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Send&#10;Message" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <Button fx:id="sendMessageButton" mnemonicParsing="false" onAction="#sendMessage" prefHeight="54.0" prefWidth="66.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Send&#10;Message" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <font>
                                     <Font name="Times New Roman" size="12.0" />
                                  </font>
@@ -119,7 +119,7 @@
                         </AnchorPane>
                         <AnchorPane HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField fx:id="messageBody" onKeyPressed="#send_message_via_enter" prefHeight="54.0" prefWidth="334.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TextField fx:id="messageBody" onKeyPressed="#sendMessageViaEnter" prefHeight="54.0" prefWidth="334.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <effect>
                                     <InnerShadow />
                                  </effect></TextField>
