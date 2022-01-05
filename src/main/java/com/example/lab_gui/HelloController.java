@@ -251,7 +251,6 @@ public class HelloController {
 
     @FXML
     private void selectedUser(MouseEvent mouseEvent) throws SQLException {
-        currentUserControl = userTable.getSelectionModel().getSelectedItem();
         if (currentUserControl != null) {
             selectedUser.setText(
                     currentUserControl.toString()
