@@ -13,6 +13,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -97,5 +99,11 @@ public class LoginController {
         stage.setMaxHeight(285);
         stage.setMaxWidth(250);
         stage.show();
+    }
+
+    public void onLoginViaEnter(KeyEvent keyEvent) throws SQLException, IOException {
+        if(keyEvent.getCode()== KeyCode.ENTER){
+            onLoginClicked(null);
+        }
     }
 }
