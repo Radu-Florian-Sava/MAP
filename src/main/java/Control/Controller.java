@@ -64,10 +64,10 @@ public class Controller {
 
 
     /**
-     * @deprecated Controller-ul va fi de tip singleton, deci mai bine nu ati folosi aceasta clasa
-     * @param userService service care contine date despre utilizatorii aplicatiei
+     * @param userService       service care contine date despre utilizatorii aplicatiei
      * @param friendshipService service care contine date despre relatiile de prietenie dintre utilizatori
-     * @param messageService service care contine date despre mesajele trimise intre utilizatorii aplicatiei
+     * @param messageService    service care contine date despre mesajele trimise intre utilizatorii aplicatiei
+     * @deprecated Controller-ul va fi de tip singleton, deci mai bine nu ati folosi aceasta clasa
      */
     @Deprecated
     public Controller(Service<Integer, User> userService, Service<Integer, Friendship> friendshipService, Service<Integer, Message> messageService) {
@@ -77,9 +77,9 @@ public class Controller {
     }
 
     /**
-     * @deprecated remains only for tests, use Controller(userService, friendshipService, messageService) instead
-     * @param userService user's service
+     * @param userService       user's service
      * @param friendshipService friendship's service
+     * @deprecated remains only for tests, use Controller(userService, friendshipService, messageService) instead
      */
     @Deprecated
     public Controller(Service userService, Service friendshipService) {
@@ -88,13 +88,13 @@ public class Controller {
     }
 
     /**
-     * @deprecated use sign up instead
      * @param firstName prenumele utilizatorului care va fi adaugat
-     * @param surname numele utilizatorului care va fi adaugat
+     * @param surname   numele utilizatorului care va fi adaugat
      * @throws ValidateException arunca exceptie daca numele/prenumele nu sunt valide
-     * @throws RepoException arunca exceptie daca apare o coliziune de id in repozitoriu
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws RepoException     arunca exceptie daca apare o coliziune de id in repozitoriu
+     * @throws SQLException      arunca exceptie daca apar probleme cu conexiunea bazei de date
      * @throws BusinessException arunca exceptie daca apar probleme la nivelul de servicii al aplicatiei
+     * @deprecated use sign up instead
      */
     public void addUser(String firstName, String surname) throws ValidateException, RepoException, SQLException, BusinessException, SQLException {
         ArrayList<Object> params = new ArrayList<>();
@@ -102,7 +102,6 @@ public class Controller {
         params.add(surname);
         userService.createRecord(params);
     }
-
 
 
     /**
@@ -123,7 +122,7 @@ public class Controller {
      * @param id este id-ul utilizatorului pe care dorim sa il stergem din aplicatie
      * @return utilizatorul sters din aplicatie
      * @throws RepoException arunca exceptie daca nu exista elementul cu id-ul dat in repozitoriu
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws SQLException  arunca exceptie daca apar probleme cu conexiunea bazei de date
      */
     public User deleteUser(int id) throws RepoException, SQLException {
         return userService.deleteRecord(id);
@@ -155,12 +154,12 @@ public class Controller {
     }
 
     /**
-     * @param id este id-ul utilizatorului pe care il modificam
+     * @param id           este id-ul utilizatorului pe care il modificam
      * @param newFirstName este noul prenume al utilizatorului
-     * @param newSurname este noul nume al utilizatorului
+     * @param newSurname   este noul nume al utilizatorului
      * @throws ValidateException arunca exceptie daca id-ul/numele/prenumele nu sunt valide
-     * @throws RepoException arunca exceptie daca nu exista utilizatorul cu id-ul id in aplicatie
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws RepoException     arunca exceptie daca nu exista utilizatorul cu id-ul id in aplicatie
+     * @throws SQLException      arunca exceptie daca apar probleme cu conexiunea bazei de date
      * @throws BusinessException arunca exceptie daca apar probleme la nivelul de servicii al aplicatiei
      */
     public void updateUser(int id, String newFirstName, String newSurname) throws ValidateException, RepoException, SQLException, BusinessException {
@@ -174,8 +173,8 @@ public class Controller {
      * @param one id-ul unuia dintre utilizatorii prieteni
      * @param two id-ul celuilalt utilizator prieten
      * @throws ValidateException arunca exceptie daca id-urile utilizatorilor nu sunt valide
-     * @throws RepoException arunca exceptie daca exista coliziune de id la nivel de repozitoriu
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws RepoException     arunca exceptie daca exista coliziune de id la nivel de repozitoriu
+     * @throws SQLException      arunca exceptie daca apar probleme cu conexiunea bazei de date
      * @throws BusinessException arunca exceptie daca apar probleme la nivelul de servicii al aplicatiei
      */
     public void addFriendship(int one, int two) throws ValidateException, RepoException, SQLException, BusinessException {
@@ -193,7 +192,7 @@ public class Controller {
      * @param id este id-ul relatiei de prietenie care va fi stearsa
      * @return relatie de prietenie stearsa
      * @throws RepoException arunca exceptie daca nu exista realtia cu id-ul id la nivel de repozitoriu
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws SQLException  arunca exceptie daca apar probleme cu conexiunea bazei de date
      */
     public Friendship deleteFriendship(int id) throws RepoException, SQLException {
         return friendshipService.deleteRecord(id);
@@ -225,12 +224,12 @@ public class Controller {
     }
 
     /**
-     * @param id este id-ul relatiei de prietenie care va fi modificata
+     * @param id     este id-ul relatiei de prietenie care va fi modificata
      * @param newOne este id-ul unuia dintre utilizatorii prieteni
      * @param newTwo este id-ul celuilalt utilizator prieten
      * @throws ValidateException daca id-urile utilizatorilor nu sunt valide
-     * @throws RepoException arunca exceptie daca prietenia cu id-ul id nu exista la nivel de repozitoriu
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws RepoException     arunca exceptie daca prietenia cu id-ul id nu exista la nivel de repozitoriu
+     * @throws SQLException      arunca exceptie daca apar probleme cu conexiunea bazei de date
      * @throws BusinessException arunca exceptie daca apar probleme la nivelul de servicii al aplicatiei
      */
     public void updateFriendship(int id, int newOne, int newTwo) throws ValidateException, RepoException, SQLException, BusinessException {
@@ -263,13 +262,13 @@ public class Controller {
     }
 
     /**
-     * @param id_from este id-ul utilizatorului care trimite mesajul
-     * @param id_to este id-ul utiliatorului spre care vs fi trimis mesajul
-     * @param message este corpul mesajului
+     * @param id_from  este id-ul utilizatorului care trimite mesajul
+     * @param id_to    este id-ul utiliatorului spre care vs fi trimis mesajul
+     * @param message  este corpul mesajului
      * @param id_reply este id-ul mesajului la care da reply noul mesaj ( daca este un reply)
      * @throws ValidateException daca datele nu sunt valide
-     * @throws RepoException arunca exceptie daca mesajul exista la nivel de repozitoriu
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws RepoException     arunca exceptie daca mesajul exista la nivel de repozitoriu
+     * @throws SQLException      arunca exceptie daca apar probleme cu conexiunea bazei de date
      * @throws BusinessException arunca exceptie daca apar probleme la nivelul de servicii al aplicatiei
      */
     public void sendMessage(int id_from, int id_to, String message, Integer id_reply) throws SQLException, ValidateException, BusinessException, RepoException {
@@ -283,15 +282,14 @@ public class Controller {
         params.add(id_reply);
         List<Friendship> friendships = (List<Friendship>) friendshipService.getRecords();
         boolean ok = friendships.stream().anyMatch((x) ->
-                                ((x.getOne() == id_from && x.getTwo() == id_to) ||
-                                (x.getOne() == id_to && x.getTwo() == id_from)) &&
-                                x.getFriendship_request() == 2);
-        if(!ok)
+                ((x.getOne() == id_from && x.getTwo() == id_to) ||
+                        (x.getOne() == id_to && x.getTwo() == id_from)) &&
+                        x.getFriendship_request() == 2);
+        if (!ok)
             throw new BusinessException("Nu exista prietenie dintre cei doi utilizatori\n");
-        if(id_reply != null)
-        {
+        if (id_reply != null) {
             Message message1 = messageService.findRecord(id_reply);
-            if((message1.getTo() != id_from || message1.getFrom() != id_to) &&
+            if ((message1.getTo() != id_from || message1.getFrom() != id_to) &&
                     (message1.getTo() != id_to || message1.getFrom() != id_from)) {
                 // System.out.println(message1.getTo() + " " + id_to + " " + message1.getFrom() + " " + id_from);
                 throw new BusinessException("Mesajul replied nu apartine acestei conversatii\n");
@@ -319,7 +317,7 @@ public class Controller {
     /**
      * @param id este id-ul mesajului care va fi sters
      * @return mesajul cu id-ul id sters din aplicatie
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws SQLException  arunca exceptie daca apar probleme cu conexiunea bazei de date
      * @throws RepoException arunca exceptie daca mesajul cu id-ul id nu exista la nivel de repozitoriu
      */
     public Message deleteMessage(int id) throws SQLException, RepoException {
@@ -339,16 +337,15 @@ public class Controller {
         User user2 = findUser(id2);
         messages = messages.stream().sorted(
                 Comparator.comparing(Message::getDate)).collect(Collectors.toList());
-        for(Message message : messages) {
-            if(message.getFrom() == id1 && message.getTo() == id2) {
-                if(message.getId_reply() != null) {
+        for (Message message : messages) {
+            if (message.getFrom() == id1 && message.getTo() == id2) {
+                if (message.getId_reply() != null) {
                     Message message1 = messageService.findRecord(message.getId_reply());
                     messages_filtered.add("Reply la \"" + message1.getMessage() + "\"");
                 }
                 messages_filtered.add(user1.getFirstName() + ": " + message.getMessage());
-            }
-            else if(message.getFrom() == id2 && message.getTo() == id1) {
-                if(message.getId_reply() != null) {
+            } else if (message.getFrom() == id2 && message.getTo() == id1) {
+                if (message.getId_reply() != null) {
                     Message message1 = messageService.findRecord(message.getId_reply());
                     messages_filtered.add("Reply la " + message1.getMessage());
                 }
@@ -366,21 +363,21 @@ public class Controller {
      */
     public Iterable<Friendship> getFriendshipsOf(int id) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
-                .filter((x)-> (x.getOne()==id || x.getTwo() == id) && x.getFriendship_request() == 2).toList();
+                .filter((x) -> (x.getOne() == id || x.getTwo() == id) && x.getFriendship_request() == 2).toList();
     }
 
     /**
-     * @param id este id-ul utilizatorului caruia dorim sa ii aflam prietenii
+     * @param id          este id-ul utilizatorului caruia dorim sa ii aflam prietenii
      * @param monthNumber este luna in care s-a stabilit relatia de prietenie (numar de la 1 la 12)
      * @return o lista de relatii de prietenie cu prietenii utilizatorului cu id-ul id din luna monthNumber
      * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
      */
-    public Iterable<Friendship> getFriendshipsWithMonth(int id,int monthNumber) throws SQLException {
+    public Iterable<Friendship> getFriendshipsWithMonth(int id, int monthNumber) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
-                .filter((x)-> (x.getOne()==id || x.getTwo() == id)
-                        && x.getFriendship_request() ==2
-                        && (x.getStringDate().contains("-"+ monthNumber +"-")
-                        || x.getStringDate().contains("-0"+monthNumber+"-"))
+                .filter((x) -> (x.getOne() == id || x.getTwo() == id)
+                        && x.getFriendship_request() == 2
+                        && (x.getStringDate().contains("-" + monthNumber + "-")
+                        || x.getStringDate().contains("-0" + monthNumber + "-"))
                 ).toList();
     }
 
@@ -391,16 +388,16 @@ public class Controller {
      */
     public Iterable<Friendship> getPendingFriendshipsOf(int id) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
-                .filter((x)-> x.getTwo() == id && x.getFriendship_request() == 0).toList();
+                .filter((x) -> x.getTwo() == id && x.getFriendship_request() == 0).toList();
     }
 
     /**
      * @param id_from este id-ul utilizatorului care a initiat cererea de prietenie
-     * @param id_to este id-ul utilizatorului caruia ii este adresata cererea de prietenie
+     * @param id_to   este id-ul utilizatorului caruia ii este adresata cererea de prietenie
      * @throws ValidateException arunca exceptie daca id-urile nu sunt valide
      * @throws BusinessException arunca exceptie daca apar probleme la nivelul de servicii al aplicatiei
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
-     * @throws RepoException arunca exceptie daca id-urile nu exista la nivel de repozitoriu
+     * @throws SQLException      arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws RepoException     arunca exceptie daca id-urile nu exista la nivel de repozitoriu
      */
     public void sendFriendship(int id_from, int id_to) throws ValidateException, BusinessException, SQLException, RepoException {
         if (userService.findRecord(id_from) == null || userService.findRecord(id_to) == null || id_from == id_to)
@@ -408,31 +405,26 @@ public class Controller {
         int request = 0;
 
         List<Friendship> friendships = (List<Friendship>) friendshipService.getRecords();
-        for(Friendship friendship: friendships)
-            if(friendship.getOne() == id_from && friendship.getTwo() == id_to) {
-                if(friendship.getFriendship_request() == 0) {
+        for (Friendship friendship : friendships)
+            if (friendship.getOne() == id_from && friendship.getTwo() == id_to) {
+                if (friendship.getFriendship_request() == 0) {
                     throw new BusinessException("A fost deja trimisa o cerere de prietenie");
-                }
-                else if(friendship.getFriendship_request() == 1) {
+                } else if (friendship.getFriendship_request() == 1) {
                     friendshipService.deleteRecord(friendship.getId());
-                }
-                else if(friendship.getFriendship_request() == 2) {
+                } else if (friendship.getFriendship_request() == 2) {
                     throw new BusinessException("Sunteti deja prieteni");
                 }
-            }
-            else if(friendship.getOne() == id_to && friendship.getTwo() == id_from) {
-                if(friendship.getFriendship_request() == 0) {
+            } else if (friendship.getOne() == id_to && friendship.getTwo() == id_from) {
+                if (friendship.getFriendship_request() == 0) {
                     ArrayList<Object> params = new ArrayList<>();
                     params.add(id_to);
                     params.add(id_from);
                     params.add(2);
                     friendshipService.updateRecord(friendship.getId(), params);
                     return;
-                }
-                else if(friendship.getFriendship_request() == 1) {
+                } else if (friendship.getFriendship_request() == 1) {
                     friendshipService.deleteRecord(friendship.getId());
-                }
-                else if(friendship.getFriendship_request() == 2) {
+                } else if (friendship.getFriendship_request() == 2) {
                     throw new BusinessException("Sunteti deja prieteni");
                 }
             }
@@ -446,26 +438,25 @@ public class Controller {
 
     /**
      * accept a friendship
-     * @param id friendship's id
+     *
+     * @param id      friendship's id
      * @param id_user the user who accept it
-     * @throws SQLException database error
+     * @throws SQLException      database error
      * @throws ValidateException validate friendship error
      * @throws BusinessException business error
-     * @throws RepoException repo rules error
+     * @throws RepoException     repo rules error
      */
     public void acceptFriendship(int id, int id_user) throws SQLException, ValidateException, BusinessException, RepoException {
         Friendship friendship = friendshipService.findRecord(id);
-        if(friendship == null) {
+        if (friendship == null) {
             throw new ValidateException("Nu exista aceasta prietenie!");
         }
-        if(friendship.getTwo() == id_user) {
-            if(friendship.getFriendship_request() == 1) {
+        if (friendship.getTwo() == id_user) {
+            if (friendship.getFriendship_request() == 1) {
                 throw new BusinessException("A fost deja refuzata!\n");
-            }
-            else if(friendship.getFriendship_request() == 2) {
+            } else if (friendship.getFriendship_request() == 2) {
                 throw new BusinessException("Deja sunteti prieteni!\n");
-            }
-            else {
+            } else {
                 friendship.setFriendship_request(2);
                 ArrayList<Object> params = new ArrayList<>();
                 params.add(friendship.getOne());
@@ -473,34 +464,32 @@ public class Controller {
                 params.add(friendship.getFriendship_request());
                 friendshipService.updateRecord(friendship.getId(), params);
             }
-        }
-        else {
+        } else {
             throw new ValidateException("Nu poate fi acceptata de acest utilizator!");
         }
     }
 
     /**
      * reject a friendship
-     * @param id friendship's id
+     *
+     * @param id      friendship's id
      * @param id_user the user who reject it
-     * @throws SQLException database error
+     * @throws SQLException      database error
      * @throws ValidateException validate friendship error
      * @throws BusinessException business error
-     * @throws RepoException repo rules error
+     * @throws RepoException     repo rules error
      */
     public void rejectFriendship(int id, int id_user) throws SQLException, ValidateException, BusinessException, RepoException {
         Friendship friendship = friendshipService.findRecord(id);
-        if(friendship == null) {
+        if (friendship == null) {
             throw new ValidateException("Nu exista aceasta prietenie!");
         }
-        if(friendship.getTwo() == id_user) {
-            if(friendship.getFriendship_request() == 1) {
+        if (friendship.getTwo() == id_user) {
+            if (friendship.getFriendship_request() == 1) {
                 throw new BusinessException("A fost deja refuzata!\n");
-            }
-            else if(friendship.getFriendship_request() == 2) {
+            } else if (friendship.getFriendship_request() == 2) {
                 throw new BusinessException("Deja sunteti prieteni!\n");
-            }
-            else {
+            } else {
                 friendship.setFriendship_request(1);
                 ArrayList<Object> params = new ArrayList<>();
                 params.add(friendship.getOne());
@@ -508,8 +497,7 @@ public class Controller {
                 params.add(1);
                 friendshipService.updateRecord(friendship.getId(), params);
             }
-        }
-        else {
+        } else {
             throw new ValidateException("Nu poate fi acceptata de acest utilizator!");
         }
     }
@@ -517,11 +505,11 @@ public class Controller {
     /**
      * @param id_from este id-ul utilizatorului care trimite mesajul
      * @param message este corpul mesajului
-     * @param ids este o lista de id-uri ale utilizatorilor carora le sunt destinate mesajele
+     * @param ids     este o lista de id-uri ale utilizatorilor carora le sunt destinate mesajele
      * @throws ValidateException arunca exceptie daca mesajul nu este valid
      * @throws BusinessException arunca exceptie daca apar probleme la nivelul de servicii al aplicatiei
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
-     * @throws RepoException arunca exceptie daca id-urile nu exista la nivel de repozitoriu
+     * @throws SQLException      arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @throws RepoException     arunca exceptie daca id-urile nu exista la nivel de repozitoriu
      */
     public void sendMessageToIds(int id_from, String message, ArrayList<Integer> ids) throws ValidateException, BusinessException, SQLException, RepoException {
         if (userService.findRecord(id_from) == null)
@@ -536,13 +524,13 @@ public class Controller {
 
         int id_message = messageService.createRecord(params);
 
-        for(Integer id_to: ids) {
+        for (Integer id_to : ids) {
 
             boolean ok = friendships.stream().anyMatch((x) ->
                     ((x.getOne() == id_from && x.getTwo() == id_to) ||
                             (x.getOne() == id_to && x.getTwo() == id_from)) &&
                             x.getFriendship_request() == 2);
-            if(!ok)
+            if (!ok)
                 throw new BusinessException("Nu exista prietenie cu " + id_to + "\n");
 
             params = new ArrayList<>();
@@ -562,8 +550,8 @@ public class Controller {
     public ArrayList<Friendship> getSentFriendships(int id) throws SQLException {
         ArrayList<Friendship> friendships = new ArrayList<>();
         List<Friendship> friendshipList = (List<Friendship>) friendshipService.getRecords();
-        for(Friendship friendship: friendshipList) {
-            if(friendship.getOne() == id)
+        for (Friendship friendship : friendshipList) {
+            if (friendship.getOne() == id)
                 friendships.add(friendship);
         }
 
@@ -573,12 +561,12 @@ public class Controller {
     public List<FriendshipDTO> getAllTypesOfFriendshipsOf(int id) throws SQLException {
         List<Friendship> friendshipList = (List<Friendship>) friendshipService.getRecords();
         friendshipList = friendshipList.stream()
-                .filter((x)-> (x.getOne()==id || x.getTwo() == id)).toList();
+                .filter((x) -> (x.getOne() == id || x.getTwo() == id)).toList();
 
         List<User> users = (List<User>) userService.getRecords();
         List<FriendshipDTO> friendshipDTOS = new ArrayList<>();
-        for(Friendship friendship : friendshipList) {
-            if(friendship.getOne() == id)
+        for (Friendship friendship : friendshipList) {
+            if (friendship.getOne() == id)
                 friendshipDTOS.add(new FriendshipDTO(
                         0,
                         friendship.getId(),
@@ -603,18 +591,18 @@ public class Controller {
     public List<UserDTO> getAllUsersDTO() throws SQLException {
         List<User> users = (List<User>) userService.getRecords();
         List<UserDTO> userDTOS = new ArrayList<>();
-        for(User user: users){
-            userDTOS.add(new UserDTO(user.getId(),user.getFirstName(),user.getSurname()));
+        for (User user : users) {
+            userDTOS.add(new UserDTO(user.getId(), user.getFirstName(), user.getSurname()));
         }
         return userDTOS;
     }
 
-    public Boolean areFriends(int id1, int id2) throws SQLException{
-        for (Friendship friendship: friendshipService.getRecords())
-            if(
+    public Boolean areFriends(int id1, int id2) throws SQLException {
+        for (Friendship friendship : friendshipService.getRecords())
+            if (
                     ((friendship.getOne() == id1 && friendship.getTwo() == id2) ||
                             (friendship.getOne() == id2 && friendship.getTwo() == id1))
-                    && friendship.getFriendship_request() == 2)
+                            && friendship.getFriendship_request() == 2)
                 return true;
         return false;
     }
@@ -622,29 +610,29 @@ public class Controller {
     public User login(String username, String password) throws SQLException {
         List<User> list = ((List<User>) userService.getRecords()).stream()
                 .filter((x) -> Objects.equals(x.getUsername(), username)).collect(Collectors.toList());
-        if(list.size() == 0)
+        if (list.size() == 0)
             return null;
 
         User user = list.get(0);
 
-        if(!Hasher.isHashedCorrectly(user.getPassword(), password))
+        if (!Hasher.isHashedCorrectly(user.getPassword(), password))
             return null;
         return user;
     }
 
     public void signup(String firstname, String surname, String username, String password, String confirm) throws SQLException, BusinessException, ValidateException, RepoException {
         String error = "";
-        if(firstname.length() == 0)
+        if (firstname.length() == 0)
             error += "Firstname cannot be null!\n";
-        if(surname.length() == 0)
+        if (surname.length() == 0)
             error += "Surname cannot be null!\n";
-        if(username.length() == 0)
+        if (username.length() == 0)
             error += "Username cannot be null!\n";
-        if(password.length() == 0)
+        if (password.length() == 0)
             error += "Password cannot be null!\n";
-        if(!Objects.equals(password, confirm))
+        if (!Objects.equals(password, confirm))
             error += "The passwords are not the same!\n";
-        if(error.length() != 0)
+        if (error.length() != 0)
             throw new BusinessException(error);
         ArrayList<Object> objects = new ArrayList<>();
 
@@ -655,7 +643,7 @@ public class Controller {
         userService.createRecord(objects);
     }
 
-    public void friendsAndMessagesBetweenADate(int id, Date date_start, Date date_end, File file_dest)
+    public void friendsAndMessagesBetweenADatePDF(int id, Date date_start, Date date_end, File file_dest)
             throws IOException, SQLException {
         PDDocument document = new PDDocument();
         PDPage pdPageFriendships = new PDPage();
@@ -673,21 +661,21 @@ public class Controller {
         contentStream.setFont(PDType1Font.TIMES_BOLD, 15);
         contentStream.showText("Friendships:");
         contentStream.setFont(PDType1Font.TIMES_ITALIC, 12);
-        for(FriendshipDTO friendship : friendships) {
-            if(friendship.getDate().getTime() >= date_start.getTime() &&
+        for (FriendshipDTO friendship : friendships) {
+            if (friendship.getDate().getTime() >= date_start.getTime() &&
                     friendship.getDate().getTime() <= date_end.getTime()) {
                 contentStream.newLine();
                 String text;
-                if(friendship.getId() == id)
+                if (friendship.getId() == id)
                     text =
                             friendship.getFirst_name() + " " +
-                            friendship.getStatus() + " " +
-                            friendship.getDate().toString();
+                                    friendship.getStatus() + " " +
+                                    friendship.getDate().toString();
                 else
                     text =
                             friendship.getSecond_name() + " " +
-                            friendship.getStatus() + " " +
-                            friendship.getDate().toString() ;
+                                    friendship.getStatus() + " " +
+                                    friendship.getDate().toString();
                 text = text.replace("\n", "").replace("\r", "");
                 contentStream.showText(text);
             }
@@ -711,11 +699,11 @@ public class Controller {
         contentStream.setFont(PDType1Font.TIMES_BOLD, 15);
         contentStream.showText("Messages:");
         contentStream.setFont(PDType1Font.TIMES_ITALIC, 12);
-        for(Message message : messages) {
-            if(
+        for (Message message : messages) {
+            if (
                     message.getTo() == id &&
-                    message.getDate().getTime() >= date_start.getTime() &&
-                    message.getDate().getTime() <= date_end.getTime())  {
+                            message.getDate().getTime() >= date_start.getTime() &&
+                            message.getDate().getTime() <= date_end.getTime()) {
                 String text = userService.findRecord(message.getFrom()) + " " +
                         message.getMessage() + " " +
                         message.getDate();
@@ -731,5 +719,47 @@ public class Controller {
         document.save(file_dest);
         document.close();
     }
-}
 
+    public void messagesFromAFriendBetweenDatesPDF(Date date_start,
+                                                   Date date_end,
+                                                   int id,
+                                                   UserDTO friend,
+                                                   File file_dest)
+            throws IOException, SQLException, BusinessException {
+
+        List<Friendship> friendships = (List<Friendship>) friendshipService.getRecords();
+        boolean ok = friendships.stream().anyMatch((x) ->
+                ((x.getOne() == id && x.getTwo() == friend.getId()) ||
+                        (x.getOne() == friend.getId() && x.getTwo() == id)) &&
+                        x.getFriendship_request() == 2);
+        if (!ok)
+            throw new BusinessException("Nu exista prietenie dintre cei doi utilizatori\n");
+        PDDocument pdDocument = new PDDocument();
+        PDPage pdPage = new PDPage();
+        pdDocument.addPage(pdPage);
+
+        PDPageContentStream contentStream = new PDPageContentStream(pdDocument, pdPage);
+
+        contentStream.newLineAtOffset(25, 725);
+        contentStream.setFont(PDType1Font.TIMES_BOLD, 15);
+        contentStream.showText("Messages with: " + friend);
+        contentStream.setFont(PDType1Font.TIMES_ITALIC, 12);
+        for (Message message : messageService.getRecords()) {
+            if (
+                    message.getTo() == id &&
+                            message.getFrom() == friend.getId() &&
+                            message.getDate().getTime() >= date_start.getTime() &&
+                            message.getDate().getTime() <= date_end.getTime()) {
+                String text = message.getMessage() + " " + message.getDate();
+                text = text.replace("\n", "").replace("\r", "");
+                contentStream.newLine();
+                contentStream.showText(text);
+            }
+        }
+        contentStream.endText();
+        contentStream.close();
+
+        pdDocument.save(file_dest);
+        pdDocument.close();
+    }
+}
