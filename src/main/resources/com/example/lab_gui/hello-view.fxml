@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -62,8 +63,14 @@
             </TableView>
             <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="317.0" style="-fx-background-color: cyan;">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealPotentialFriends" prefHeight="26.0" prefWidth="290.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Add friend" textAlignment="CENTER" />
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealCurrentFriends" prefHeight="26.0" prefWidth="278.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: Midnightblue;" text="Remove friend" textAlignment="CENTER" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealPotentialFriends" prefHeight="26.0" prefWidth="290.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Add friend" textAlignment="CENTER">
+                     <effect>
+                        <DropShadow />
+                     </effect></Button>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealCurrentFriends" prefHeight="26.0" prefWidth="278.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: Midnightblue;" text="Remove friend" textAlignment="CENTER">
+                     <effect>
+                        <DropShadow />
+                     </effect></Button>
                </children>
             </HBox>
             <TableView fx:id="hiddenTable" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#setPassiveUser" prefHeight="157.0" prefWidth="342.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" visible="false">
@@ -78,7 +85,10 @@
             </TableView>
             <HBox fx:id="changeStatusSection" prefHeight="29.0" prefWidth="342.0" style="-fx-border-color: midnightblue; -fx-background-color: cyan;" visible="false">
                <children>
-                  <Button fx:id="changeFriendStatus" mnemonicParsing="false" onAction="#changeStatusOfFriendship" prefHeight="26.0" prefWidth="128.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Unfriend/Befriend" />
+                  <Button fx:id="changeFriendStatus" mnemonicParsing="false" onAction="#changeStatusOfFriendship" prefHeight="26.0" prefWidth="128.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Unfriend/Befriend">
+                     <effect>
+                        <DropShadow />
+                     </effect></Button>
                   <Label fx:id="passiveUserName" alignment="CENTER" prefHeight="30.0" prefWidth="266.0" style="-fx-background-color: cyan;" text="PersonName">
                      <effect>
                         <InnerShadow />
