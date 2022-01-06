@@ -34,7 +34,7 @@ import java.util.stream.StreamSupport;
  *  clasa care extrage informatii de la nivelul de business din diferentele sectiuni ale aplicatiei
  */
 public class Controller {
-    private static Controller controller = new Controller();
+    private static final Controller controller = new Controller();
     private Service<Integer, User> userService;
     private Service<Integer, Friendship> friendshipService;
     private Service<Integer, Message> messageService;

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
-public class Pdf {
+public class PdfController {
     @FXML
     public TextField pathBox;
     @FXML
@@ -28,7 +28,7 @@ public class Pdf {
     @FXML
     public Button chooseFileButton;
     private int option;
-    private int id;
+    private int id = 1;
     private UserDTO friend;
 
 
@@ -36,6 +36,14 @@ public class Pdf {
         this.option = option;
         this.id = id;
         this.friend = friend;
+    }
+
+    @FXML
+    void initialize() {
+        if(option == 1)
+            optionLabel.setText("Create a PDF for all your messages and friendships between a date");
+        else
+            optionLabel.setText("Create a PDF for all your messages from a friend between a date");
     }
 
     @FXML

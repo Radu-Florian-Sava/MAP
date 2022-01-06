@@ -38,13 +38,13 @@ dependencies {
         exclude(group: 'org.openjfx')
     }
     implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
-    implementation 'junit:junit:4.13.1'
-    implementation 'junit:junit:4.13.1'
-    implementation 'org.testng:testng:7.1.0'
-    implementation 'junit:junit:4.13.1'
-    implementation 'org.testng:testng:7.1.0'
-    implementation 'junit:junit:4.13.1'
-    implementation 'org.testng:testng:7.1.0'
+    implementation 'junit:junit:4.13.2'
+    implementation 'junit:junit:4.13.2'
+    implementation 'org.testng:testng:7.4.0'
+    implementation 'junit:junit:4.13.2'
+    implementation 'org.testng:testng:7.4.0'
+    implementation 'junit:junit:4.13.2'
+    implementation 'org.testng:testng:7.4.0'
     implementation 'org.testng:testng:7.1.0'
     implementation 'org.postgresql:postgresql:42.3.1'
     implementation 'org.apache.pdfbox:pdfbox:2.0.24'
