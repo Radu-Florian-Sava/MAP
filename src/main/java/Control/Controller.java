@@ -330,9 +330,9 @@ public class Controller {
      * @return un iterable care contine corpul mesajelor
      * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
      */
-    public Iterable<String> getMessagesBy2Users(int id1, int id2) throws SQLException {
+    public Iterable<MessageDTO> getMessagesBy2Users(int id1, int id2) throws SQLException {
         List<Message> messages = (List<Message>) messageService.getRecords();
-        ArrayList<String> messages_filtered = new ArrayList<>();
+        ArrayList<MessageDTO> messages_filtered = new ArrayList<>();
         User user1 = findUser(id1);
         User user2 = findUser(id2);
         messages = messages.stream().sorted(
@@ -341,15 +341,40 @@ public class Controller {
             if (message.getFrom() == id1 && message.getTo() == id2) {
                 if (message.getId_reply() != null) {
                     Message message1 = messageService.findRecord(message.getId_reply());
-                    messages_filtered.add("Reply la \"" + message1.getMessage() + "\"");
+                    MessageDTO messageDTO = new MessageDTO(
+                            message.getId(),
+                            message.getMessage(),
+                            userService.findRecord(id1).getUsername(),
+                            message1.getMessage()
+                    );
+                    messages_filtered.add(messageDTO);
                 }
-                messages_filtered.add(user1.getFirstName() + ": " + message.getMessage());
+                else {
+                    MessageDTO messageDTO = new MessageDTO(
+                            message.getId(),
+                            message.getMessage(),
+                            userService.findRecord(id1).getUsername()
+                    );
+                    messages_filtered.add(messageDTO);
+                }
             } else if (message.getFrom() == id2 && message.getTo() == id1) {
                 if (message.getId_reply() != null) {
                     Message message1 = messageService.findRecord(message.getId_reply());
-                    messages_filtered.add("Reply la " + message1.getMessage());
+                    MessageDTO messageDTO = new MessageDTO(
+                            message.getId(),
+                            message.getMessage(),
+                            userService.findRecord(id2).getUsername(),
+                            message1.getMessage()
+                    );
+                    messages_filtered.add(messageDTO);
+                } else {
+                    MessageDTO messageDTO = new MessageDTO(
+                            message.getId(),
+                            message.getMessage(),
+                            userService.findRecord(id2).getUsername()
+                    );
+                    messages_filtered.add(messageDTO);
                 }
-                messages_filtered.add(user2.getFirstName() + ": " + message.getMessage());
             }
         }
 

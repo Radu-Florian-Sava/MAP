@@ -219,7 +219,8 @@ public class HelloController {
 
     private Iterable<String> getMessages() throws SQLException {
         if(currentUserControl!=null && passiveUserControl!=null){
-            return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
+            // return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
+            return null;
         }
         return null;
     }
