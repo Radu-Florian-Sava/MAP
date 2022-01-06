@@ -34,10 +34,6 @@ public class MessageDTO {
         return user_from;
     }
 
-    public List<String> getUsers_to() {
-        return users_to;
-    }
-
     @Override
     public String toString() {
         return user_from + ": " + message;
