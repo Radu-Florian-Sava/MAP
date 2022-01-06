@@ -1,10 +1,7 @@
 package com.example.lab_gui;
 
 import Control.Controller;
-import Domain.Friendship;
-import Domain.FriendshipDTO;
-import Domain.User;
-import Domain.UserDTO;
+import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
@@ -41,10 +38,10 @@ public class HelloController {
 
     // messages
     @FXML
-    private TableView<String> messageTable;
+    private TableView<MessageDTO> messageTable;
 
     @FXML
-    private TableColumn<String,String> messageColumn;
+    private TableColumn<MessageDTO,String> messageColumn;
 
     @FXML
     private Button sendMessageButton;
@@ -217,10 +214,9 @@ public class HelloController {
         }
     }
 
-    private Iterable<String> getMessages() throws SQLException {
+    private Iterable<MessageDTO> getMessages() throws SQLException {
         if(currentUserControl!=null && passiveUserControl!=null){
-            // return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
-            return null;
+             return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
         }
         return null;
     }
@@ -241,7 +237,7 @@ public class HelloController {
             hiddenFirstName.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getFirstName()));
             hiddenSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));
 
-            messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue()));
+            messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().toString()));
 
             loadFriendships();
             loadUsers();
@@ -410,7 +406,7 @@ public class HelloController {
         }
 
         showMessages();
-        List<String> messages = (List<String>) getMessages();
+        List<MessageDTO> messages = (List<MessageDTO>) getMessages();
         if(messages!=null && messages.size()!=0)
             messageTable.setItems(FXCollections.observableList(messages));
         else

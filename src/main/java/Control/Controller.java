@@ -344,7 +344,7 @@ public class Controller {
                     MessageDTO messageDTO = new MessageDTO(
                             message.getId(),
                             message.getMessage(),
-                            userService.findRecord(id1).getUsername(),
+                            user1.getFirstName() + " " + user1.getSurname(),
                             message1.getMessage()
                     );
                     messages_filtered.add(messageDTO);
@@ -353,7 +353,7 @@ public class Controller {
                     MessageDTO messageDTO = new MessageDTO(
                             message.getId(),
                             message.getMessage(),
-                            userService.findRecord(id1).getUsername()
+                            user1.getFirstName() + " " + user1.getSurname()
                     );
                     messages_filtered.add(messageDTO);
                 }
@@ -363,7 +363,7 @@ public class Controller {
                     MessageDTO messageDTO = new MessageDTO(
                             message.getId(),
                             message.getMessage(),
-                            userService.findRecord(id2).getUsername(),
+                            user2.getFirstName() + " " + user2.getSurname(),
                             message1.getMessage()
                     );
                     messages_filtered.add(messageDTO);
@@ -371,7 +371,7 @@ public class Controller {
                     MessageDTO messageDTO = new MessageDTO(
                             message.getId(),
                             message.getMessage(),
-                            userService.findRecord(id2).getUsername()
+                            user2.getFirstName() + " " + user2.getSurname()
                     );
                     messages_filtered.add(messageDTO);
                 }
