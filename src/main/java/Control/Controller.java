@@ -740,6 +740,7 @@ public class Controller {
 
         PDPageContentStream contentStream = new PDPageContentStream(pdDocument, pdPage);
 
+        contentStream.beginText();
         contentStream.newLineAtOffset(25, 725);
         contentStream.setFont(PDType1Font.TIMES_BOLD, 15);
         contentStream.showText("Messages with: " + friend);
