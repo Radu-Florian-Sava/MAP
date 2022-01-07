@@ -9,6 +9,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 
@@ -17,7 +20,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +33,10 @@ public class HelloController {
 
     @FXML
     public HBox changeStatusSection;
+    @FXML
     public HBox containingWindow;
+    @FXML
+    public Button pdfSimpleButton;
 
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
@@ -442,5 +450,60 @@ public class HelloController {
         loadFriendships();
         hideRelationsMenu();
         hideMessages();
+    }
+
+    @FXML
+    public void onPDFSimpleClicked(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
+        Parent parent = fxmlLoader.load();
+        Scene scene = new Scene(parent, 321, 400);
+        PdfController pdfController = fxmlLoader.getController();
+
+        pdfController.setUp(1, currentUserControl.getId(), null);
+
+        Stage stage = new Stage();
+
+        stage.setTitle("Generate PDF");
+        stage.setScene(scene);
+        stage.setMinHeight(175);
+        stage.setMinWidth(400);
+        stage.setHeight(175);
+        stage.setWidth(400);
+        stage.setMaxHeight(175);
+        stage.setMaxWidth(400);
+
+        stage.show();
+    }
+
+    @FXML
+    public void onPDFFriendClicked(ActionEvent actionEvent) throws IOException {
+        if(passiveUserControl == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("You must choose a friend for this PDF");
+            alert.show();
+        }
+        else {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
+            Parent parent = fxmlLoader.load();
+            Scene scene = new Scene(parent, 321, 400);
+            PdfController pdfController = fxmlLoader.getController();
+
+            pdfController.setUp(2, currentUserControl.getId(), passiveUserControl);
+
+            Stage stage = new Stage();
+
+            stage.setTitle("Generate PDF for a friend");
+            stage.setScene(scene);
+
+            stage.setMinHeight(175);
+            stage.setMinWidth(400);
+            stage.setHeight(175);
+            stage.setWidth(400);
+            stage.setMaxHeight(175);
+            stage.setMaxWidth(400);
+
+            stage.show();
+        }
     }
 }
