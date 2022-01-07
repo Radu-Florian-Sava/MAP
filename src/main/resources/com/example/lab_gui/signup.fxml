@@ -36,7 +36,7 @@
          <effect>
             <InnerShadow />
          </effect></PasswordField>
-      <Button fx:id="signUpButton" layoutX="12.0" layoutY="214.0" mnemonicParsing="false" onAction="#signUpClicked" prefHeight="25.0" prefWidth="197.0" style="-fx-background-color: cyan;" text="Sign Up">
+      <Button fx:id="signUpButton" layoutX="12.0" layoutY="214.0" mnemonicParsing="false" onAction="#signUpClicked" prefHeight="25.0" prefWidth="197.0" style="-fx-background-color: MediumOrchid;" text="Sign Up">
          <effect>
             <DropShadow />
          </effect></Button>

@@ -5,6 +5,7 @@ import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import Utils.StatusFriendship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -198,7 +199,6 @@ public class HelloController {
 
     private void hideRelationsMenu() throws SQLException {
         changeStatusSection.setVisible(false);
-        hiddenTable.setVisible(false);
         changeFriendStatus.setText("Unfriend\\Befriend");
         passiveUserControl = null;
         passiveUserName.setText("Nume Prenume");
@@ -214,6 +214,8 @@ public class HelloController {
         if(passiveUserControl!=null)
         {
             messageFunctionality.setVisible(true);
+            changeStatusSection.setVisible(false);
+            hiddenTable.setVisible(false);
             messageColumn.setText("Messages with " +
                     passiveUserControl.getFirstName() +
                     " " +
@@ -268,6 +270,7 @@ public class HelloController {
 
     @FXML
     private void setPassiveUser(MouseEvent mouseEvent) {
+        messageFunctionality.setVisible(false);
         passiveUserControl = hiddenTable.getSelectionModel().getSelectedItem();
         if (passiveUserControl != null) {
             passiveUserName.setText(
@@ -477,7 +480,7 @@ public class HelloController {
 
     @FXML
     public void onPDFFriendClicked(ActionEvent actionEvent) throws IOException {
-        if(passiveUserControl == null) {
+        if(selectedFriendship==null || selectedFriendship.getStatus() != StatusFriendship.ACCEPT.getStatus()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("You must choose a friend for this PDF");
