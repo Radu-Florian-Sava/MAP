@@ -61,6 +61,12 @@
                   <InnerShadow />
                </effect>
             </TableView>
+            <HBox prefHeight="30.0" prefWidth="342.0">
+               <children>
+                  <Button fx:id="pdfSimpleButton" mnemonicParsing="false" onAction="#onPDFSimpleClicked" prefHeight="26.0" prefWidth="178.0" text="PDF infoz" />
+                  <Button fx:id="pdfFriendButton" mnemonicParsing="false" onAction="#onPDFFriendClicked" prefHeight="26.0" prefWidth="167.0" text="PDF infoz with a friend" />
+               </children>
+            </HBox>
             <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="317.0" style="-fx-background-color: cyan;">
                <children>
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealPotentialFriends" prefHeight="26.0" prefWidth="290.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Add friend" textAlignment="CENTER">
