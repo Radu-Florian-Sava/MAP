@@ -18,11 +18,11 @@
          <effect>
             <InnerShadow />
          </effect></PasswordField>
-      <Button fx:id="loginButton" layoutX="136.0" layoutY="118.0" mnemonicParsing="false" onAction="#onLoginClicked" prefHeight="26.0" prefWidth="106.0" style="-fx-background-color: cyan;" text="Log in">
+      <Button fx:id="loginButton" layoutX="136.0" layoutY="118.0" mnemonicParsing="false" onAction="#onLoginClicked" prefHeight="26.0" prefWidth="106.0" style="-fx-background-color: MediumOrchid;" text="Log in">
          <effect>
             <DropShadow />
          </effect></Button>
-      <Button fx:id="signupButton" layoutX="14.0" layoutY="119.0" mnemonicParsing="false" onAction="#onSignUpClicked" prefHeight="26.0" prefWidth="113.0" style="-fx-background-color: cyan;" text="Sign Up">
+      <Button fx:id="signupButton" layoutX="14.0" layoutY="119.0" mnemonicParsing="false" onAction="#onSignUpClicked" prefHeight="26.0" prefWidth="113.0" style="-fx-background-color: MediumOrchid;" text="Sign Up">
          <effect>
             <DropShadow />
          </effect></Button>

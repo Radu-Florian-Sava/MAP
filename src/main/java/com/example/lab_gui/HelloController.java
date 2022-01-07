@@ -1,17 +1,18 @@
 package com.example.lab_gui;
 
 import Control.Controller;
-import Domain.Friendship;
-import Domain.FriendshipDTO;
-import Domain.User;
-import Domain.UserDTO;
+import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import Utils.StatusFriendship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 
@@ -20,7 +21,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +34,10 @@ public class HelloController {
 
     @FXML
     public HBox changeStatusSection;
+    @FXML
     public HBox containingWindow;
+    @FXML
+    public Button pdfSimpleButton;
 
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
@@ -41,10 +47,10 @@ public class HelloController {
 
     // messages
     @FXML
-    private TableView<String> messageTable;
+    private TableView<MessageDTO> messageTable;
 
     @FXML
-    private TableColumn<String,String> messageColumn;
+    private TableColumn<MessageDTO,String> messageColumn;
 
     @FXML
     private Button sendMessageButton;
@@ -193,7 +199,6 @@ public class HelloController {
 
     private void hideRelationsMenu() throws SQLException {
         changeStatusSection.setVisible(false);
-        hiddenTable.setVisible(false);
         changeFriendStatus.setText("Unfriend\\Befriend");
         passiveUserControl = null;
         passiveUserName.setText("Nume Prenume");
@@ -209,6 +214,8 @@ public class HelloController {
         if(passiveUserControl!=null)
         {
             messageFunctionality.setVisible(true);
+            changeStatusSection.setVisible(false);
+            hiddenTable.setVisible(false);
             messageColumn.setText("Messages with " +
                     passiveUserControl.getFirstName() +
                     " " +
@@ -217,9 +224,9 @@ public class HelloController {
         }
     }
 
-    private Iterable<String> getMessages() throws SQLException {
+    private Iterable<MessageDTO> getMessages() throws SQLException {
         if(currentUserControl!=null && passiveUserControl!=null){
-            return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
+             return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
         }
         return null;
     }
@@ -240,7 +247,7 @@ public class HelloController {
             hiddenFirstName.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getFirstName()));
             hiddenSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));
 
-            messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue()));
+            messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().toString()));
 
             loadFriendships();
             loadUsers();
@@ -263,6 +270,7 @@ public class HelloController {
 
     @FXML
     private void setPassiveUser(MouseEvent mouseEvent) {
+        messageFunctionality.setVisible(false);
         passiveUserControl = hiddenTable.getSelectionModel().getSelectedItem();
         if (passiveUserControl != null) {
             passiveUserName.setText(
@@ -409,7 +417,7 @@ public class HelloController {
         }
 
         showMessages();
-        List<String> messages = (List<String>) getMessages();
+        List<MessageDTO> messages = (List<MessageDTO>) getMessages();
         if(messages!=null && messages.size()!=0)
             messageTable.setItems(FXCollections.observableList(messages));
         else
@@ -445,5 +453,60 @@ public class HelloController {
         loadFriendships();
         hideRelationsMenu();
         hideMessages();
+    }
+
+    @FXML
+    public void onPDFSimpleClicked(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
+        Parent parent = fxmlLoader.load();
+        Scene scene = new Scene(parent, 321, 400);
+        PdfController pdfController = fxmlLoader.getController();
+
+        pdfController.setUp(1, currentUserControl.getId(), null);
+
+        Stage stage = new Stage();
+
+        stage.setTitle("Generate PDF");
+        stage.setScene(scene);
+        stage.setMinHeight(175);
+        stage.setMinWidth(400);
+        stage.setHeight(175);
+        stage.setWidth(400);
+        stage.setMaxHeight(175);
+        stage.setMaxWidth(400);
+
+        stage.show();
+    }
+
+    @FXML
+    public void onPDFFriendClicked(ActionEvent actionEvent) throws IOException {
+        if(selectedFriendship==null || selectedFriendship.getStatus() != StatusFriendship.ACCEPT.getStatus()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("You must choose a friend for this PDF");
+            alert.show();
+        }
+        else {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
+            Parent parent = fxmlLoader.load();
+            Scene scene = new Scene(parent, 321, 400);
+            PdfController pdfController = fxmlLoader.getController();
+
+            pdfController.setUp(2, currentUserControl.getId(), passiveUserControl);
+
+            Stage stage = new Stage();
+
+            stage.setTitle("Generate PDF for a friend");
+            stage.setScene(scene);
+
+            stage.setMinHeight(175);
+            stage.setMinWidth(400);
+            stage.setHeight(175);
+            stage.setWidth(400);
+            stage.setMaxHeight(175);
+            stage.setMaxWidth(400);
+
+            stage.show();
+        }
     }
 }

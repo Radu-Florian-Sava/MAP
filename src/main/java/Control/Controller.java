@@ -34,7 +34,7 @@ import java.util.stream.StreamSupport;
  *  clasa care extrage informatii de la nivelul de business din diferentele sectiuni ale aplicatiei
  */
 public class Controller {
-    private static Controller controller = new Controller();
+    private static final Controller controller = new Controller();
     private Service<Integer, User> userService;
     private Service<Integer, Friendship> friendshipService;
     private Service<Integer, Message> messageService;
@@ -330,9 +330,9 @@ public class Controller {
      * @return un iterable care contine corpul mesajelor
      * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
      */
-    public Iterable<String> getMessagesBy2Users(int id1, int id2) throws SQLException {
+    public Iterable<MessageDTO> getMessagesBy2Users(int id1, int id2) throws SQLException {
         List<Message> messages = (List<Message>) messageService.getRecords();
-        ArrayList<String> messages_filtered = new ArrayList<>();
+        ArrayList<MessageDTO> messages_filtered = new ArrayList<>();
         User user1 = findUser(id1);
         User user2 = findUser(id2);
         messages = messages.stream().sorted(
@@ -341,15 +341,40 @@ public class Controller {
             if (message.getFrom() == id1 && message.getTo() == id2) {
                 if (message.getId_reply() != null) {
                     Message message1 = messageService.findRecord(message.getId_reply());
-                    messages_filtered.add("Reply la \"" + message1.getMessage() + "\"");
+                    MessageDTO messageDTO = new MessageDTO(
+                            message.getId(),
+                            message.getMessage(),
+                            user1.getFirstName() + " " + user1.getSurname(),
+                            message1.getMessage()
+                    );
+                    messages_filtered.add(messageDTO);
                 }
-                messages_filtered.add(user1.getFirstName() + ": " + message.getMessage());
+                else {
+                    MessageDTO messageDTO = new MessageDTO(
+                            message.getId(),
+                            message.getMessage(),
+                            user1.getFirstName() + " " + user1.getSurname()
+                    );
+                    messages_filtered.add(messageDTO);
+                }
             } else if (message.getFrom() == id2 && message.getTo() == id1) {
                 if (message.getId_reply() != null) {
                     Message message1 = messageService.findRecord(message.getId_reply());
-                    messages_filtered.add("Reply la " + message1.getMessage());
+                    MessageDTO messageDTO = new MessageDTO(
+                            message.getId(),
+                            message.getMessage(),
+                            user2.getFirstName() + " " + user2.getSurname(),
+                            message1.getMessage()
+                    );
+                    messages_filtered.add(messageDTO);
+                } else {
+                    MessageDTO messageDTO = new MessageDTO(
+                            message.getId(),
+                            message.getMessage(),
+                            user2.getFirstName() + " " + user2.getSurname()
+                    );
+                    messages_filtered.add(messageDTO);
                 }
-                messages_filtered.add(user2.getFirstName() + ": " + message.getMessage());
             }
         }
 
@@ -740,6 +765,7 @@ public class Controller {
 
         PDPageContentStream contentStream = new PDPageContentStream(pdDocument, pdPage);
 
+        contentStream.beginText();
         contentStream.newLineAtOffset(25, 725);
         contentStream.setFont(PDType1Font.TIMES_BOLD, 15);
         contentStream.showText("Messages with: " + friend);
