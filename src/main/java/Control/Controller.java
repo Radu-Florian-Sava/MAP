@@ -20,7 +20,6 @@ import Service.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.File;
@@ -112,7 +111,7 @@ public class Controller {
     private Vector<Integer> friendsOf(int id) throws SQLException {
         Vector<Integer> friendshipVector = new Vector<>();
         for (Friendship friendship : friendshipService.getRecords()) {
-            if (friendship.getTwo() == id || friendship.getOne() == id)
+            if (friendship.getReceiver() == id || friendship.getSender() == id)
                 friendshipVector.add(friendship.getId());
         }
         return friendshipVector;
@@ -282,8 +281,8 @@ public class Controller {
         params.add(id_reply);
         List<Friendship> friendships = (List<Friendship>) friendshipService.getRecords();
         boolean ok = friendships.stream().anyMatch((x) ->
-                ((x.getOne() == id_from && x.getTwo() == id_to) ||
-                        (x.getOne() == id_to && x.getTwo() == id_from)) &&
+                ((x.getSender() == id_from && x.getReceiver() == id_to) ||
+                        (x.getSender() == id_to && x.getReceiver() == id_from)) &&
                         x.getFriendship_request() == 2);
         if (!ok)
             throw new BusinessException("Nu exista prietenie dintre cei doi utilizatori\n");
@@ -388,7 +387,7 @@ public class Controller {
      */
     public Iterable<Friendship> getFriendshipsOf(int id) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
-                .filter((x) -> (x.getOne() == id || x.getTwo() == id) && x.getFriendship_request() == 2).toList();
+                .filter((x) -> (x.getSender() == id || x.getReceiver() == id) && x.getFriendship_request() == 2).toList();
     }
 
     /**
@@ -399,7 +398,7 @@ public class Controller {
      */
     public Iterable<Friendship> getFriendshipsWithMonth(int id, int monthNumber) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
-                .filter((x) -> (x.getOne() == id || x.getTwo() == id)
+                .filter((x) -> (x.getSender() == id || x.getReceiver() == id)
                         && x.getFriendship_request() == 2
                         && (x.getStringDate().contains("-" + monthNumber + "-")
                         || x.getStringDate().contains("-0" + monthNumber + "-"))
@@ -413,7 +412,7 @@ public class Controller {
      */
     public Iterable<Friendship> getPendingFriendshipsOf(int id) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
-                .filter((x) -> x.getTwo() == id && x.getFriendship_request() == 0).toList();
+                .filter((x) -> x.getReceiver() == id && x.getFriendship_request() == 0).toList();
     }
 
     /**
@@ -431,7 +430,7 @@ public class Controller {
 
         List<Friendship> friendships = (List<Friendship>) friendshipService.getRecords();
         for (Friendship friendship : friendships)
-            if (friendship.getOne() == id_from && friendship.getTwo() == id_to) {
+            if (friendship.getSender() == id_from && friendship.getReceiver() == id_to) {
                 if (friendship.getFriendship_request() == 0) {
                     throw new BusinessException("A fost deja trimisa o cerere de prietenie");
                 } else if (friendship.getFriendship_request() == 1) {
@@ -439,7 +438,7 @@ public class Controller {
                 } else if (friendship.getFriendship_request() == 2) {
                     throw new BusinessException("Sunteti deja prieteni");
                 }
-            } else if (friendship.getOne() == id_to && friendship.getTwo() == id_from) {
+            } else if (friendship.getSender() == id_to && friendship.getReceiver() == id_from) {
                 if (friendship.getFriendship_request() == 0) {
                     ArrayList<Object> params = new ArrayList<>();
                     params.add(id_to);
@@ -476,7 +475,7 @@ public class Controller {
         if (friendship == null) {
             throw new ValidateException("Nu exista aceasta prietenie!");
         }
-        if (friendship.getTwo() == id_user) {
+        if (friendship.getReceiver() == id_user) {
             if (friendship.getFriendship_request() == 1) {
                 throw new BusinessException("A fost deja refuzata!\n");
             } else if (friendship.getFriendship_request() == 2) {
@@ -484,8 +483,8 @@ public class Controller {
             } else {
                 friendship.setFriendship_request(2);
                 ArrayList<Object> params = new ArrayList<>();
-                params.add(friendship.getOne());
-                params.add(friendship.getTwo());
+                params.add(friendship.getSender());
+                params.add(friendship.getReceiver());
                 params.add(friendship.getFriendship_request());
                 friendshipService.updateRecord(friendship.getId(), params);
             }
@@ -509,7 +508,7 @@ public class Controller {
         if (friendship == null) {
             throw new ValidateException("Nu exista aceasta prietenie!");
         }
-        if (friendship.getTwo() == id_user) {
+        if (friendship.getReceiver() == id_user) {
             if (friendship.getFriendship_request() == 1) {
                 throw new BusinessException("A fost deja refuzata!\n");
             } else if (friendship.getFriendship_request() == 2) {
@@ -517,8 +516,8 @@ public class Controller {
             } else {
                 friendship.setFriendship_request(1);
                 ArrayList<Object> params = new ArrayList<>();
-                params.add(friendship.getOne());
-                params.add(friendship.getTwo());
+                params.add(friendship.getSender());
+                params.add(friendship.getReceiver());
                 params.add(1);
                 friendshipService.updateRecord(friendship.getId(), params);
             }
@@ -552,8 +551,8 @@ public class Controller {
         for (Integer id_to : ids) {
 
             boolean ok = friendships.stream().anyMatch((x) ->
-                    ((x.getOne() == id_from && x.getTwo() == id_to) ||
-                            (x.getOne() == id_to && x.getTwo() == id_from)) &&
+                    ((x.getSender() == id_from && x.getReceiver() == id_to) ||
+                            (x.getSender() == id_to && x.getReceiver() == id_from)) &&
                             x.getFriendship_request() == 2);
             if (!ok)
                 throw new BusinessException("Nu exista prietenie cu " + id_to + "\n");
@@ -576,7 +575,7 @@ public class Controller {
         ArrayList<Friendship> friendships = new ArrayList<>();
         List<Friendship> friendshipList = (List<Friendship>) friendshipService.getRecords();
         for (Friendship friendship : friendshipList) {
-            if (friendship.getOne() == id)
+            if (friendship.getSender() == id)
                 friendships.add(friendship);
         }
 
@@ -586,17 +585,17 @@ public class Controller {
     public List<FriendshipDTO> getAllTypesOfFriendshipsOf(int id) throws SQLException {
         List<Friendship> friendshipList = (List<Friendship>) friendshipService.getRecords();
         friendshipList = friendshipList.stream()
-                .filter((x) -> (x.getOne() == id || x.getTwo() == id)).toList();
+                .filter((x) -> (x.getSender() == id || x.getReceiver() == id)).toList();
 
         List<User> users = (List<User>) userService.getRecords();
         List<FriendshipDTO> friendshipDTOS = new ArrayList<>();
         for (Friendship friendship : friendshipList) {
-            if (friendship.getOne() == id)
+            if (friendship.getSender() == id)
                 friendshipDTOS.add(new FriendshipDTO(
                         0,
                         friendship.getId(),
-                        users.stream().filter((x) -> x.getId() == friendship.getOne()).toList().get(0).toString(),
-                        users.stream().filter((x) -> x.getId() == friendship.getTwo()).toList().get(0).toString(),
+                        users.stream().filter((x) -> x.getId() == friendship.getSender()).toList().get(0).toString(),
+                        users.stream().filter((x) -> x.getId() == friendship.getReceiver()).toList().get(0).toString(),
                         friendship.getDate(),
                         UtilsFunctions.transormIntegerToStatusFriendship(friendship.getFriendship_request())
                 ));
@@ -604,8 +603,8 @@ public class Controller {
                 friendshipDTOS.add(new FriendshipDTO(
                         1,
                         friendship.getId(),
-                        users.stream().filter((x) -> x.getId() == friendship.getTwo()).toList().get(0).toString(),
-                        users.stream().filter((x) -> x.getId() == friendship.getOne()).toList().get(0).toString(),
+                        users.stream().filter((x) -> x.getId() == friendship.getReceiver()).toList().get(0).toString(),
+                        users.stream().filter((x) -> x.getId() == friendship.getSender()).toList().get(0).toString(),
                         friendship.getDate(),
                         UtilsFunctions.transormIntegerToStatusFriendship(friendship.getFriendship_request())
                 ));
@@ -625,8 +624,8 @@ public class Controller {
     public Boolean areFriends(int id1, int id2) throws SQLException {
         for (Friendship friendship : friendshipService.getRecords())
             if (
-                    ((friendship.getOne() == id1 && friendship.getTwo() == id2) ||
-                            (friendship.getOne() == id2 && friendship.getTwo() == id1))
+                    ((friendship.getSender() == id1 && friendship.getReceiver() == id2) ||
+                            (friendship.getSender() == id2 && friendship.getReceiver() == id1))
                             && friendship.getFriendship_request() == 2)
                 return true;
         return false;
@@ -754,8 +753,8 @@ public class Controller {
 
         List<Friendship> friendships = (List<Friendship>) friendshipService.getRecords();
         boolean ok = friendships.stream().anyMatch((x) ->
-                ((x.getOne() == id && x.getTwo() == friend.getId()) ||
-                        (x.getOne() == friend.getId() && x.getTwo() == id)) &&
+                ((x.getSender() == id && x.getReceiver() == friend.getId()) ||
+                        (x.getSender() == friend.getId() && x.getReceiver() == id)) &&
                         x.getFriendship_request() == 2);
         if (!ok)
             throw new BusinessException("Nu exista prietenie dintre cei doi utilizatori\n");

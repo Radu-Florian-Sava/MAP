@@ -50,9 +50,9 @@ public class FriendshipService extends AbstractService<Integer, Friendship>{
         Friendship friendship = new Friendship(one, two);
         validator.validate(friendship);
         for (Friendship iter : repository.getAll()) {
-            if (iter.getOne() == friendship.getOne() && iter.getTwo() == friendship.getTwo())
+            if (iter.getSender() == friendship.getSender() && iter.getReceiver() == friendship.getReceiver())
                 throw new RepoException("Element existent\n");
-            else if(iter.getOne() == friendship.getTwo() && iter.getTwo() == friendship.getOne()) {
+            else if(iter.getSender() == friendship.getReceiver() && iter.getReceiver() == friendship.getSender()) {
                 throw new RepoException("Element existent\n");
             }
         }

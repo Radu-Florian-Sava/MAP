@@ -298,8 +298,8 @@ public class HelloController {
             } else if (Objects.equals(changeFriendStatus.getText(), "Unfriend")) {
                 Iterable<Friendship> friendshipList = controller.getFriendshipsOf(currentUserControl.getId());
                 friendshipList.forEach(friendship -> {
-                            if (friendship.getOne() == passiveUserControl.getId() ||
-                                    friendship.getTwo() == passiveUserControl.getId()) {
+                            if (friendship.getSender() == passiveUserControl.getId() ||
+                                    friendship.getReceiver() == passiveUserControl.getId()) {
                                 try {
                                     controller.deleteFriendship(friendship.getId());
                                     hideRelationsMenu();

@@ -60,8 +60,8 @@ class Tests {
 
         Friendship friendship1 = new Friendship(1, user1.getId(), user2.getId());
         assertEquals(java.util.Optional.ofNullable(friendship1.getId()), 1);
-        assertEquals(java.util.Optional.of(friendship1.getOne()), user1.getId());
-        assertEquals(java.util.Optional.of(friendship1.getTwo()), user2.getId());
+        assertEquals(java.util.Optional.of(friendship1.getSender()), user1.getId());
+        assertEquals(java.util.Optional.of(friendship1.getReceiver()), user2.getId());
 
         assertEquals(friendship1.toString(), "1;1;2\n");
 
@@ -196,8 +196,8 @@ class Tests {
         counter=1;
         for(Friendship friendship: inMemoryRepository2.getAll()){
             assertEquals(java.util.Optional.ofNullable(friendship.getId()),counter);
-            assertEquals(friendship.getOne(),counter);
-            assertEquals(friendship.getTwo(),counter+1);
+            assertEquals(friendship.getSender(),counter);
+            assertEquals(friendship.getReceiver(),counter+1);
             counter++;
         }
 
@@ -278,8 +278,8 @@ class Tests {
         FriendshipParser friendshipParser = new FriendshipParser();
         Friendship friendship1 = friendshipParser.parse(strings2);
         assertEquals(java.util.Optional.ofNullable(friendship1.getId()), 1);
-        assertEquals(friendship1.getOne(), 2);
-        assertEquals(friendship1.getTwo(), 3);
+        assertEquals(friendship1.getSender(), 2);
+        assertEquals(friendship1.getReceiver(), 3);
 
         String[] gresit1 = {"1", "2"}, gresit2 = {"3", "4"};
         assertNull(userParser.parse(gresit1));

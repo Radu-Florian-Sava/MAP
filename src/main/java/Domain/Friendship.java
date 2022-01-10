@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public class Friendship implements Identifiable<Integer> {
     private int id;
-    private int one, two;
+    private int sender, receiver;
 
     public Date getDate() {
         return date;
@@ -18,45 +18,45 @@ public class Friendship implements Identifiable<Integer> {
     private Date date;
     private int friendship_request;
 
-    public Friendship(int id, int one, int two, Date date, int friendship_request) {
+    public Friendship(int id, int sender, int receiver, Date date, int friendship_request) {
         this.id = id;
-        this.one = one;
-        this.two = two;
+        this.sender = sender;
+        this.receiver = receiver;
         this.date = date;
         this.friendship_request = friendship_request;
     }
 
-    public Friendship(int id, int one, int two, int friendship_request) {
+    public Friendship(int id, int sender, int receiver, int friendship_request) {
         this.id = id;
-        this.one = one;
-        this.two = two;
+        this.sender = sender;
+        this.receiver = receiver;
         this.friendship_request = friendship_request;
     }
 
-    public Friendship(int id, int one, int two, Date date) {
+    public Friendship(int id, int sender, int receiver, Date date) {
         this.id = id;
-        this.one = one;
-        this.two = two;
+        this.sender = sender;
+        this.receiver = receiver;
         this.date = date;
         this.friendship_request = 0;
     }
 
-    public Friendship(int one, int two) {
+    public Friendship(int sender, int receiver) {
         this.id = 1;
-        this.one = one;
-        this.two = two;
+        this.sender = sender;
+        this.receiver = receiver;
         this.date =  new Date(System.currentTimeMillis());
     }
 
     /**
      * @param id  este id-ul prieteniei intre doi utilizatori
-     * @param one este id-ul unuia dintre utilizatori
-     * @param two este id-ul celuilalt utilizator
+     * @param sender este id-ul unuia dintre utilizatori
+     * @param receiver este id-ul celuilalt utilizator
      */
-    public Friendship(int id, int one, int two) {
+    public Friendship(int id, int sender, int receiver) {
         this.id = id;
-        this.one = one;
-        this.two = two;
+        this.sender = sender;
+        this.receiver = receiver;
         this.date = new Date(System.currentTimeMillis());
     }
 
@@ -71,8 +71,8 @@ public class Friendship implements Identifiable<Integer> {
         boolean equal = Objects.equals(getId(), that.getId());
         if (equal)
             return true;
-        equal = (Objects.equals(((Friendship) o).one, this.one) && Objects.equals(((Friendship) o).two, this.two)) ||
-                (Objects.equals(((Friendship) o).one, this.two) && Objects.equals(((Friendship) o).two, this.one));
+        equal = (Objects.equals(((Friendship) o).sender, this.sender) && Objects.equals(((Friendship) o).receiver, this.receiver)) ||
+                (Objects.equals(((Friendship) o).sender, this.receiver) && Objects.equals(((Friendship) o).receiver, this.sender));
         return equal;
     }
 
@@ -87,8 +87,8 @@ public class Friendship implements Identifiable<Integer> {
     /**
      * @return returneaza id-ul "primului" utilizator
      */
-    public int getOne() {
-        return one;
+    public int getSender() {
+        return sender;
     }
 
     /**
@@ -96,14 +96,14 @@ public class Friendship implements Identifiable<Integer> {
      */
     @Override
     public String toString() {
-        return this.getId() + ";" + one + ";" + two + "\n";
+        return this.getId() + ";" + sender + ";" + receiver + "\n";
     }
 
     /**
      * @return returneaza id-ul celui "de-al doilea" utilizator
      */
-    public int getTwo() {
-        return two;
+    public int getReceiver() {
+        return receiver;
     }
 
     /**

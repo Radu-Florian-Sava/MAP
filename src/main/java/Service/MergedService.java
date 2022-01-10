@@ -74,7 +74,7 @@ public class MergedService {
     private Vector<Integer> friendsOf(int id) throws SQLException {
         Vector<Integer> friendshipVector = new Vector<>();
         for (Friendship friendship : friendshipRepository.getAll()) {
-            if (friendship.getTwo() == id || friendship.getOne() == id)
+            if (friendship.getReceiver() == id || friendship.getSender() == id)
                 friendshipVector.add(friendship.getId());
         }
         return friendshipVector;

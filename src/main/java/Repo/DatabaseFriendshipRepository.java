@@ -35,8 +35,8 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
             Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO friendships (id_user_1, id_user_2, friendship_made, friendship_request) VALUES ("
-                            + friendship.getOne() + "," +
-                            friendship.getTwo() + ",'" +
+                            + friendship.getSender() + "," +
+                            friendship.getReceiver() + ",'" +
                             friendship.getStringDate() + "'," +
                             friendship.getFriendship_request() + ") RETURNING id");
 
@@ -77,8 +77,8 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
     public void update(Integer id, Friendship friendship) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE friendships " +
-                "SET id_user_1 = " + friendship.getOne() +
-                ",id_user_2 = " + friendship.getTwo() +
+                "SET id_user_1 = " + friendship.getSender() +
+                ",id_user_2 = " + friendship.getReceiver() +
                 ",friendship_request = " + friendship.getFriendship_request() +
                 " WHERE id=" + id);
         if (preparedStatement.executeUpdate() == 0)

@@ -26,11 +26,11 @@ public class FriendshipValidator implements Validation<Integer, Friendship> {
         message = "";
         if (friendship.getId() < 1)
             message += "Id invalid!\n";
-        if (friendship.getOne() < 1)
+        if (friendship.getSender() < 1)
             message += "Primul utlilizator nu e valid!\n";
-        if (friendship.getTwo() < 1)
+        if (friendship.getReceiver() < 1)
             message += "Al doilea utlilizator nu e valid!\n";
-        if (friendship.getTwo() == friendship.getOne())
+        if (friendship.getReceiver() == friendship.getSender())
             message += "Utilizatorii au id identic!\n";
         if (message.length() > 0)
             throw new ValidateException(message);

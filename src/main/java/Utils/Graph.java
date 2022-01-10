@@ -52,8 +52,8 @@ public class Graph {
                 matrice[i][j] = value;
 
         for (Friendship friendship : friendshipService.getRecords()) {
-            int i = idContor.get(friendship.getOne());
-            int j = idContor.get(friendship.getTwo());
+            int i = idContor.get(friendship.getSender());
+            int j = idContor.get(friendship.getReceiver());
             matrice[i][j] = 1;
             matrice[j][i] = 1;
         }
