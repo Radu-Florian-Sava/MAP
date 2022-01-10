@@ -26,13 +26,7 @@ public class Friendship implements Identifiable<Integer> {
         this.friendship_request = friendship_request;
     }
 
-    public Friendship(int id, int sender, int receiver, int friendship_request) {
-        this.id = id;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.friendship_request = friendship_request;
-    }
-
+    @Deprecated
     public Friendship(int id, int sender, int receiver, Date date) {
         this.id = id;
         this.sender = sender;
@@ -41,6 +35,7 @@ public class Friendship implements Identifiable<Integer> {
         this.friendship_request = 0;
     }
 
+    @Deprecated
     public Friendship(int sender, int receiver) {
         this.id = 1;
         this.sender = sender;
@@ -53,6 +48,7 @@ public class Friendship implements Identifiable<Integer> {
      * @param sender este id-ul unuia dintre utilizatori
      * @param receiver este id-ul celuilalt utilizator
      */
+    @Deprecated
     public Friendship(int id, int sender, int receiver) {
         this.id = id;
         this.sender = sender;

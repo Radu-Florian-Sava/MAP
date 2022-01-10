@@ -17,6 +17,7 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+@Deprecated
 public class TestsMesaje {
     @Test
     public void repo_test() throws SQLException, RepoException {

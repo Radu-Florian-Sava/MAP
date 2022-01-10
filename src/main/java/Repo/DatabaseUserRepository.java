@@ -42,7 +42,10 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
             throw new RepoException("Element inexistent\n");
         return new User(resultSet.getInt("id"),
                 resultSet.getString("first_name"),
-                resultSet.getString("last_name"));
+                resultSet.getString("last_name"),
+                resultSet.getString("username"),
+                resultSet.getString("password")
+        );
     }
 
     @Override
@@ -65,7 +68,10 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
             return null;
         return new User(resultSet.getInt("id"),
                 resultSet.getString("first_name"),
-                resultSet.getString("last_name"));
+                resultSet.getString("last_name"),
+                resultSet.getString("username"),
+                resultSet.getString("password")
+        );
 
     }
 

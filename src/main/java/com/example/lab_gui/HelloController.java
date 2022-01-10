@@ -337,7 +337,7 @@ public class HelloController {
             int tempId = Integer.parseInt(selectedUser.getText());
             User tempUser = controller.findUser(tempId);
             if (tempUser != null)
-                selectedUser.setText(new UserDTO(tempId, tempUser.getFirstName(), tempUser.getSurname()).toString());
+                selectedUser.setText(new UserDTO(tempId, tempUser.getFirstName(), tempUser.getSurname(),tempUser.getUsername()).toString());
             else
                 throw new NumberFormatException("This is not the user that you are looking for");
         } catch (NumberFormatException numberFormatException) {
@@ -413,7 +413,7 @@ public class HelloController {
         {
             int passive_user_id = Integer.parseInt(selectedFriendship.getSecondName().split(";")[0]);
             User tempUser = controller.findUser(passive_user_id);
-            passiveUserControl=new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname());
+            passiveUserControl=new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname(),tempUser.getUsername());
         }
 
         showMessages();

@@ -616,7 +616,7 @@ public class Controller {
         List<User> users = (List<User>) userService.getRecords();
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
-            userDTOS.add(new UserDTO(user.getId(), user.getFirstName(), user.getSurname()));
+            userDTOS.add(new UserDTO(user.getId(), user.getFirstName(), user.getSurname(),user.getUsername()));
         }
         return userDTOS;
     }

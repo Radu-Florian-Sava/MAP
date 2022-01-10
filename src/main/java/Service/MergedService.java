@@ -20,6 +20,7 @@ import java.util.Vector;
  * permite aplicarea anumitor operatii obiectelor din aplicatie si realizeaza anumite statistici pe baza informatiilor
  * extrase
  */
+@Deprecated
 public class MergedService {
     private Repository<Integer, User> userRepository;
     private Repository<Integer, Friendship> friendshipRepository;

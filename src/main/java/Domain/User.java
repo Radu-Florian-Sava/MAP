@@ -13,12 +13,14 @@ public class User implements Identifiable<Integer> {
     private String username;
     private String password;
 
+    @Deprecated
     public User(String firstName, String surname) {
         this.id = 1;
         this.firstName = firstName;
         this.surname = surname;
     }
 
+    @Deprecated
     public User(String firstName, String surname, String username, String password) {
         this.id = 1;
         this.firstName = firstName;
@@ -54,6 +56,7 @@ public class User implements Identifiable<Integer> {
      * @param firstName este numele utilizatorului
      * @param surname   este prenumele utilizatorului
      */
+    @Deprecated
     public User(int id, String firstName, String surname) {
         this.id = id;
         this.firstName = firstName;

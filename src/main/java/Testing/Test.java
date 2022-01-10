@@ -30,6 +30,7 @@ import static org.junit.Assert.*;
 /**
  * clasa de teste efectuate cu junit
  */
+@Deprecated
 class Tests {
 
     public Tests() {

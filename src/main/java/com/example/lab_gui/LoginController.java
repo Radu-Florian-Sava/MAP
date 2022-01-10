@@ -65,13 +65,15 @@ public class LoginController {
             HelloController helloController = fxmlLoader.getController();
 
             try {
-                helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname()));
+                helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname(),user.getUsername()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
 
+            stage.setResizable(true);
+            stage.setMaximized(true);
             stage.setTitle("Webber");
             stage.setScene(scene);
 
