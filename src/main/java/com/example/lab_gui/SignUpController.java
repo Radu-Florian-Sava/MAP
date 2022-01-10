@@ -22,14 +22,19 @@ import java.sql.SQLException;
 public class SignUpController {
     @FXML
     public Button signUpButton;
+
     @FXML
     public TextField firstnameField;
+
     @FXML
     public TextField surnameField;
+
     @FXML
     public TextField usernameField;
+
     @FXML
     public PasswordField passwordField;
+
     @FXML
     public PasswordField confirmPasswordField;
 
@@ -64,14 +69,6 @@ public class SignUpController {
             stage.close();
 
             stage.setScene(scene);
-            stage.setMinHeight(200);
-            stage.setMinWidth(271);
-
-            stage.setMaxHeight(200);
-            stage.setMaxWidth(271);
-            stage.setMaxHeight(200);
-            stage.setHeight(200);
-            stage.setWidth(271);
 
             stage.show();
         }

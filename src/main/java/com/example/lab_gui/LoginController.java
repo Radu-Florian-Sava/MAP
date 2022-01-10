@@ -75,11 +75,6 @@ public class LoginController {
             stage.setTitle("Webber");
             stage.setScene(scene);
 
-            stage.setMinHeight(315);
-            stage.setMinWidth(580);
-
-            stage.setMaxHeight(490);
-            stage.setMaxWidth(980);
             stage.show();
         }
     }
@@ -96,11 +91,6 @@ public class LoginController {
         stage.setTitle("Sign Up");
         stage.setScene(scene);
 
-        stage.setMinHeight(285);
-        stage.setMinWidth(250);
-
-        stage.setMaxHeight(285);
-        stage.setMaxWidth(250);
         stage.show();
     }
 

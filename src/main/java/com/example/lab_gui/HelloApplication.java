@@ -35,14 +35,12 @@ public class HelloApplication extends Application {
         });
 
         stage.setScene(scene);
-        stage.setMinHeight(200);
-        stage.setMinWidth(271);
         stage.setTitle("Log in");
-        stage.setMaxHeight(200);
-        stage.setMaxWidth(271);
-        stage.setMaxHeight(200);
-        stage.setHeight(200);
-        stage.setWidth(271);
+
+        stage.setWidth(450);
+        stage.setHeight(400);
+        stage.setResizable(false);
+
         stage.show();
     }
 

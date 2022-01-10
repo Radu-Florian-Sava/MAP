@@ -6,28 +6,47 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="376.0" maxWidth="443.0" minHeight="203.0" minWidth="271.0" prefHeight="376.0" prefWidth="443.0" style="-fx-background-color: MEDIUMSLATEBLUE;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="376.0" prefWidth="443.0" style="-fx-background-color: MEDIUMSLATEBLUE;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.LoginController">
    <children>
-      <TextField fx:id="usernameBox" layoutX="92.0" layoutY="35.0">
+      <TextField fx:id="usernameBox" layoutX="230.0" layoutY="227.0">
          <effect>
             <InnerShadow />
-         </effect></TextField>
-      <PasswordField fx:id="passwordBox" layoutX="92.0" layoutY="72.0" onKeyPressed="#onLoginViaEnter">
+         </effect>
+      </TextField>
+      <PasswordField fx:id="passwordBox" layoutX="230.0" layoutY="267.0" onKeyPressed="#onLoginViaEnter">
          <effect>
             <InnerShadow />
-         </effect></PasswordField>
-      <Button fx:id="loginButton" layoutX="136.0" layoutY="118.0" mnemonicParsing="false" onAction="#onLoginClicked" prefHeight="26.0" prefWidth="106.0" style="-fx-background-color: MediumOrchid;" text="Log in">
+         </effect>
+      </PasswordField>
+      <Button fx:id="loginButton" layoutX="305.0" layoutY="312.0" mnemonicParsing="false" onAction="#onLoginClicked" prefHeight="26.0" prefWidth="106.0" style="-fx-background-color: MediumOrchid;" text="Log in">
          <effect>
             <DropShadow />
-         </effect></Button>
-      <Button fx:id="signupButton" layoutX="14.0" layoutY="119.0" mnemonicParsing="false" onAction="#onSignUpClicked" prefHeight="26.0" prefWidth="113.0" style="-fx-background-color: MediumOrchid;" text="Sign Up">
+         </effect>
+      </Button>
+      <Button fx:id="signupButton" layoutX="22.0" layoutY="312.0" mnemonicParsing="false" onAction="#onSignUpClicked" prefHeight="26.0" prefWidth="113.0" style="-fx-background-color: MediumOrchid;" text="Sign Up">
          <effect>
             <DropShadow />
-         </effect></Button>
-      <Label layoutX="114.0" layoutY="14.0" text="Log in" />
-      <Label layoutX="14.0" layoutY="39.0" text="Username" />
-      <Label layoutX="14.0" layoutY="76.0" text="Password" />
+         </effect>
+      </Button>
+      <Label alignment="CENTER" layoutX="156.0" layoutY="167.0" prefHeight="41.0" prefWidth="106.0" text="Log in">
+         <font>
+            <Font name="Times New Roman" size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="144.0" layoutY="231.0" text="Username" />
+      <Label layoutX="146.0" layoutY="271.0" text="Password" />
+      <ImageView fitHeight="150.0" fitWidth="213.0" layoutX="126.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Images/Webber.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
    </children>
 </AnchorPane>
