@@ -9,6 +9,7 @@ import Exceptions.RepoException;
  *             tip de repozitoriu care retine elementele de tip T in memorie
  *             elementele dispar la inchiderea aplicatiei
  */
+@Deprecated
 public class InMemoryRepository<Id, T extends Identifiable<Id>> extends AbstractRepository<Id, T> {
 
     /**

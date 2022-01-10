@@ -103,7 +103,7 @@ public class User implements Identifiable<Integer> {
      */
     @Override
     public String toString() {
-        return Integer.toString(this.getId()) + ";" + firstName + ";" + surname + "\n";
+        return this.getId() + ";" + firstName + ";" + surname + "\n";
     }
 
     /**

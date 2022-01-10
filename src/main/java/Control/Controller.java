@@ -597,7 +597,7 @@ public class Controller {
                         users.stream().filter((x) -> x.getId() == friendship.getSender()).toList().get(0).toString(),
                         users.stream().filter((x) -> x.getId() == friendship.getReceiver()).toList().get(0).toString(),
                         friendship.getDate(),
-                        UtilsFunctions.transormIntegerToStatusFriendship(friendship.getFriendship_request())
+                        UtilsFunctions.transformIntegerToStatusFriendship(friendship.getFriendship_request())
                 ));
             else
                 friendshipDTOS.add(new FriendshipDTO(
@@ -606,7 +606,7 @@ public class Controller {
                         users.stream().filter((x) -> x.getId() == friendship.getReceiver()).toList().get(0).toString(),
                         users.stream().filter((x) -> x.getId() == friendship.getSender()).toList().get(0).toString(),
                         friendship.getDate(),
-                        UtilsFunctions.transormIntegerToStatusFriendship(friendship.getFriendship_request())
+                        UtilsFunctions.transformIntegerToStatusFriendship(friendship.getFriendship_request())
                 ));
         }
         return friendshipDTOS;

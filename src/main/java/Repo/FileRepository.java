@@ -12,6 +12,7 @@ import java.io.*;
  *             tip de repozitoriu care retine elementele de tip T in memorie si in fisier
  *             elementele nu dispar la inchiderea aplicatiei
  */
+@Deprecated
 public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepository<Id, T> {
     private String fileName;
     private TypeParser<Id, T> typeParser;

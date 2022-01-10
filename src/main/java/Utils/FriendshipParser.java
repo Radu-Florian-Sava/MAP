@@ -4,7 +4,9 @@ import Domain.Friendship;
 
 /**
  * clasa care creeaza o noua relatie de prietenie
+ * @deprecated this class must 
  */
+@Deprecated
 public class FriendshipParser implements TypeParser<Integer, Friendship> {
 
     /**

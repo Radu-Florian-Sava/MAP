@@ -6,6 +6,7 @@ import Utils.TypeParser;
 /**
  *  repozitoriu specializat care retine date despre utilizatori in fisier
  */
+@Deprecated
 public class FileUserRepository extends FileRepository<Integer, User> {
 
     /**

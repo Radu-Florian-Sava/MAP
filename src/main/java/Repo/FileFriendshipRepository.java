@@ -6,6 +6,7 @@ import Utils.TypeParser;
 /**
  *  repozitoriu specializat care retine date despre utilizatori in fisier
  */
+@Deprecated
 public class FileFriendshipRepository extends FileRepository<Integer, Friendship> {
     /**
      * @param fileName   numele fisierului in care vor fi puse inregistrarile

@@ -5,6 +5,7 @@ import Domain.User;
 /**
  * clasa cara creeaza un nou utilizator
  */
+@Deprecated
 public class UserParser implements TypeParser<Integer, User> {
 
     /**

@@ -7,6 +7,7 @@ import Domain.Identifiable;
  * @param <T>  instanta a clasei Identifiable
  *             clasa care creeaza un anumit tip de obiect folosind strategy pattern
  */
+@Deprecated
 public interface TypeParser<Id, T extends Identifiable<Id>> {
     /**
      * @param attributes o lista de atribute de tip sir de caractere a elementului pe care il va genera

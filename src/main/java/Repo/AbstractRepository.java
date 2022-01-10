@@ -10,6 +10,7 @@ import java.util.Map;
  * @param <T>  instanta a clasei Identifiable
  *             implementeaza partial interfata Repository
  */
+@Deprecated
 public abstract class AbstractRepository<Id, T extends Identifiable<Id>> implements Repository<Id, T> {
 
     protected Map<Id, T> elems;
