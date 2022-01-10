@@ -26,11 +26,11 @@ public class FriendshipDTO {
         return id;
     }
 
-    public String getFirst_name() {
+    public String getFirstName() {
         return first_name;
     }
 
-    public String getSecond_name() {
+    public String getSecondName() {
         return second_name;
     }
 

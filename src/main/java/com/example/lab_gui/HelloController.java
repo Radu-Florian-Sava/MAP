@@ -235,7 +235,7 @@ public class HelloController {
         try {
 
             relationColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStringRelation()));
-            userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecond_name()));
+            userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecondName()));
             statusColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStatus()));
 
 
@@ -356,7 +356,7 @@ public class HelloController {
             if (selectedFriendship.getRelation() == 1) {
 
                 acceptOrReject.setTitle("Do you confirm this friendship request ?");
-                acceptOrReject.setContentText("The user " + selectedFriendship.getSecond_name() +
+                acceptOrReject.setContentText("The user " + selectedFriendship.getSecondName() +
                         " has sent you a friend request");
 
                 hideRelationsMenu();
@@ -365,7 +365,7 @@ public class HelloController {
                 ButtonType ignore = new ButtonType("Ignore for now", ButtonBar.ButtonData.CANCEL_CLOSE);
 
                 acceptOrReject.getButtonTypes().setAll(acceptRequest, rejectRequest, ignore);
-                int user_id = Integer.parseInt(selectedFriendship.getFirst_name().split(";")[0]);
+                int user_id = Integer.parseInt(selectedFriendship.getFirstName().split(";")[0]);
 
                 Optional<ButtonType> result = acceptOrReject.showAndWait();
 
@@ -382,7 +382,7 @@ public class HelloController {
             } else {
                 acceptOrReject.setTitle("Do you cancel this friendship request ?");
                 acceptOrReject.setContentText("You have sent a friendship request to " +
-                        selectedFriendship.getSecond_name());
+                        selectedFriendship.getSecondName());
 
                 hideRelationsMenu();
                 ButtonType deleteRequest = new ButtonType("Yes");
@@ -411,7 +411,7 @@ public class HelloController {
     public void loadMessages() throws SQLException {
         if(selectedFriendship!=null)
         {
-            int passive_user_id = Integer.parseInt(selectedFriendship.getSecond_name().split(";")[0]);
+            int passive_user_id = Integer.parseInt(selectedFriendship.getSecondName().split(";")[0]);
             User tempUser = controller.findUser(passive_user_id);
             passiveUserControl=new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname());
         }

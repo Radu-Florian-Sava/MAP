@@ -692,12 +692,12 @@ public class Controller {
                 String text;
                 if (friendship.getId() == id)
                     text =
-                            friendship.getFirst_name() + " " +
+                            friendship.getFirstName() + " " +
                                     friendship.getStatus() + " " +
                                     friendship.getDate().toString();
                 else
                     text =
-                            friendship.getSecond_name() + " " +
+                            friendship.getSecondName() + " " +
                                     friendship.getStatus() + " " +
                                     friendship.getDate().toString();
                 text = text.replace("\n", "").replace("\r", "");
