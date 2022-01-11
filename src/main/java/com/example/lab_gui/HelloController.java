@@ -508,7 +508,14 @@ public class HelloController {
 
     @FXML
     public void selectReply(MouseEvent mouseEvent) {
-        idToReply = messageTable.getSelectionModel().getSelectedItem().getId();
-        sendMessageButton.setText("Send \nReply");
+        if(idToReply==-1)
+        {
+            idToReply = messageTable.getSelectionModel().getSelectedItem().getId();
+            sendMessageButton.setText("Send \nReply");
+        }
+        else{
+            idToReply = -1;
+            sendMessageButton.setText("Send \nMessage");
+        }
     }
 }
