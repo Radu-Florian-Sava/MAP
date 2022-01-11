@@ -8,21 +8,16 @@ import Exceptions.ValidateException;
 import Utils.StatusFriendship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
-
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -126,14 +121,14 @@ public class HelloController {
         if (currentUserControl != null) {
             try {
                 friendships = controller.getAllTypesOfFriendshipsOf(currentUserControl.getId());
+                friendshipTable.setItems(FXCollections.observableList(friendships));
+
             } catch (SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText(e.getMessage());
                 alert.show();
             }
-
-            friendshipTable.setItems(FXCollections.observableList(friendships));
         }
 
         if (friendships == null || friendships.isEmpty()) {
@@ -143,16 +138,16 @@ public class HelloController {
     }
 
     private void loadUsers()  {
-        List<UserDTO> userDTOS = null;
+        List<UserDTO> userDTOS;
         try {
             userDTOS = controller.getAllUsersDTO();
+            userTable.setItems(FXCollections.observableList(userDTOS));
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText(e.getMessage());
             alert.show();
         }
-        userTable.setItems(FXCollections.observableList(userDTOS));
     }
 
     private void loadFriends() {
@@ -175,6 +170,7 @@ public class HelloController {
                             return false;
                         }
                 ).toList();
+                hiddenTable.setItems(FXCollections.observableList(hiddenUserDTO));
             } catch (SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -182,8 +178,7 @@ public class HelloController {
                 alert.show();
             }
 
-            hiddenTable.setItems(FXCollections.observableList(hiddenUserDTO));
-            if (hiddenUserDTO.isEmpty()) {
+            if (hiddenUserDTO==null) {
                 hiddenTable.setPlaceholder(new Label("For the moment there are no friends to show \n" +
                         "Try again after you make some :P"));
                 changeStatusUserControl = null;
@@ -214,6 +209,7 @@ public class HelloController {
                             return false;
                         }
                 ).toList();
+                hiddenTable.setItems(FXCollections.observableList(hiddenUserDTO));
             } catch (SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -221,9 +217,8 @@ public class HelloController {
                 alert.show();
             }
 
-            hiddenTable.setItems(FXCollections.observableList(hiddenUserDTO));
 
-            if (hiddenUserDTO.isEmpty()) {
+            if (hiddenUserDTO==null) {
                 hiddenTable.setPlaceholder(new Label("It looks like you've got lots of friends \n" +
                         "There's no one to add at the moment XD"));
                 changeStatusUserControl = null;
@@ -295,7 +290,7 @@ public class HelloController {
     }
 
     @FXML
-    private void setPassiveUser(MouseEvent mouseEvent) {
+    private void setPassiveUser() {
         changeStatusUserControl = hiddenTable.getSelectionModel().getSelectedItem();
         if (changeStatusUserControl != null) {
             passiveUserName.setText(
@@ -304,16 +299,16 @@ public class HelloController {
         }
     }
 
-    public void revealPotentialFriends(ActionEvent actionEvent)  {
+    public void revealPotentialFriends()  {
         loadBefriendable();
 
     }
 
-    public void revealCurrentFriends(ActionEvent actionEvent)  {
+    public void revealCurrentFriends()  {
         loadFriends();
     }
 
-    public void changeStatusOfFriendship(ActionEvent actionEvent)  {
+    public void changeStatusOfFriendship()  {
         try {
             if (changeStatusUserControl != null && currentUserControl != null) {
 
@@ -385,7 +380,7 @@ public class HelloController {
         }
     }
 
-    public void selectFriendship(MouseEvent mouseEvent)  {
+    public void selectFriendship()  {
         try {
             selectedFriendship = friendshipTable.getSelectionModel().getSelectedItem();
 
@@ -480,7 +475,7 @@ public class HelloController {
     }
 
     @FXML
-    public void sendMessage(ActionEvent actionEvent) {
+    public void sendMessage() {
         if(currentUserControl!=null && messageUserControl !=null){
             String message = messageBody.getText();
             if(message.length()!=0)
@@ -508,7 +503,7 @@ public class HelloController {
 
     public void sendMessageViaEnter(KeyEvent keyEvent) {
         if(keyEvent.getCode()==KeyCode.ENTER){
-            sendMessage(null);
+            sendMessage();
         }
     }
 
@@ -524,7 +519,7 @@ public class HelloController {
     }
 
     @FXML
-    public void onPDFSimpleClicked(ActionEvent actionEvent)  {
+    public void onPDFSimpleClicked()  {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
         Parent parent = null;
         try {
@@ -555,7 +550,7 @@ public class HelloController {
     }
 
     @FXML
-    public void onPDFFriendClicked(ActionEvent actionEvent)  {
+    public void onPDFFriendClicked()  {
         if(selectedFriendship==null || selectedFriendship.getStatus() != StatusFriendship.ACCEPT.getStatus()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -595,7 +590,7 @@ public class HelloController {
     }
 
     @FXML
-    public void selectReply(MouseEvent mouseEvent) {
+    public void selectReply() {
         if(idToReply==-1)
         {
             idToReply = messageTable.getSelectionModel().getSelectedItem().getId();

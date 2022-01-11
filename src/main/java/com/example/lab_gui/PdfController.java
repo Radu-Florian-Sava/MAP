@@ -3,12 +3,9 @@ package com.example.lab_gui;
 import Control.Controller;
 import Domain.UserDTO;
 import Exceptions.BusinessException;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -57,7 +54,7 @@ public class PdfController {
     }
 
     @FXML
-    public void onCreatePDFClicked(ActionEvent actionEvent)  {
+    public void onCreatePDFClicked()  {
         String err = "";
         Date date_start = new Date(dateStart.getValue().toEpochDay() * 3600 * 24 * 1000);
         Date date_end = new Date(dateEnd.getValue().toEpochDay() * 3600 * 24 * 1000);
@@ -110,7 +107,7 @@ public class PdfController {
     }
 
     @FXML
-    public void onChooseFileClicked(ActionEvent actionEvent) {
+    public void onChooseFileClicked() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File file = directoryChooser.showDialog(chooseFileButton.getScene().getWindow());
         pathBox.setText(file.getAbsolutePath());

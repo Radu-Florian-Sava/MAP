@@ -5,7 +5,6 @@ import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
 import Utils.Hasher;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -45,7 +44,7 @@ public class SignUpController {
     public PasswordField confirmPasswordField;
 
     @FXML
-    public void signUpClicked(ActionEvent actionEvent) {
+    public void signUpClicked() {
         String error = "";
         try {
             Controller.getInstance().signup(
@@ -91,7 +90,7 @@ public class SignUpController {
      */
     public void signUpViaEnter(KeyEvent keyEvent)  {
         if(keyEvent.getCode()== KeyCode.ENTER){
-            signUpClicked(null);
+            signUpClicked();
         }
     }
 }
