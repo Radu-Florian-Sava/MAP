@@ -6,6 +6,9 @@ import Exceptions.RepoException;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * specialised repository which contains friendship relationships in a database
+ */
 public class DatabaseFriendshipRepository implements Repository<Integer, Friendship> {
 
     private final String url;
@@ -26,9 +29,9 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
 
     /**
      * add a friendship
-     * @param friendship the friendship we want to add
-     * @throws SQLException database error
-     * @return
+     * @param friendship the friendship relationship that we want to add
+     * @throws SQLException if the database cannot be accessed
+     * @return the id of the added element
      */
     @Override
     public Integer add(Friendship friendship) throws RepoException, SQLException {
@@ -49,8 +52,8 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
      * delete a friendship by id
      * @param id the friendship with that specific id
      * @return the friendship deleted
-     * @throws RepoException if the friendship with that id doesnt exist
-     * @throws SQLException database error
+     * @throws RepoException if the friendship with that id doesn't exist
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public Friendship delete(Integer id) throws RepoException, SQLException {
@@ -70,8 +73,8 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
     /**
      * @param id the friendship with that specific id
      * @param friendship the new friendship
-     * @throws RepoException if the friendship with that id doesnt exist
-     * @throws SQLException database error
+     * @throws RepoException if the friendship with that id doesn't exist
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public void update(Integer id, Friendship friendship) throws RepoException, SQLException {
@@ -88,8 +91,8 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
 
     /**
      * @param id the friendship with that specific id
-     * @return the friendship with that id or null if it doesnt exist
-     * @throws SQLException database error
+     * @return the friendship with that id or null if it doesn't exist
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public Friendship find(Integer id) throws SQLException {
@@ -108,8 +111,8 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
 
 
     /**
-     * @return all friendships
-     * @throws SQLException database error
+     * @return an iterable containing all the friendship relationship
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public Iterable<Friendship> getAll() throws SQLException {
@@ -130,8 +133,8 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
     }
 
     /**
-     * @return the number of friendships in total
-     * @throws SQLException database error
+     * @return the number of friendships contained by the database
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public int size() throws SQLException {

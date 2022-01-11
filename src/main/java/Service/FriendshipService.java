@@ -12,18 +12,27 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ *  service used for storing users
+ */
 public class FriendshipService extends AbstractService<Integer, Friendship>{
 
+    /**
+     * @param repository the repository used by the service
+     * @param validator the validator used by the service
+     */
     public FriendshipService(Repository repository, Validator validator) {
         super(repository, validator);
     }
 
 
     /**
-     * @deprecated we don't need id generator anymore
+     * @return the 'least' numeric ID which is not used
+     * @throws SQLException if the database cannot be accessed
+     * @deprecated since we are using a database
      */
-    @Override
     @Deprecated
+    @Override
     public Integer generateId() throws SQLException {
         if (repository.size() == 0)
             return 1;
@@ -35,12 +44,13 @@ public class FriendshipService extends AbstractService<Integer, Friendship>{
     }
 
     /**
-     * add a friendship in repo
-     * @param params the params we need to create a new friendship
-     * @throws SQLException database error
-     * @throws BusinessException business error
-     * @throws ValidateException validation of friendship error
-     * @throws RepoException repo rule error
+     * add a friendship in repository
+     * @param params the parameters we need to create a new friendship
+     * @throws SQLException if the database cannot be accessed
+     * @throws BusinessException for unforeseen errors which might appear when the entities in our application
+     *                           interact with one another
+     * @throws ValidateException if the element contains invalid data
+     * @throws RepoException if there already is an element with the given ID parameter
      */
     @Override
     public int createRecord( ArrayList<Object> params) throws SQLException, BusinessException, ValidateException, RepoException {
@@ -62,12 +72,13 @@ public class FriendshipService extends AbstractService<Integer, Friendship>{
     }
 
     /**
-     * update a friendship from repo
-     * @param params the params we need to create a new friendship
-     * @throws SQLException database error
-     * @throws BusinessException business error
-     * @throws ValidateException validation of friendship error
-     * @throws RepoException repo rule error
+     * update a friendship in repository
+     * @param params the parameters we need to update a friendship
+     * @throws SQLException if the database cannot be accessed
+     * @throws BusinessException for unforeseen errors which might appear when the entities in our application
+     *                           interact with one another
+     * @throws ValidateException if the element contains invalid data
+     * @throws RepoException if there is no element with the given ID
      */
     @Override
     public void updateRecord(Integer id, ArrayList<Object> params) throws BusinessException, ValidateException, SQLException, RepoException {

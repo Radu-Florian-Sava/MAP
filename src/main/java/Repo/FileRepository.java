@@ -7,10 +7,11 @@ import Utils.TypeParser;
 import java.io.*;
 
 /**
- * @param <Id> id-ul generic al unui element din repozitoriu
- * @param <T>  instanta a clasei Identifiable
- *             tip de repozitoriu care retine elementele de tip T in memorie si in fisier
- *             elementele nu dispar la inchiderea aplicatiei
+ * @param <Id> generic ID of an element
+ * @param <T>  instance of Identifiable
+ *             the elements have the generic type T
+ *             IMPORTANT: since the elements are saved in a file
+ *                        the data won't disappear when the application in closed
  */
 @Deprecated
 public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepository<Id, T> {
@@ -18,8 +19,8 @@ public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepo
     private TypeParser<Id, T> typeParser;
 
     /**
-     * @param fileName   numele fisierului in care vor fi puse inregistrarile
-     * @param typeParser numele obiectului care va genera elemente generice de tipul specificat
+     * @param fileName the name of the file containing the elements
+     * @param typeParser an object specialised for creating elements which the repository contains
      */
     public FileRepository(String fileName, TypeParser<Id, T> typeParser) {
         super();
@@ -34,7 +35,7 @@ public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepo
     }
 
     /**
-     * metoda privata care incarca inregistrarile din fisier in repozitoriu
+     * private method which loads all the elements from the file in memory
      */
     private void loadFromFile() {
         try {
@@ -58,7 +59,7 @@ public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepo
     }
 
     /**
-     * @param string sirul de caractere care va fi scris in fisier
+     * @param string which will be written in the file
      */
     private void appendToFile(String string) {
         try {
@@ -70,7 +71,7 @@ public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepo
     }
 
     /**
-     * scrie toate intregistrarile din repozitoriu in fisier
+     * write in the file all the elements which are in memory
      */
     private void writeToFile() {
         try {
@@ -84,9 +85,9 @@ public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepo
     }
 
     /**
-     * @param t element de tip generic care va fi adaugat in repozitoriu
-     * @throws RepoException arunca exceptie daca exista un element generic cu id-ul dat in repozitoriu
-     * @return
+     * @param t the element which will be added
+     * @throws RepoException if there already is an element with the given ID contained by the repository
+     * @return the ID of the given element
      */
     @Override
     public Id add(T t) throws RepoException {
@@ -98,9 +99,9 @@ public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepo
     }
 
     /**
-     * @param id id-ul elementului de tip generic care va fi sters din repozitoriu
-     * @return returneaza elementul generic sters
-     * @throws RepoException arunca exceptie daca nu exista elementul cu id-ul dat in repozitoriu
+     * @param id of the element which will be deleted
+     * @return the deleted element
+     * @throws RepoException if there is no element with the given ID in the repository
      */
     @Override
     public T delete(Id id) throws RepoException {
@@ -112,9 +113,9 @@ public class FileRepository<Id, T extends Identifiable<Id>> extends AbstractRepo
     }
 
     /**
-     * @param id id-ul elementului care va fi modificat
-     * @param t  element de tip generic care va inlocui elementul cu id-ul id din repozitoriu
-     * @throws RepoException arunca exceptie daca nu exista elementul cu id-ul dat in repozitoriu
+     * @param id of the element which will be modified
+     * @param t  element with the same ID which will replace the element with the given ID
+     * @throws RepoException if there is no element with the given ID in the repository
      */
     @Override
     public void update(Id id, T t) throws RepoException {

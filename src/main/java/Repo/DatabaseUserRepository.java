@@ -6,18 +6,33 @@ import Exceptions.RepoException;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ *  specialised repository which contains users in a database
+ */
 public class DatabaseUserRepository implements Repository<Integer, User> {
 
     private final String url;
     private final String username;
     private final String password;
 
+    /**
+     * constructor
+     * @param url the url of the database
+     * @param username the username of the database
+     * @param password the password of the database
+     */
     public DatabaseUserRepository(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
     }
 
+    /**
+     * @param user the user that we want to add
+     * @return the ID of the added user
+     * @throws RepoException if the user with this ID already exists
+     * @throws SQLException if the database cannot be accessed
+     */
     @Override
     public Integer add(User user) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
@@ -32,6 +47,12 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
         return resultSet.getInt("id");
     }
 
+    /**
+     * @param id of the element which will be deleted
+     * @return the deleted user
+     * @throws RepoException if the user with this ID doesn't exist
+     * @throws SQLException if the database cannot be accessed
+     */
     @Override
     public User delete(Integer id) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
@@ -48,6 +69,12 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
         );
     }
 
+    /**
+     * @param id   of the element which will be updated
+     * @param user an user with the same ID which will replace the current user
+     * @throws RepoException if the user with this ID doesn't exist
+     * @throws SQLException if the database cannot be accessed
+     */
     @Override
     public void update(Integer id, User user) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
@@ -59,6 +86,11 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
             throw new RepoException("Element inexistent\n");
     }
 
+    /**
+     * @param id of the element we are looking for
+     * @return the element with the given ID or null if it doesn't exist
+     * @throws SQLException if the database cannot be accessed
+     */
     @Override
     public User find(Integer id) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
@@ -76,6 +108,10 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
     }
 
 
+    /**
+     * @return an iterable containing all the users
+     * @throws SQLException if the database cannot be accessed
+     */
     @Override
     public Iterable<User> getAll() throws SQLException {
         ArrayList<User> userArrayList = new ArrayList<>();
@@ -93,6 +129,10 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
         return userArrayList;
     }
 
+    /**
+     * @return the number of users in the database
+     * @throws SQLException if the database cannot be accessed
+     */
     @Override
     public int size() throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);

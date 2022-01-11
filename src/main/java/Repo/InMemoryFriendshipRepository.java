@@ -3,12 +3,12 @@ package Repo;
 import Domain.Friendship;
 
 /**
- *  repozitoriu specializat care retine date despre relatiile de prietenie in memorie ca si HashMap
+ *  specialised repository which contains friendship relationships in memory
  */
 @Deprecated
 public class InMemoryFriendshipRepository extends InMemoryRepository<Integer, Friendship> {
     /**
-     * constructor standard
+     * standard constructor
      */
     public InMemoryFriendshipRepository() {
         super();

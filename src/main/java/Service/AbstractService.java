@@ -8,16 +8,16 @@ import Validate.Validator;
 import java.sql.SQLException;
 
 /**
- * @param <Id> tipul id-ului unic al fiecarui element din service
- * @param <T> tipul elementului care este un identifiable de Id
+ * @param <Id> generic ID of an element
+ * @param <T> instance of Identifiable
  */
 public abstract class AbstractService<Id, T extends Identifiable<Id>> implements Service<Id, T> {
     protected Repository<Id, T> repository;
     protected Validator<Id, T> validator;
 
     /**
-     * @param repository este repozitoriul folosit de catre service
-     * @param validator este validatorul folosit de catre service
+     * @param repository used by the service to contain the elements
+     * @param validator used by the service to validate the elements
      */
     public AbstractService(Repository repository, Validator validator) {
         super();
@@ -26,8 +26,8 @@ public abstract class AbstractService<Id, T extends Identifiable<Id>> implements
     }
 
     /**
-     * @return numarul de elemente din service
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the number of elements contained by the service
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public int count() throws SQLException {
@@ -35,8 +35,8 @@ public abstract class AbstractService<Id, T extends Identifiable<Id>> implements
     }
 
     /**
-     * @return un iterable care contine elementele din service
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return an iterable containing all the elements
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public Iterable<T> getRecords() throws SQLException {
@@ -44,9 +44,9 @@ public abstract class AbstractService<Id, T extends Identifiable<Id>> implements
     }
 
     /**
-     * @param id este id-ul elementului cautat
-     * @return este elementul cu id-ul id sau null daca nu exista in service
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the element we are looking for
+     * @return the element with the given ID or null if it doesn't exist
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public T findRecord(Id id) throws SQLException {
@@ -54,10 +54,10 @@ public abstract class AbstractService<Id, T extends Identifiable<Id>> implements
     }
 
     /**
-     * @param id este id-ul elementului pe care dorim sa il stergem
-     * @return elementul sters cu id-ul id
-     * @throws RepoException arunca exceptie daca nu exista un element cu id-ul id la nivel de repozitoriu
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the element we want to delete
+     * @return the deleted element
+     * @throws RepoException if the element with the given ID doesn't exist
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public T deleteRecord(Id id) throws RepoException, SQLException {

@@ -16,9 +16,8 @@ import java.util.Objects;
 import java.util.Vector;
 
 /**
- * @deprecated folositi Controller impreuna cu UserService si FriendshipService
- * permite aplicarea anumitor operatii obiectelor din aplicatie si realizeaza anumite statistici pe baza informatiilor
- * extrase
+ * @deprecated use Controller from the Control layer instead, it is much more elegant
+ * allows operations on the user service and friendship service at a basic and rather primitive level
  */
 @Deprecated
 public class MergedService {
@@ -28,8 +27,8 @@ public class MergedService {
     private FriendshipValidator friendshipValidator;
 
     /**
-     * @param userRepository       numele fisierului in care sunt stocati utilizatorii
-     * @param friendshipRepository numele fisierului in care sunt stocate relatiile de prietenie
+     * @param userRepository  the user repository we use
+     * @param friendshipRepository the friendship repository we use
      */
     public MergedService(Repository userRepository, Repository friendshipRepository) {
         this.userRepository = userRepository;
@@ -39,10 +38,10 @@ public class MergedService {
     }
 
     /**
-     * @param repository repozitoriul pentru care va fi generat id-ul
-     * @param <T> clasa derivata din Identifiable
-     * @return cel mai mic id numar intreg strict pozitiv care poate fi asignat
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param repository for which the ID will be generated
+     * @param <T> instance of Identifiable
+     * @return the 'least' id not used by the repository
+     * @throws SQLException if the database cannot be accessed
      */
     private <T extends Identifiable<Integer>> int generateId(Repository<Integer, T> repository) throws SQLException {
         if (repository.size() == 0)
@@ -55,11 +54,11 @@ public class MergedService {
     }
 
     /**
-     * @param firstName numele utilizatorului care va fi adaugat
-     * @param surname   prenumele utilizatorului care va fi adaugat
-     * @throws ValidateException arunca exceptie daca numele/ prenumele sunt vide
-     * @throws RepoException     arunca exceptie daca id-ul asignat este duplicat
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param firstName of the user that we want to add
+     * @param surname of the user that we want to add
+     * @throws ValidateException if the firstName/surname are void("")
+     * @throws RepoException if there is a duplicated ID(or rather an attempt)
+     * @throws SQLException if the database cannot be accessed
      */
     public void addUser(String firstName, String surname) throws ValidateException, RepoException, SQLException {
         User user = new User(generateId(userRepository), firstName, surname);
@@ -68,9 +67,9 @@ public class MergedService {
     }
 
     /**
-     * @param id este id-ul elementului cautat (relatie de prietenie)
-     * @return returneaza o lista cu 2 id-uri a utilizatorilor prieteni corespunzatori relatiei de prietenie
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the user whose friends we want to find
+     * @return a vector of the friendships' IDs
+     * @throws SQLException if the database cannot be accessed
      */
     private Vector<Integer> friendsOf(int id) throws SQLException {
         Vector<Integer> friendshipVector = new Vector<>();
@@ -82,10 +81,10 @@ public class MergedService {
     }
 
     /**
-     * @param id reprezinta id-ul utilizatorului care va fi sters
-     * @return returneaza utilizatorul cu id-ul id care a fost sters
-     * @throws RepoException arunca exceptie daca elementul cu id-ul dat nu exista
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the user that we want to delete
+     * @return the user we deleted
+     * @throws RepoException if the element doesn't exist
+     * @throws SQLException if the database cannot be accessed
      */
     public User deleteUser(int id) throws RepoException, SQLException {
         for (int friendshipId : friendsOf(id)) {
@@ -95,37 +94,37 @@ public class MergedService {
     }
 
     /**
-     * @param id este id-ul utilizatorului cautat
-     * @return returneaza utilizatorul cu id-ul dat sau null daca nu exista
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the user we are looking for
+     * @return the user with the given ID or null if it doesn't exist
+     * @throws SQLException if the database cannot be accessed
      */
     public User findUser(int id) throws SQLException {
         return userRepository.find(id);
     }
 
     /**
-     * @return returneaza o lista iterabila cu toti utilizatorii
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return an iterable containing all the users
+     * @throws SQLException if the database cannot be accessed
      */
     public Iterable<User> getUsers() throws SQLException {
         return userRepository.getAll();
     }
 
     /**
-     * @return returneaza numarul de utilizatori din aplicatie
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the number of users contained by the repository
+     * @throws SQLException if the database cannot be accessed
      */
     public int numberOfUsers() throws SQLException {
         return userRepository.size();
     }
 
     /**
-     * @param id este id-ul utilizatorului care va fi modificat
-     * @param newFirstName este noul nume al utilizatorului
-     * @param newSurname   este noul prenume al utilizatorului
-     * @throws ValidateException arunca exceptie daca numele/prenumele este vid
-     * @throws RepoException     arunca exceptie daca id-ul nu corespunde unui utilizator
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the element which we want to update
+     * @param newFirstName of the user which we want to update
+     * @param newSurname of the user which we want to update
+     * @throws ValidateException if one of the names if void("")
+     * @throws RepoException if there is no user with the given ID
+     * @throws SQLException if the database cannot be accessed
      */
     public void updateUser(int id, String newFirstName, String newSurname) throws ValidateException, RepoException, SQLException {
         User user = new User(id, newFirstName, newSurname);
@@ -134,11 +133,12 @@ public class MergedService {
     }
 
     /**
-     * @param one id-ul unui utilizator participant la relatia de prietenie
-     * @param two id-ul celui de-al doilea utilizator participant la relatia de prietenie
-     * @throws ValidateException arunca exceptie daca id-urile nu corespund unor utilizatori sau daca sunt egale
-     * @throws RepoException     arunca exceptie daca exista deja un element cu id-ul nou generat
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * creates a new friendship relationship between the two users given by IDs
+     * @param one id of an user
+     * @param two another id of a different user
+     * @throws ValidateException if the IDs are negative or equal
+     * @throws RepoException if the users don't exist
+     * @throws SQLException if the database cannot be accessed
      */
     public void addFriendship(int one, int two) throws ValidateException, RepoException, SQLException {
         if (userRepository.find(one) == null || userRepository.find(two) == null || one == two)
@@ -155,47 +155,47 @@ public class MergedService {
     }
 
     /**
-     * @param id este id-ul relatiei de prietenie care va fi stearsa
-     * @return returneza relatia de prietenie stearsa
-     * @throws RepoException arunca exceptie daca nu exista o relatie de prietenie cu id-ul dat
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the friendship relationship which we are going to delete
+     * @return the deleted friendship relationship
+     * @throws RepoException if there is no friendship with the given ID in the repository
+     * @throws SQLException if the database cannot be accessed
      */
     public Friendship deleteFriendship(int id) throws RepoException, SQLException {
         return friendshipRepository.delete(id);
     }
 
     /**
-     * @param id este id-ul relatiei de prietenie pe care o cautam
-     * @return returneaza relatia de prietenie cu id-ul dat sau null daca nu exista
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the friendship relationship that we are looking for
+     * @return the friendship relationship with the given ID or null if it doesn't exist
+     * @throws SQLException if the database cannot be accessed
      */
     public Friendship findFriendship(int id) throws SQLException {
         return friendshipRepository.find(id);
     }
 
     /**
-     * @return returneaza o lista iterabila cu toate relatiile de prietenie
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return an iterable containing the friendship relationships
+     * @throws SQLException if the database cannot be accessed
      */
     public Iterable<Friendship> getFriendships() throws SQLException {
         return friendshipRepository.getAll();
     }
 
     /**
-     * @return returneaza numarul de relatii de prietenie existente dintre utilizatorii aplicatiei
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the number of friendships contained by the repository
+     * @throws SQLException if the database cannot be accessed
      */
     public int numberOfFriendships() throws SQLException {
         return friendshipRepository.size();
     }
 
     /**
-     * @param id     id-ul relatiei de prietenie pe care dorim sa o modificam
-     * @param newOne este id-ul noului utilizator care ia parte la relatia de prietenie
-     * @param newTwo este id-ul celuilalt nou utilizator care ia parte la relatia de prietenie
-     * @throws ValidateException arunca exceptie daca id-urile nu corespund unor utilizatori ai aplicatiei
-     * @throws RepoException     arunca exceptie daca nu exista o relatie de prietenie cu id-ul dat
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the friendship relationship that we want to update
+     * @param newOne id of one of the new users
+     * @param newTwo id of the other new user
+     * @throws ValidateException if the user IDs are invalid or the friendship cannot be found
+     * @throws RepoException if there is no friendship with the given ID
+     * @throws SQLException if the database cannot be accessed
      */
     public void updateFriendship(int id, int newOne, int newTwo) throws ValidateException, RepoException, SQLException {
         if (userRepository.find(newOne) == null || userRepository.find(newTwo) == null)
@@ -210,8 +210,8 @@ public class MergedService {
     }
 
     /**
-     * @return returneaza numarul de comunitati din aplicatie in functie de realtiile de prietenie dintre utilizatori
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the number of user communities
+     * @throws SQLException if the database cannot be accessed
      */
     public int numberOfCommunities() throws SQLException {
         MergeGraph mergeGraph = new MergeGraph(this);
@@ -219,8 +219,8 @@ public class MergedService {
     }
 
     /**
-     * @return returneaza utiilizatorii membri din cea mai activa comunitate
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the most sociable community composed of the users contained in the arrayList returned
+     * @throws SQLException if the database cannot be accessed
      */
     public ArrayList<User> mostSocial() throws SQLException {
         MergeGraph mergeGraph = new MergeGraph(this);

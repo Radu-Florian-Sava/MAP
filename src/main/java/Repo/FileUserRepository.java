@@ -4,14 +4,14 @@ import Domain.User;
 import Utils.TypeParser;
 
 /**
- *  repozitoriu specializat care retine date despre utilizatori in fisier
+ * specialised repository which contains users in a file
  */
 @Deprecated
 public class FileUserRepository extends FileRepository<Integer, User> {
 
     /**
-     * @param fileName   numele fisierului in care vor fi puse inregistrarile
-     * @param typeParser numele obiectului care va genera elemente generice de tipul specificat
+     * @param fileName the name of the file containing the elements
+     * @param typeParser an object specialised for creating elements of the class User
      */
     public FileUserRepository(String fileName, TypeParser<Integer, User> typeParser) {
         super(fileName, typeParser);

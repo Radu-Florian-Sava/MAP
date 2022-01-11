@@ -6,12 +6,16 @@ import Exceptions.RepoException;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ *  specialised repository which contains messages between users in a database
+ */
 public class DatabaseMessageRepository implements Repository<Integer, Message> {
     private final String url;
     private final String username;
     private final String password;
 
     /**
+     * constructor
      * @param url the url of the database
      * @param username the username of the database
      * @param password the password of the database
@@ -24,8 +28,8 @@ public class DatabaseMessageRepository implements Repository<Integer, Message> {
 
     /**
      * @param message the message we want to add
-     * @throws SQLException database error
-     * @return
+     * @throws SQLException if the database cannot be accessed
+     * @return the ID of the added message
      */
     @Override
     public Integer add(Message message) throws RepoException, SQLException {
@@ -63,7 +67,7 @@ public class DatabaseMessageRepository implements Repository<Integer, Message> {
      * @param integer the id of the message we want to delete
      * @return the message deleted
      * @throws RepoException if the message with that id doesn't exist
-     * @throws SQLException database error
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public Message delete(Integer integer) throws RepoException, SQLException {
@@ -90,7 +94,7 @@ public class DatabaseMessageRepository implements Repository<Integer, Message> {
      * @param integer the message's id we want to update
      * @param message the new message
      * @throws RepoException if the message with that id doesn't exist
-     * @throws SQLException database error
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public void update(Integer integer, Message message) throws RepoException, SQLException {
@@ -108,7 +112,7 @@ public class DatabaseMessageRepository implements Repository<Integer, Message> {
     /**
      * @param integer the id of the message we want to find
      * @return the message with that id
-     * @throws SQLException database error
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public Message find(Integer integer) throws SQLException {
@@ -131,8 +135,8 @@ public class DatabaseMessageRepository implements Repository<Integer, Message> {
     }
 
     /**
-     * @return all messages
-     * @throws SQLException database error
+     * @return an iterable containing all the messages
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public Iterable<Message> getAll() throws SQLException {
@@ -171,7 +175,7 @@ public class DatabaseMessageRepository implements Repository<Integer, Message> {
 
     /**
      * @return the number of messages in total
-     * @throws SQLException database error
+     * @throws SQLException if the database cannot be accessed
      */
     @Override
     public int size() throws SQLException {

@@ -6,9 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @param <Id> id-ul generic al unui element din repozitoriu
- * @param <T>  instanta a clasei Identifiable
- *             implementeaza partial interfata Repository
+ * @param <Id> generic id of an element contained by the repository
+ * @param <T>  instance of Identifiable which partially implements the interface
  */
 @Deprecated
 public abstract class AbstractRepository<Id, T extends Identifiable<Id>> implements Repository<Id, T> {
@@ -16,15 +15,15 @@ public abstract class AbstractRepository<Id, T extends Identifiable<Id>> impleme
     protected Map<Id, T> elems;
 
     /**
-     * constructor care initializeaza campul protejat elems cu un nou dictionar cu tabela de dispersie
+     * constructor which initiates the container of elements with a new HashMap
      */
     public AbstractRepository() {
         this.elems = new HashMap<>();
     }
 
     /**
-     * @param id id-ul elementului care va fi cautat in repozitoriu
-     * @return returneaza elementul generic cu id-ul dat ca parametru sau null daca nu exista in repozitoriu
+     * @param id of the element we are looking for
+     * @return the element which has the given id or null if it is not in the repository
      */
     @Override
     public T find(Id id) {
@@ -34,7 +33,7 @@ public abstract class AbstractRepository<Id, T extends Identifiable<Id>> impleme
     }
 
     /**
-     * @return returneaza o lista iterabila cu elementele generice din repozitoriu
+     * @return an iterable containing the values of the HashMap
      */
     @Override
     public Iterable<T> getAll() {
@@ -42,7 +41,7 @@ public abstract class AbstractRepository<Id, T extends Identifiable<Id>> impleme
     }
 
     /**
-     * @return returneaza numarul de elemente din repozitoriu
+     * @return the number of elements currently contained by the repository
      */
     @Override
     public int size() {

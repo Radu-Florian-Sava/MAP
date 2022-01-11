@@ -4,25 +4,25 @@ import Domain.Identifiable;
 import Exceptions.RepoException;
 
 /**
- * @param <Id> id-ul generic al unui element din repozitoriu
- * @param <T>  instanta a clasei Identifiable
- *             tip de repozitoriu care retine elementele de tip T in memorie
- *             elementele dispar la inchiderea aplicatiei
+ * @param <Id> generic ID of an element
+ * @param <T>  instance of Identifiable
+ *             the elements have the generic type T
+ *             IMPORTANT: since it is in memory it will disappear when the application in closed
  */
 @Deprecated
 public class InMemoryRepository<Id, T extends Identifiable<Id>> extends AbstractRepository<Id, T> {
 
     /**
-     * constructor standard
+     * standard constructor
      */
     public InMemoryRepository() {
         super();
     }
 
     /**
-     * @param t element de tip generic care va fi adaugat in repozitoriu
-     * @throws RepoException arunca exceptie daca exista un element generic cu id-ul dat in repozitoriu
-     * @return
+     * @param t element which will be added
+     * @throws RepoException if there already is an element with the ID of t
+     * @return the ID of the added element
      */
     @Override
     public Id add(T t) throws RepoException {
@@ -33,9 +33,9 @@ public class InMemoryRepository<Id, T extends Identifiable<Id>> extends Abstract
     }
 
     /**
-     * @param id id-ul elementului de tip generic care va fi sters din repozitoriu
-     * @return returneaza elementul generic sters
-     * @throws RepoException arunca exceptie daca nu exista elementul cu id-ul dat in repozitoriu
+     * @param id of the deleted element
+     * @return the deleted element
+     * @throws RepoException if there is no element with the given ID
      */
     @Override
     public T delete(Id id) throws RepoException {
@@ -45,9 +45,9 @@ public class InMemoryRepository<Id, T extends Identifiable<Id>> extends Abstract
     }
 
     /**
-     * @param id id-ul elementului care va fi modificat
-     * @param t  element de tip generic care va inlocui elementul cu id-ul id din repozitoriu
-     * @throws RepoException arunca exceptie daca nu exista elementul cu id-ul dat in repozitoriu
+     * @param id of the element to be updated
+     * @param t  element with the same ID which will replace the existing element
+     * @throws RepoException if there is no element with the given ID
      */
     @Override
     public void update(Id id, T t) throws RepoException {

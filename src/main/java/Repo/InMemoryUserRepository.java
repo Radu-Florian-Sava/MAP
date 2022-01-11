@@ -3,12 +3,12 @@ package Repo;
 import Domain.User;
 
 /**
- *  repozitoriu specializat care retine date despre utilizatori in memorie ca si HashMap
+ *  specialised repository which contains users in memory
  */
 @Deprecated
 public class InMemoryUserRepository extends InMemoryRepository<Integer, User> {
     /**
-     *  constructor standard
+     *  standard constructor
      */
     public InMemoryUserRepository() {
         super();

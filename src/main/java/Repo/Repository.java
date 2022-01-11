@@ -6,53 +6,53 @@ import Exceptions.RepoException;
 import java.sql.SQLException;
 
 /**
- * @param <Id> id-ul generic al unui element din repozitoriu
- * @param <T>  instanta a clasei Identifiable
- *             permite efectuarea CRUD operations
+ * @param <Id> generic id of an element contained by the repository
+ * @param <T>  instance of Identifiable
+ *           allows CRUD operations
  */
 
 public interface Repository<Id, T extends Identifiable<Id>> {
 
     /**
-     * @param t element de tip generic care va fi adaugat in repozitoriu
-     * @throws RepoException arunca exceptie specifica contextului
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
-     * @return
+     * @param t generic element which will be added
+     * @throws RepoException depending on the context
+     * @throws SQLException if it cannot connect to the database
+     * @return the ID of the added element
      */
     Id add(T t) throws RepoException, SQLException;
 
     /**
-     * @param id id-ul elementului de tip generic care va fi sters din repozitoriu
-     * @return returneaza elementul generic sters daca a fost gasit
-     * @throws RepoException arunca exceptie specifica contextului
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the element which will be deleted
+     * @return the deleted element
+     * @throws RepoException depending on the context
+     * @throws SQLException if it cannot connect to the database
      */
     T delete(Id id) throws RepoException, SQLException;
 
     /**
-     * @param id id-ul elementului care va fi modificat
-     * @param t  element de tip generic care va inlocui elementul cu id-ul id din repozitoriu
-     * @throws RepoException arunca exceptie specifica contextului
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the element which will be updated
+     * @param t  the new element which has the same ID and will replace the old one
+     * @throws RepoException depending on the context
+     * @throws SQLException if it cannot connect to the database
      */
     void update(Id id, T t) throws RepoException, SQLException;
 
     /**
-     * @param id id-ul elementului care va fi cautat in repozitoriu
-     * @return un element generic relativ la id-ul dat ca parametru
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @param id of the element we are looking for
+     * @return the element which has the given ID
+     * @throws SQLException if it cannot connect to the database
      */
     T find(Id id) throws SQLException;
 
     /**
-     * @return returneaza o lista iterabila de inregistrari generice
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return an iterable of generic type
+     * @throws SQLException if it cannot connect to the database
      */
     Iterable<T> getAll() throws SQLException;
 
     /**
-     * @return returneaza numarul de inregistrari din repozitoriu
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the number of records inside the repository
+     * @throws SQLException if it cannot connect to the database
      */
     int size() throws SQLException;
 }

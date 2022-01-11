@@ -12,22 +12,24 @@ import java.util.ArrayList;
 
 
 /**
- * clasa service specializata pentru operatii cu relatii de prietenie
+ * service used for storing users
  */
 public class UserService extends AbstractService<Integer, User>{
 
     /**
-     * @param repository este repozitoriul folosit de catre service
-     * @param validator este validatorul folosit de catre service
+     * @param repository the repository used by the service
+     * @param validator the validator used by the service
      */
     public UserService(Repository repository, Validator validator) {
         super(repository, validator);
     }
 
     /**
-     * @return genereaza un id nou unic, se recomanda a nu se folosi daca se lucreaza cu memorare in baza de date
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the 'least' numeric ID which is not used
+     * @throws SQLException if the database cannot be accessed
+     * @deprecated since we are using a database
      */
+    @Deprecated
     @Override
     public Integer generateId() throws SQLException {
         if (repository.size() == 0)
@@ -40,13 +42,12 @@ public class UserService extends AbstractService<Integer, User>{
     }
 
     /**
-     * @param params lista de parametri care caracterizeaza o intergistrare generica
-     *               lista de parametri trebuie sa contina doua elemente care vor deveni
-     *               prenumele, respectiv numele utilizatorului (String,String)
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
-     * @throws BusinessException arunca exceptie la nivelul de servicii al aplicatiei daca parametri nu pot fi convertiti
-     * @throws ValidateException arunca exceptie daca elementele listei de parametri nu sunt valide
-     * @throws RepoException arunca exceptie daca exista un element cu id-ul folosit la nivel de repozitoriu
+     * @param params the parameters we need to update a user
+     * @throws SQLException if the database cannot be accessed
+     * @throws BusinessException for unforeseen errors which might appear when the entities in our application
+     *                           interact with one another
+     * @throws ValidateException if the element contains invalid data
+     * @throws RepoException if there already is an element with the given ID parameter
      */
     @Override
     public int createRecord(ArrayList<Object> params) throws SQLException, BusinessException, ValidateException, RepoException {
@@ -70,12 +71,13 @@ public class UserService extends AbstractService<Integer, User>{
     }
 
     /**
-     * @param id     este id-ul elementului pe care dorim sa il inlocuim
-     * @param params reprezinta noile informatii referitoare la inregistrarea cu id-ul id (care nu va fi schimbat)
-     * @throws BusinessException
-     * @throws ValidateException
-     * @throws SQLException
-     * @throws RepoException
+     * @param id of the user which will be updated
+     * @param params the parameters we need to update a user
+     * @throws SQLException if the database cannot be accessed
+     * @throws BusinessException for unforeseen errors which might appear when the entities in our application
+     *                           interact with one another
+     * @throws ValidateException if the element contains invalid data
+     * @throws RepoException if there is no element with the given ID parameter
      */
     @Override
     public void updateRecord(Integer id, ArrayList<Object> params) throws BusinessException, ValidateException, SQLException, RepoException {
