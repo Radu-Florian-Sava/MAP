@@ -38,7 +38,10 @@ public class MessageDTO {
 
     @Override
     public String toString() {
-        return user_from + ": " + message;
+        return
+                (message_reply == null) ?
+        user_from + ": " + message :
+                "Reply la " + message_reply + "\n" + user_from + ": " + message;
     }
 
     public int getId() {

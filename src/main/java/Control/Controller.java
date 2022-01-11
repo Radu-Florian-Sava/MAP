@@ -290,9 +290,9 @@ public class Controller {
         if (!ok)
             throw new BusinessException("Nu exista prietenie dintre cei doi utilizatori\n");
         if (id_reply != null) {
-            Message message1 = messageService.findRecord(id_reply);
-            if ((message1.getTo() != id_from || message1.getFrom() != id_to) &&
-                    (message1.getTo() != id_to || message1.getFrom() != id_from)) {
+            List<Message> messages = (List<Message>) messageService.getRecords();
+            if (messages.stream().noneMatch((x) -> (x.getFrom() == id_from && x.getTo() == id_to)
+            || (x.getFrom() == id_to && x.getTo() == id_from))) {
                 throw new BusinessException("Mesajul replied nu apartine acestei conversatii\n");
             }
         }
@@ -345,8 +345,8 @@ public class Controller {
                     MessageDTO messageDTO = new MessageDTO(
                             message.getId(),
                             message.getMessage(),
-                            user1.getFirstName() + " " + user1.getSurname(),
-                            message1.getMessage()
+                            message1.getMessage(),
+                            user1.getFirstName() + " " + user1.getSurname()
                     );
                     messages_filtered.add(messageDTO);
                 }
