@@ -1,12 +1,12 @@
 package Domain;
 
 /**
- * @param <Id> este tipul generic pentru id-ul unei instante apartinand acestei clase
+ * @param <Id> is a generic ID type
  */
 public interface Identifiable<Id> {
 
     /**
-     * @return returneaza id-ul elementului
+     * @return the ID of the element
      */
     Id getId();
 

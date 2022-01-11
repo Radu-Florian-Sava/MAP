@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 
 /**
- * clasa care foloseste algoritmi de grafuri pentru a calcula numarul de comunitati (componente conexe)
- * si determina cea mai sociabila comunitate (componenta conexa cu cel mai lung lant simplu elementar)
+ * class which uses graph theory algorthm in order to calculate the number of communities (conex components)
+ * and determine the most sociable community (the conex component which has the longest path)
  */
 public class Graph {
     private Service<Integer,User> userService;
@@ -27,14 +27,18 @@ public class Graph {
 
 
     /**
-     * @param userService service de utilizatori pe care il ia ca parametru pentru a extrage si asocia nodurile
-     * @param friendshipService service de prietenii pe care il ia ca parametru pentru a extrage si asocia muchii
+     * @param userService has the users associated with the vertexes
+     * @param friendshipService has the friendships associated with the edges
      */
     public Graph( Service<Integer,User>  userService, Service<Integer,Friendship> friendshipService) {
         this.userService=userService;
         this.friendshipService=friendshipService;
     }
 
+    /**
+     * @param value sets every value of the matrix which doesn't represent an edge with the given value
+     * @throws SQLException if it cannot connect to the database
+     */
     private void setMatrice(int value) throws SQLException {
         contor = 0;
         idContor = new HashMap<>();
@@ -60,9 +64,9 @@ public class Graph {
     }
 
     /**
-     * @return returneaza numarul de componente conexe care reprezinta numarul de comunitati
-     * foloseste logica algoritmului Roy-Warshal
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the number of conex components/ communities
+     * uses the Roy-Warshal algorithm logic
+     * @throws SQLException if it cannot connect to the database
      */
     public int connected() throws SQLException {
         setMatrice(0);
@@ -90,9 +94,9 @@ public class Graph {
     }
 
     /**
-     * @param distanta       tablou unidimensional care reprezinta distanta maxima de la in varf initial dat la celelalte
-     * @param queue          coada in care se pastreaza noduril rand pe rand pana ce vor fi analizate si eliminate
-     * @param distanceMatrix matricea distantelor care va fi esentiala in calcularea drumului maxim
+     * @param distanta       unidimensional array which contains the distance from the initial vertex to the others
+     * @param queue          in which we keep our vertexes once we discover them
+     * @param distanceMatrix distance matrix used in order to calculate the maximum distance
      */
     private void BFS_r(Integer[] distanta, ArrayList<Integer> queue, Integer[][] distanceMatrix) {
         while (!(queue.size() == 0)) {
@@ -126,8 +130,8 @@ public class Graph {
     }
 
     /**
-     * @param x indicele x al unui utilizator din obiectul de servicii
-     * @return returneaza indicii asociati fiecarui utilizator din comunitatea din care face parte
+     * @param x the index of a user from the Service object
+     * @return the indexes of the other users which are in the same community
      */
     private ArrayList<Integer> getComponent(int x) {
         int index = communityAssigner[x];
@@ -140,11 +144,9 @@ public class Graph {
     }
 
     /**
-     * @return returneaza cea mai sociabila comunitate (componenta conexa cu cel mai lung drum)
-     * foloseste un algoritm de backtracking pentru a determina cel mai lung lant simplu elementar
-     * incepand din fiecare nod pe rand si il memoreaza lungimea maxima si un nod din componenta conexa
-     * caruia ii vom gasi componenta conexa si o vom returna ca si lista de utilizatori
-     * @throws SQLException arunca exceptie daca apar probleme cu conexiunea bazei de date
+     * @return the most sociable community (the conex component with the longest path)
+     * uses backtracking by trying to find every path and get the max value
+     * @throws SQLException if it cannot connect to the database
      */
     public ArrayList<User> socialComponent() throws SQLException {
         connected();

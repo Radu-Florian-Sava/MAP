@@ -52,7 +52,7 @@ public class TestsMesaje {
         List<Message> messages = (List<Message>) repoMesaje.getAll();
         Message message = repoMesaje.find(messages.get(0).getId());
         assertEquals(message.getMessage(), mes);
-        assertEquals(message.getId_reply(), null);
+        assertEquals(message.getIdReply(), null);
         assertEquals(java.util.Optional.of(message.getFrom()), users.get(0).getId());
         assertEquals(java.util.Optional.of(message.getTo()), users.get(1).getId());
 
@@ -70,21 +70,21 @@ public class TestsMesaje {
         messages = (List<Message>) repoMesaje.getAll();
         Message message1 = repoMesaje.find(messages.get(1).getId());
         assertEquals(message1.getMessage(), mes);
-        assertEquals(message1.getId_reply(), message.getId());
+        assertEquals(message1.getIdReply(), message.getId());
         assertEquals(java.util.Optional.of(message1.getFrom()), users.get(1).getId());
         assertEquals(java.util.Optional.of(message1.getTo()), users.get(0).getId());
 
-        Message message2 = repoMesaje.find(message1.getId_reply());
+        Message message2 = repoMesaje.find(message1.getIdReply());
 
         assertEquals(message2.getMessage(), message.getMessage());
-        assertEquals(message2.getId_reply(), message.getId_reply());
+        assertEquals(message2.getIdReply(), message.getIdReply());
         assertEquals(message2.getFrom(), message.getFrom());
         assertEquals(message2.getTo(), message.getTo());
 
         Message delete_message = repoMesaje.delete(message2.getId());
 
         assertEquals(delete_message.getMessage(), message.getMessage());
-        assertEquals(delete_message.getId_reply(), message.getId_reply());
+        assertEquals(delete_message.getIdReply(), message.getIdReply());
         assertEquals(delete_message.getFrom(), message.getFrom());
         assertEquals(delete_message.getTo(), message.getTo());
 

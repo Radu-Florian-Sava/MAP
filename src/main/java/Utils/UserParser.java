@@ -3,14 +3,18 @@ package Utils;
 import Domain.User;
 
 /**
- * clasa cara creeaza un nou utilizator
+ * class which creates a new USER
+ * @deprecated only to be used with non-GUI interfaces
  */
 @Deprecated
 public class UserParser implements TypeParser<Integer, User> {
 
     /**
-     * @param attributes o lista de atribute de tip sir de caractere a elementului pe care il va genera
-     * @return un obiect de tip utilizator cu atribute tranformate din sir de caractere in cele necesare
+     * @param attributes a list of attributes of the element that it's going to create
+     *        3 attributes - id(int)
+     *                       firstName(String)
+     *                       surname(String)
+     * @return a User object which has the associated characteristics as the parameters given by the list
      */
     @Override
     public User parse(String[] attributes) {

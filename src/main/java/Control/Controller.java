@@ -9,6 +9,7 @@ import Repo.DatabaseMessageRepository;
 import Repo.DatabaseUserRepository;
 import Repo.Repository;
 import Service.Service;
+import Utils.Constants;
 import Utils.Graph;
 import Utils.Hasher;
 import Utils.UtilsFunctions;
@@ -338,8 +339,8 @@ public class Controller {
                 Comparator.comparing(Message::getDate)).collect(Collectors.toList());
         for (Message message : messages) {
             if (message.getFrom() == id1 && message.getTo() == id2) {
-                if (message.getId_reply() != null) {
-                    Message message1 = messageService.findRecord(message.getId_reply());
+                if (message.getIdReply() != null) {
+                    Message message1 = messageService.findRecord(message.getIdReply());
                     MessageDTO messageDTO = new MessageDTO(
                             message.getId(),
                             message.getMessage(),
@@ -357,8 +358,8 @@ public class Controller {
                     messages_filtered.add(messageDTO);
                 }
             } else if (message.getFrom() == id2 && message.getTo() == id1) {
-                if (message.getId_reply() != null) {
-                    Message message1 = messageService.findRecord(message.getId_reply());
+                if (message.getIdReply() != null) {
+                    Message message1 = messageService.findRecord(message.getIdReply());
                     MessageDTO messageDTO = new MessageDTO(
                             message.getId(),
                             message.getMessage(),
@@ -387,7 +388,9 @@ public class Controller {
      */
     public Iterable<Friendship> getFriendshipsOf(int id) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
-                .filter((x) -> (x.getSender() == id || x.getReceiver() == id) && x.getFriendship_request() == 2).toList();
+                .filter((x) -> (x.getSender() == id || x.getReceiver() == id) &&
+                        x.getFriendship_request() == Constants.ACCEPTED_FRIENDSHIP)
+                .toList();
     }
 
     /**
@@ -399,7 +402,7 @@ public class Controller {
     public Iterable<Friendship> getFriendshipsWithMonth(int id, int monthNumber) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
                 .filter((x) -> (x.getSender() == id || x.getReceiver() == id)
-                        && x.getFriendship_request() == 2
+                        && x.getFriendship_request() == Constants.ACCEPTED_FRIENDSHIP
                         && (x.getStringDate().contains("-" + monthNumber + "-")
                         || x.getStringDate().contains("-0" + monthNumber + "-"))
                 ).toList();
@@ -412,7 +415,7 @@ public class Controller {
      */
     public Iterable<Friendship> getPendingFriendshipsOf(int id) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
-                .filter((x) -> x.getReceiver() == id && x.getFriendship_request() == 0).toList();
+                .filter((x) -> x.getReceiver() == id && x.getFriendship_request() == Constants.PENDING_FRIENDSHIP).toList();
     }
 
     /**
@@ -431,24 +434,24 @@ public class Controller {
         List<Friendship> friendships = (List<Friendship>) friendshipService.getRecords();
         for (Friendship friendship : friendships)
             if (friendship.getSender() == id_from && friendship.getReceiver() == id_to) {
-                if (friendship.getFriendship_request() == 0) {
+                if (friendship.getFriendship_request() == Constants.PENDING_FRIENDSHIP) {
                     throw new BusinessException("A fost deja trimisa o cerere de prietenie");
-                } else if (friendship.getFriendship_request() == 1) {
+                } else if (friendship.getFriendship_request() == Constants.REJECTED_FRIENDSHIP) {
                     friendshipService.deleteRecord(friendship.getId());
-                } else if (friendship.getFriendship_request() == 2) {
+                } else if (friendship.getFriendship_request() == Constants.ACCEPTED_FRIENDSHIP) {
                     throw new BusinessException("Sunteti deja prieteni");
                 }
             } else if (friendship.getSender() == id_to && friendship.getReceiver() == id_from) {
-                if (friendship.getFriendship_request() == 0) {
+                if (friendship.getFriendship_request() == Constants.PENDING_FRIENDSHIP) {
                     ArrayList<Object> params = new ArrayList<>();
                     params.add(id_to);
                     params.add(id_from);
                     params.add(2);
                     friendshipService.updateRecord(friendship.getId(), params);
                     return;
-                } else if (friendship.getFriendship_request() == 1) {
+                } else if (friendship.getFriendship_request() == Constants.REJECTED_FRIENDSHIP) {
                     friendshipService.deleteRecord(friendship.getId());
-                } else if (friendship.getFriendship_request() == 2) {
+                } else if (friendship.getFriendship_request() == Constants.ACCEPTED_FRIENDSHIP) {
                     throw new BusinessException("Sunteti deja prieteni");
                 }
             }
@@ -476,12 +479,12 @@ public class Controller {
             throw new ValidateException("Nu exista aceasta prietenie!");
         }
         if (friendship.getReceiver() == id_user) {
-            if (friendship.getFriendship_request() == 1) {
+            if (friendship.getFriendship_request() == Constants.REJECTED_FRIENDSHIP) {
                 throw new BusinessException("A fost deja refuzata!\n");
-            } else if (friendship.getFriendship_request() == 2) {
+            } else if (friendship.getFriendship_request() == Constants.ACCEPTED_FRIENDSHIP) {
                 throw new BusinessException("Deja sunteti prieteni!\n");
             } else {
-                friendship.setFriendship_request(2);
+                friendship.setFriendship_request(Constants.ACCEPTED_FRIENDSHIP);
                 ArrayList<Object> params = new ArrayList<>();
                 params.add(friendship.getSender());
                 params.add(friendship.getReceiver());
@@ -509,12 +512,12 @@ public class Controller {
             throw new ValidateException("Nu exista aceasta prietenie!");
         }
         if (friendship.getReceiver() == id_user) {
-            if (friendship.getFriendship_request() == 1) {
+            if (friendship.getFriendship_request() == Constants.REJECTED_FRIENDSHIP) {
                 throw new BusinessException("A fost deja refuzata!\n");
-            } else if (friendship.getFriendship_request() == 2) {
+            } else if (friendship.getFriendship_request() == Constants.ACCEPTED_FRIENDSHIP) {
                 throw new BusinessException("Deja sunteti prieteni!\n");
             } else {
-                friendship.setFriendship_request(1);
+                friendship.setFriendship_request(Constants.REJECTED_FRIENDSHIP);
                 ArrayList<Object> params = new ArrayList<>();
                 params.add(friendship.getSender());
                 params.add(friendship.getReceiver());

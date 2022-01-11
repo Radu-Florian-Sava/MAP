@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
- *  clasa care retine date despre un mesaj: expeditor, destinatar, data, corp, este/ nu este reply
+ *  class which contains a message
  */
 public class Message implements Identifiable<Integer> {
     private final int id;
@@ -15,11 +15,11 @@ public class Message implements Identifiable<Integer> {
     private final Integer id_reply;
 
     /**
-     * @param from este id-ul expeditorului
-     * @param to este id-ul destinatarului
-     * @param message este corpul mesajului
-     * @param date este data la care a fost trimis
-     * @param id_reply se aplica daca mesajul este un reply
+     * @param from is the sender id
+     * @param to is the receiver id
+     * @param message is the message body
+     * @param date is the date when the message has been sent
+     * @param id_reply applied if the message is a reply corresponding to the message it replies to
      */
     public Message(int from, int to, String message, Timestamp date, Integer id_reply) {
         this.id = 1;
@@ -31,12 +31,12 @@ public class Message implements Identifiable<Integer> {
     }
 
     /**
-     * @param id este id-ul mesajului care va fi adaugat
-     * @param from este id-ul expeditorului
-     * @param to este id-ul destinatarului
-     * @param message este corpul mesajului
-     * @param date este data la care a fost trimis
-     * @param id_reply se aplica daca mesajul este un reply
+     * @param id is the id of the message which is going to be sent
+     * @param from is the sender id
+     * @param to is the receiver id
+     * @param message is the message body
+     * @param date is the date when the message has been sent
+     * @param id_reply applied if the message is a reply
      */
     public Message(int id, int from, int to, String message, Timestamp date, Integer id_reply) {
         this.id = id;
@@ -48,48 +48,51 @@ public class Message implements Identifiable<Integer> {
     }
 
     /**
-     * @return expeditorul mesajului
+     * @return the message sender ID
      */
     public int getFrom() {
         return from;
     }
 
     /**
-     * @return destinatarul mesajului
+     * @return the message receiver ID
      */
     public int getTo() {
         return to;
     }
 
     /**
-     * @return corpul mesajului
+     * @return the message body
      */
     public String getMessage() {
         return message;
     }
 
     /**
-     * @return data la care a fost trimis mesajul
+     * @return the date when the message has been sent
      */
     public Timestamp getDate() {
         return date;
     }
 
     /**
-     * @return id-ul de reply daca este un reply
+     * @return the ID of the message it reaplies to
      */
-    public Integer getId_reply() {
+    public Integer getIdReply() {
         return id_reply;
     }
 
+    /**
+     * @return the message ID
+     */
     @Override
     public Integer getId() {
         return id;
     }
 
     /**
-     * @param o este obiectul pe care il comparam
-     * @return returneaza true daca cele doua mesaje sunt egale sau false in caz contrar
+     * @param o is the object we compare
+     * @return true if o and this object are equal, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -100,7 +103,7 @@ public class Message implements Identifiable<Integer> {
     }
 
     /**
-     * @return un numar intreg unic pentru fiecare mesaj diferit
+     * @return an unique integer for each object of this type
      */
     @Override
     public int hashCode() {
@@ -108,7 +111,8 @@ public class Message implements Identifiable<Integer> {
     }
 
     /**
-     * @return mesajul ca si sir de caractere ce contine corpul, expeditorul, destinatarul, data
+     * @return the message using a specific format
+     * messageBody + 'de la' + fromID + 'la' + toID + 'la data de' + date
      */
     @Override
     public String toString() {

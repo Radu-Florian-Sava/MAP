@@ -29,7 +29,7 @@ public class DatabaseMessageRepository implements Repository<Integer, Message> {
      */
     @Override
     public Integer add(Message message) throws RepoException, SQLException {
-        Integer id_reply = message.getId_reply();
+        Integer id_reply = message.getIdReply();
         Connection connection = DriverManager.getConnection(url, username, password);
         if(message.getMessage() == null) {
             PreparedStatement preparedStatement = connection.prepareStatement(

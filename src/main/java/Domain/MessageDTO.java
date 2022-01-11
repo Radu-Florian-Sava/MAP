@@ -1,7 +1,9 @@
 package Domain;
 
-import java.util.List;
 
+/**
+ * class which contains specific information of a message
+ */
 public class MessageDTO {
     private final int id;
     private final String message;

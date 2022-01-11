@@ -124,11 +124,11 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="messageFunctionality" alignment="TOP_RIGHT" visible="false" HBox.hgrow="ALWAYS">
+      <VBox fx:id="messageFunctionality" alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
          <children>
             <AnchorPane>
                <children>
-                  <TableView fx:id="messageTable" style="-fx-background-color: MediumOrchid; -fx-border-color: midnightblue;">
+                  <TableView fx:id="messageTable" onMouseClicked="#selectReply" style="-fx-background-color: MediumOrchid; -fx-border-color: midnightblue;">
                     <columns>
                       <TableColumn fx:id="messageColumn" editable="false" minWidth="-1.0" prefWidth="392.79994201660156" resizable="false" sortable="false" text="Messages" />
                     </columns>

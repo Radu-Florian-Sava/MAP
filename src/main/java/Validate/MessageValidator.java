@@ -6,13 +6,14 @@ import Exceptions.ValidateException;
 import java.util.Objects;
 
 /**
- * valideaza o relatie de prietenie dintre doi utilizatori
+ * validates a friendship relationship between two users
  */
 public class MessageValidator implements Validation<Integer, Message> {
     /**
-     * @param message element de tip mesaj care va fi validat
-     * @throws ValidateException arunca eroare de validare daca id-urile expeditor/destinatar nu exista,
-     * id-ul reply este negativ, data sau corpul sunt vide
+     * @param message Message class variable to be validated
+     * @throws ValidateException if the id is not a natural number, the id of the sender/receiver ID
+     *                           is not a natural number, the message body is void,
+     *                           the message date is null or if replyID is not a natural number
      */
     @Override
     public void genericValidate(Message message) throws ValidateException {
@@ -29,8 +30,8 @@ public class MessageValidator implements Validation<Integer, Message> {
                 err += "Mesaj invalid!\n";
         if(message.getDate() == null)
             err += "Data invalida!\n";
-        if(message.getId_reply() != null)
-            if(message.getId_reply() <= 0)
+        if(message.getIdReply() != null)
+            if(message.getIdReply() <= 0)
                 err += "Id reply invalid!\n";
 
         if(err.length() > 0)

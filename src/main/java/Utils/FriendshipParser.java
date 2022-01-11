@@ -3,15 +3,15 @@ package Utils;
 import Domain.Friendship;
 
 /**
- * clasa care creeaza o noua relatie de prietenie
- * @deprecated this class must 
+ * class which creates a friendship relationship
+ * @deprecated this class must only be used with a non-GUI
  */
 @Deprecated
 public class FriendshipParser implements TypeParser<Integer, Friendship> {
 
     /**
-     * @param attributes o lista de atribute de tip sir de caractere a elementului pe care il va genera
-     * @return un obiect de tip relatie de prietenie cu atribute tranformate din sir de caractere in cele necesare
+     * @param attributes a list of attributes which the created element will have
+     * @return a Friendship class object having the given attributes
      */
     @Override
     public Friendship parse(String[] attributes) {

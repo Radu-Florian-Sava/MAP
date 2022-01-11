@@ -2,7 +2,8 @@ package Exceptions;
 
 public class RepoException extends Exception {
     /**
-     * @param message mesaj specific contextului generat de raportarea id-ului fiecarui element la repozitoriu
+     * @param message specific message regarding an element related to the Infrastructure layer
+     *                (repository problems)
      */
     public RepoException(String message) {
         super(message);

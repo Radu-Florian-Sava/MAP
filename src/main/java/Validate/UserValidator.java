@@ -6,22 +6,21 @@ import Exceptions.ValidateException;
 import java.util.Objects;
 
 /**
- * valideaza un utilizator
+ * validates an user
  */
 public class UserValidator implements Validation<Integer, User> {
     private String message;
 
     /**
-     * mesajul specific este intializat vid in constructor
+     * the message is initialised as a null message by the constructor
      */
     public UserValidator() {
         message = "";
     }
 
     /**
-     * @param user element de tip utilizator care va fi validat
-     * @throws ValidateException arunca eroare de validare cu mesajul creeat pe parcurs daca exista
-     *                           verifica daca elementul are id numar natural si nume/prenume siruri nevide
+     * @param user User class variable to be validated
+     * @throws ValidateException if the element's id is not a natural number or if the FirstName or Surname are void
      */
     @Override
     public void genericValidate(User user) throws ValidateException {

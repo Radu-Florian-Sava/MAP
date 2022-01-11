@@ -4,14 +4,14 @@ import Domain.Identifiable;
 import Exceptions.ValidateException;
 
 /**
- * @param <Id> id-ul generic al unui element
- * @param <T>  instanta a clasei Identifiable
- *             valideaza un element generic folosind logica strategy pattern
+ * @param <Id> generic ID of an element
+ * @param <T>  instance of the Identifiable class
+ *             validates an element using the strategy pattern logic
  */
 public interface Validation<Id, T extends Identifiable<Id>> {
     /**
-     * @param t elementul generic care va fi validat
-     * @throws ValidateException exceptie aruncata daca elementul generic nu este valid (de la caz la caz)
+     * @param t generic element to be validated
+     * @throws ValidateException throws a context-specific error if the element is not valid (depends on each case)
      */
      void genericValidate(T t) throws ValidateException;
 }

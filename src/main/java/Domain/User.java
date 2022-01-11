@@ -3,7 +3,7 @@ package Domain;
 import java.util.Objects;
 
 /**
- * caracterizeaza un utilizator al aplicatiei prin id, nume si prenume
+ * class which contains the information of a user
  */
 public class User implements Identifiable<Integer> {
 
@@ -13,6 +13,10 @@ public class User implements Identifiable<Integer> {
     private String username;
     private String password;
 
+    /**
+     * @param firstName the first name of the user
+     * @param surname the surname of the user
+     */
     @Deprecated
     public User(String firstName, String surname) {
         this.id = 1;
@@ -20,6 +24,12 @@ public class User implements Identifiable<Integer> {
         this.surname = surname;
     }
 
+    /**
+     * @param firstName the first name of the user
+     * @param surname the surname of the user
+     * @param username the username (unique for each)
+     * @param password the user password (or rather hashed password)
+     */
     @Deprecated
     public User(String firstName, String surname, String username, String password) {
         this.id = 1;
@@ -30,7 +40,7 @@ public class User implements Identifiable<Integer> {
     }
 
     /**
-     * @return returneaza id-ul de tipul numar intreg al unui utilizator
+     * @return the id of the user
      */
     @Override
     public Integer getId() {
@@ -38,23 +48,23 @@ public class User implements Identifiable<Integer> {
     }
 
     /**
-     * @return returneaza numele de tipul sir de caractere al unui utilizator
+     * @return the first name of the user
      */
     public String getFirstName() {
         return firstName;
     }
 
     /**
-     * @return returneaza prenumele de tipul sir de caractere al unui utilizator
+     * @return the surname of the user
      */
     public String getSurname() {
         return surname;
     }
 
     /**
-     * @param id        este id-ul utilizatorului
-     * @param firstName este numele utilizatorului
-     * @param surname   este prenumele utilizatorului
+     * @param id the user id (unique)
+     * @param firstName the first name of the user
+     * @param surname the surname of the user
      */
     @Deprecated
     public User(int id, String firstName, String surname) {
@@ -63,6 +73,13 @@ public class User implements Identifiable<Integer> {
         this.surname = surname;
     }
 
+    /**
+     * @param id the id of the user (unique)
+     * @param firstName the first name of the user
+     * @param surname the surname of the user
+     * @param username the username (unique for each)
+     * @param password the user password (or rather hashed password)
+     */
     public User(int id, String firstName, String surname, String username, String password) {
         this.id = id;
         this.firstName = firstName;
@@ -72,37 +89,35 @@ public class User implements Identifiable<Integer> {
     }
 
     /**
-     * @param firstName atribuie numelui utilizatorului parametrul de tip sir de caractere dat
+     * @param firstName the first name of the user
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     /**
-     * @param surname atribuie prenumelui utilizatorului parametrul de tip sir de caractere dat
+     * @param surname the surname of the user
      */
     public void setSurname(String surname) {
         this.surname = surname;
     }
 
+    /**
+     * @return the username (unique for each)
+     */
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
+    /**
+     * @return the user password (or rather hashed password)
+     */
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     /**
-     * @return returneaza inregistrarea ca sir de caractere de forma id;nume;prenume\n
+     * @return the object as a string as:  id;firstName;surname\n
      */
     @Override
     public String toString() {
@@ -110,8 +125,8 @@ public class User implements Identifiable<Integer> {
     }
 
     /**
-     * @param o elementul pe care il comparam cu utilizatorul in cauza
-     * @return returneaza true daca sunt egale sau false in caz contrar
+     * @param o element to be compared
+     * @return true if o is equal with this object, false otherwise
      */
     @Override
     public boolean equals(Object o) {

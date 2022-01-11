@@ -5,19 +5,28 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * caracterizeaza o relatie de prietenie din aplicatie prin id si doua id-uri care corespund unor utilizatori ai aplicatiei
+ * creates a friendship relationship between the users(see User class)
  */
 public class Friendship implements Identifiable<Integer> {
     private int id;
     private int sender, receiver;
+    private Date date;
+    private int friendship_request;
 
+    /**
+     * @return the date when the friendship was created
+     */
     public Date getDate() {
         return date;
     }
 
-    private Date date;
-    private int friendship_request;
-
+    /**
+     * @param id makes each friendship uniquely identifiable
+     * @param sender the person who sent the friendship request
+     * @param receiver the person who received the friendship request
+     * @param date the date when the friendship was created
+     * @param friendship_request integer: 0 - PENDING, 1 - REJECTED, 2 - ACCEPTED
+     */
     public Friendship(int id, int sender, int receiver, Date date, int friendship_request) {
         this.id = id;
         this.sender = sender;
@@ -26,6 +35,13 @@ public class Friendship implements Identifiable<Integer> {
         this.friendship_request = friendship_request;
     }
 
+    /**
+     * @param id makes each friendship uniquely identifiable
+     * @param sender the person who sent the friendship request
+     * @param receiver the person who received the friendship request
+     * @param date the date when the friendship was created
+     * @deprecated only to be used with a non-GUI
+     */
     @Deprecated
     public Friendship(int id, int sender, int receiver, Date date) {
         this.id = id;
@@ -35,6 +51,11 @@ public class Friendship implements Identifiable<Integer> {
         this.friendship_request = 0;
     }
 
+    /**
+     * @param sender the person who sent the friendship request
+     * @param receiver the person who received the friendship request
+     * @deprecated only to be used with a non-GUI
+     */
     @Deprecated
     public Friendship(int sender, int receiver) {
         this.id = 1;
@@ -44,9 +65,10 @@ public class Friendship implements Identifiable<Integer> {
     }
 
     /**
-     * @param id  este id-ul prieteniei intre doi utilizatori
-     * @param sender este id-ul unuia dintre utilizatori
-     * @param receiver este id-ul celuilalt utilizator
+     * @param id makes each friendship uniquely identifiable
+     * @param sender the person who sent the friendship request
+     * @param receiver the person who received the friendship request
+     * @deprecated only to be used with a non-GUI
      */
     @Deprecated
     public Friendship(int id, int sender, int receiver) {
@@ -57,8 +79,8 @@ public class Friendship implements Identifiable<Integer> {
     }
 
     /**
-     * @param o elementul pe care il comparam cu relatia de prietenie in cauza
-     * @return returneaza true daca sunt egale sau false in caz contrar
+     * @param o element to be compared
+     * @return true if o and this element are equal, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -73,7 +95,7 @@ public class Friendship implements Identifiable<Integer> {
     }
 
     /**
-     * @return data de la care doi utilizatori sunt prieteni ca si string sub forma yyyy-mm-dd
+     * @return the date when the friendship was created as yyyy-mm-dd
      */
     public String getStringDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -81,14 +103,14 @@ public class Friendship implements Identifiable<Integer> {
     }
 
     /**
-     * @return returneaza id-ul "primului" utilizator
+     * @return id of the person who sent the friendship request
      */
     public int getSender() {
         return sender;
     }
 
     /**
-     * @return returneaza inregistrarea ca sir de caractere de forma id;idUtilizator1;idUtilizator2\n
+     * @return the combination as follows: id;senderID;receiverID\n
      */
     @Override
     public String toString() {
@@ -96,14 +118,14 @@ public class Friendship implements Identifiable<Integer> {
     }
 
     /**
-     * @return returneaza id-ul celui "de-al doilea" utilizator
+     * @return id of the person who received the friendship request
      */
     public int getReceiver() {
         return receiver;
     }
 
     /**
-     * @return returneaza id-ul relatiei de prietenie
+     * @return the id of the friendship request
      */
     @Override
     public Integer getId() {
@@ -111,14 +133,14 @@ public class Friendship implements Identifiable<Integer> {
     }
 
     /**
-     * @return returneaza flagul friendship request ( 0 - trimisa, 1 - refuzata, 2 - acceptata)
+     * @return the friendship request 'flag' ( 0 - pending, 1 - refused, 2 - accepted)
      */
     public int getFriendship_request() {
         return friendship_request;
     }
 
     /**
-     * @param friendship_request seteaza flagului friendship_request valoarea data
+     * @param friendship_request sets the friendship request 'flag' to a different value
      */
     public void setFriendship_request(int friendship_request) {
         this.friendship_request = friendship_request;

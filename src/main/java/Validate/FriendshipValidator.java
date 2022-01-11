@@ -4,22 +4,22 @@ import Domain.Friendship;
 import Exceptions.ValidateException;
 
 /**
- * valideaza o relatie de prietenie dintre doi utilizatori
+ * validates a friendship relationship between two users
  */
 public class FriendshipValidator implements Validation<Integer, Friendship> {
     private String message;
 
     /**
-     * mesajul specific este intializat vid in constructor
+     * the message is initialised as a null message by the constructor
      */
     public FriendshipValidator() {
         message = "";
     }
 
     /**
-     * @param friendship element de tip relatie de prietenie care va fi validat
-     * @throws ValidateException arunca eroare de validare cu mesajul creeat pe parcurs daca exista
-     *                           verifica daca elementul are id-uri numere naturale si utilizatorii au id-uri diferite
+     * @param friendship Friendship class element to be validated
+     * @throws ValidateException if the ID is not a natural number, the sender/receiver IDs are not natural number or
+     *                           if the sender and the receiver have the same ID
      */
     @Override
     public void genericValidate(Friendship friendship) throws ValidateException {

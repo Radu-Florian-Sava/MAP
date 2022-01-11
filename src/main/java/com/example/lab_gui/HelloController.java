@@ -44,6 +44,7 @@ public class HelloController {
     private UserDTO currentUserControl = null;
     private UserDTO passiveUserControl = null;
     private FriendshipDTO selectedFriendship = null;
+    private int idToReply=-1;
 
     // messages
     @FXML
@@ -309,7 +310,8 @@ public class HelloController {
                             }
                         }
                 );
-
+                hideRelationsMenu();
+                hideMessages();
             }
 
         }
@@ -411,6 +413,7 @@ public class HelloController {
     public void loadMessages() throws SQLException {
         if(selectedFriendship!=null)
         {
+            idToReply = -1;
             int passive_user_id = Integer.parseInt(selectedFriendship.getSecondName().split(";")[0]);
             User tempUser = controller.findUser(passive_user_id);
             passiveUserControl=new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname(),tempUser.getUsername());
@@ -431,7 +434,15 @@ public class HelloController {
             String message = messageBody.getText();
             if(message.length()!=0)
             {
-                controller.sendMessage(currentUserControl.getId(),passiveUserControl.getId(),message,null);
+                if(idToReply==-1)
+                    controller.sendMessage(currentUserControl.getId(),passiveUserControl.getId(),message,null);
+                else
+                {
+                    controller.sendMessage(currentUserControl.getId(),passiveUserControl.getId(),message,idToReply);
+                    idToReply=-1;
+                    sendMessageButton.setText("Send \nMessage");
+                }
+
                 loadMessages();
                 messageBody.setText("");
             }
@@ -508,5 +519,10 @@ public class HelloController {
 
             stage.show();
         }
+    }
+
+    public void selectReply(MouseEvent mouseEvent) {
+        idToReply = messageTable.getSelectionModel().getSelectedItem().getId();
+        sendMessageButton.setText("Send \nReply");
     }
 }
