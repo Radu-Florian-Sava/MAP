@@ -23,6 +23,7 @@ public class FriendshipService extends AbstractService<Integer, Friendship>{
      * @deprecated we don't need id generator anymore
      */
     @Override
+    @Deprecated
     public Integer generateId() throws SQLException {
         if (repository.size() == 0)
             return 1;

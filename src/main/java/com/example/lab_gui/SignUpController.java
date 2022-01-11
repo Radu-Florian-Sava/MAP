@@ -4,6 +4,7 @@ import Control.Controller;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import Utils.Hasher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 public class SignUpController {
@@ -46,10 +48,10 @@ public class SignUpController {
                     firstnameField.getText(),
                     surnameField.getText(),
                     usernameField.getText(),
-                    passwordField.getText(),
-                    confirmPasswordField.getText());
+                    Hasher.hash(passwordField.getText()),
+                    Hasher.hash(confirmPasswordField.getText()));
         }
-        catch(BusinessException | SQLException | ValidateException | RepoException businessException)
+        catch(BusinessException | SQLException | ValidateException | RepoException | NoSuchAlgorithmException businessException)
         {
             error = businessException.getMessage();
         }

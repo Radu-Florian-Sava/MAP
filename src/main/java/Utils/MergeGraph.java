@@ -14,6 +14,7 @@ import java.util.HashMap;
  * class which uses graph theory algorthm in order to calculate the number of communities (conex components)
  * and determine the most sociable community (the conex component which has the longest path)
  */
+@Deprecated
 public class MergeGraph {
     private MergedService service;
     private Integer[][] matrice;

@@ -20,6 +20,7 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,7 +36,7 @@ public class LoginController {
     public Button signupButton;
 
     @FXML
-    public void onLoginClicked(ActionEvent actionEvent) throws IOException, SQLException {
+    public void onLoginClicked(ActionEvent actionEvent) throws IOException, SQLException, NoSuchAlgorithmException {
         String username = usernameBox.getText();
         String password = passwordBox.getText();
         User user = null;
@@ -96,7 +97,7 @@ public class LoginController {
         stage.show();
     }
 
-    public void onLoginViaEnter(KeyEvent keyEvent) throws SQLException, IOException {
+    public void onLoginViaEnter(KeyEvent keyEvent) throws SQLException, IOException, NoSuchAlgorithmException {
         if(keyEvent.getCode()== KeyCode.ENTER){
             onLoginClicked(null);
         }

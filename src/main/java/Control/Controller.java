@@ -25,6 +25,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,6 +97,7 @@ public class Controller {
      * @throws BusinessException arunca exceptie daca apar probleme la nivelul de servicii al aplicatiei
      * @deprecated use sign up instead
      */
+    @Deprecated
     public void addUser(String firstName, String surname) throws ValidateException, RepoException, SQLException, BusinessException, SQLException {
         ArrayList<Object> params = new ArrayList<>();
         params.add(firstName);
@@ -633,7 +635,7 @@ public class Controller {
         return false;
     }
 
-    public User login(String username, String password) throws SQLException {
+    public User login(String username, String password) throws SQLException, NoSuchAlgorithmException {
         List<User> list = ((List<User>) userService.getRecords()).stream()
                 .filter((x) -> Objects.equals(x.getUsername(), username)).collect(Collectors.toList());
         if (list.size() == 0)
