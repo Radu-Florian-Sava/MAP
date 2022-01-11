@@ -37,8 +37,8 @@ import java.util.stream.StreamSupport;
  */
 public class Controller {
     private static final Controller controller = new Controller();
-    private Service<Integer, User> userService;
-    private Service<Integer, Friendship> friendshipService;
+    private final Service<Integer, User> userService;
+    private final Service<Integer, Friendship> friendshipService;
     private Service<Integer, Message> messageService;
 
     /**
