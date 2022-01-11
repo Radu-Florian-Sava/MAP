@@ -1,5 +1,7 @@
 package Domain;
 
+import Utils.Constants;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -11,7 +13,7 @@ public class Friendship implements Identifiable<Integer> {
     private int id;
     private int sender, receiver;
     private Date date;
-    private int friendship_request;
+    private int friendshipRequest;
 
     /**
      * @return the date when the friendship was created
@@ -25,14 +27,14 @@ public class Friendship implements Identifiable<Integer> {
      * @param sender the person who sent the friendship request
      * @param receiver the person who received the friendship request
      * @param date the date when the friendship was created
-     * @param friendship_request integer: 0 - PENDING, 1 - REJECTED, 2 - ACCEPTED
+     * @param friendshipRequest integer: 0 - PENDING, 1 - REJECTED, 2 - ACCEPTED
      */
-    public Friendship(int id, int sender, int receiver, Date date, int friendship_request) {
+    public Friendship(int id, int sender, int receiver, Date date, int friendshipRequest) {
         this.id = id;
         this.sender = sender;
         this.receiver = receiver;
         this.date = date;
-        this.friendship_request = friendship_request;
+        this.friendshipRequest = friendshipRequest;
     }
 
     /**
@@ -48,13 +50,14 @@ public class Friendship implements Identifiable<Integer> {
         this.sender = sender;
         this.receiver = receiver;
         this.date = date;
-        this.friendship_request = 0;
+        this.friendshipRequest = 0;
     }
 
     /**
      * @param sender the person who sent the friendship request
      * @param receiver the person who received the friendship request
-     * @deprecated only to be used with a non-GUI
+     * @deprecated only to be used with non-GUI, leaves INCOMPLETE attributes(for example data)
+     *             WARNING: the ID is given as 1 by default
      */
     @Deprecated
     public Friendship(int sender, int receiver) {
@@ -62,6 +65,7 @@ public class Friendship implements Identifiable<Integer> {
         this.sender = sender;
         this.receiver = receiver;
         this.date =  new Date(System.currentTimeMillis());
+        this.friendshipRequest =Constants.PENDING_FRIENDSHIP;
     }
 
     /**
@@ -133,14 +137,14 @@ public class Friendship implements Identifiable<Integer> {
     /**
      * @return the friendship request 'flag' ( 0 - pending, 1 - refused, 2 - accepted)
      */
-    public int getFriendship_request() {
-        return friendship_request;
+    public int getFriendshipRequest() {
+        return friendshipRequest;
     }
 
     /**
-     * @param friendship_request sets the friendship request 'flag' to a different value
+     * @param friendshipRequest sets the friendship request 'flag' to a different value
      */
-    public void setFriendship_request(int friendship_request) {
-        this.friendship_request = friendship_request;
+    public void setFriendshipRequest(int friendshipRequest) {
+        this.friendshipRequest = friendshipRequest;
     }
 }

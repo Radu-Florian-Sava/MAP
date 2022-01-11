@@ -180,7 +180,7 @@ public class HelloController {
                             return !controller.areFriends(currentUserControl.getId(), x.getId()) &&
                                     x.getId() != currentUserControl.getId() &&
                                     !controller.getSentFriendships(currentUserControl.getId()).stream().filter(
-                                                    y -> y.getFriendship_request() == 0 || y.getFriendship_request() == 2
+                                                    y -> y.getFriendshipRequest() == 0 || y.getFriendshipRequest() == 2
                                             ).toList()
                                             .contains(new Friendship(0, currentUserControl.getId(), x.getId()));
                         } catch (SQLException ignored) {
@@ -283,7 +283,7 @@ public class HelloController {
                 controller.sendFriendship(currentUserControl.getId(), changeStatusUserControl.getId());
                 hideRelationsMenu();
             } else if (Objects.equals(changeFriendStatus.getText(), "Unfriend")) {
-                Iterable<Friendship> friendshipList = controller.getFriendshipsOf(currentUserControl.getId());
+                Iterable<Friendship> friendshipList = controller.getAcceptedFriendshipsOf(currentUserControl.getId());
                 friendshipList.forEach(friendship -> {
                             if (friendship.getSender() == changeStatusUserControl.getId() ||
                                     friendship.getReceiver() == changeStatusUserControl.getId()) {

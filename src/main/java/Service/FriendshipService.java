@@ -109,7 +109,7 @@ public class FriendshipService extends AbstractService<Integer, Friendship>{
             if(check.equals(friendship) && !Objects.equals(check.getId(), id))
                 throw new RepoException("Prietenie deja stabilita\n");
             else if(check.equals(friendship) && friendship_request == -1)
-                friendship.setFriendship_request(check.getFriendship_request());
+                friendship.setFriendshipRequest(check.getFriendshipRequest());
         repository.update(id, friendship);
     }
 }

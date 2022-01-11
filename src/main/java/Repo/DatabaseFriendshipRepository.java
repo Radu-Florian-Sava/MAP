@@ -41,7 +41,7 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
                             + friendship.getSender() + "," +
                             friendship.getReceiver() + ",'" +
                             friendship.getStringDate() + "'," +
-                            friendship.getFriendship_request() + ") RETURNING id");
+                            friendship.getFriendshipRequest() + ") RETURNING id");
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -82,7 +82,7 @@ public class DatabaseFriendshipRepository implements Repository<Integer, Friends
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE friendships " +
                 "SET id_user_1 = " + friendship.getSender() +
                 ",id_user_2 = " + friendship.getReceiver() +
-                ",friendship_request = " + friendship.getFriendship_request() +
+                ",friendship_request = " + friendship.getFriendshipRequest() +
                 " WHERE id=" + id);
         if (preparedStatement.executeUpdate() == 0)
             throw new RepoException("Element inexistent\n");
