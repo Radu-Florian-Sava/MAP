@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
+/**
+ * a javafx controller class for the PDF creating menu
+ */
 public class PdfController {
     @FXML
     public TextField pathBox;
@@ -42,6 +45,9 @@ public class PdfController {
             optionLabel.setText("Create a PDF for all your messages from a friend between a date");
     }
 
+    /**
+     * create the initial build for the application
+     */
     @FXML
     void initialize() {
         if(option == 1)
@@ -51,7 +57,7 @@ public class PdfController {
     }
 
     @FXML
-    public void onCreatePDFClicked(ActionEvent actionEvent) throws SQLException, IOException, BusinessException {
+    public void onCreatePDFClicked(ActionEvent actionEvent)  {
         String err = "";
         Date date_start = new Date(dateStart.getValue().toEpochDay() * 3600 * 24 * 1000);
         Date date_end = new Date(dateEnd.getValue().toEpochDay() * 3600 * 24 * 1000);
@@ -70,21 +76,37 @@ public class PdfController {
             alert.show();
             return;
         }
-        if(option == 1)
-            Controller.getInstance().friendsAndMessagesBetweenADatePDF(
-                    id,
-                    date_start,
-                    date_end,
-                    file
-            );
-        else
-            Controller.getInstance().messagesFromAFriendBetweenDatesPDF(
-                    date_start,
-                    date_end,
-                    id,
-                    friend,
-                    file
-            );
+        if(option == 1) {
+            try {
+                Controller.getInstance().friendsAndMessagesBetweenADatePDF(
+                        id,
+                        date_start,
+                        date_end,
+                        file
+                );
+            } catch (IOException | SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText(e.getMessage());
+                alert.show();
+            }
+        }
+        else {
+            try {
+                Controller.getInstance().messagesFromAFriendBetweenDatesPDF(
+                        date_start,
+                        date_end,
+                        id,
+                        friend,
+                        file
+                );
+            } catch (IOException | BusinessException | SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText(e.getMessage());
+                alert.show();
+            }
+        }
     }
 
     @FXML

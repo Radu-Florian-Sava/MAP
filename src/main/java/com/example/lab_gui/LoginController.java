@@ -35,8 +35,9 @@ public class LoginController {
     @FXML
     public Button signupButton;
 
+
     @FXML
-    public void onLoginClicked(ActionEvent actionEvent) throws IOException, SQLException, NoSuchAlgorithmException {
+    public void onLoginClicked(ActionEvent actionEvent)  {
         String username = usernameBox.getText();
         String password = passwordBox.getText();
         User user = null;
@@ -47,7 +48,14 @@ public class LoginController {
         else if(password.length() == 0)
             err += "The password box must not be empty!\n";
         else {
-            user = Controller.getInstance().login(username, password);
+            try {
+                user = Controller.getInstance().login(username, password);
+            } catch (SQLException | NoSuchAlgorithmException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText(e.getMessage());
+                alert.show();
+            }
             if (user == null)
                 err += "Authentication error!\n";
         }
@@ -61,15 +69,20 @@ public class LoginController {
         }
         else {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-            Parent parent = fxmlLoader.load();
+            Parent parent = null;
+            try {
+                parent = fxmlLoader.load();
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText(e.getMessage());
+                alert.show();
+            }
             Scene scene = new Scene(parent, 320, 400);
             HelloController helloController = fxmlLoader.getController();
 
-            try {
-                helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname(),user.getUsername()));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname(),user.getUsername()));
+
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
 
@@ -82,9 +95,17 @@ public class LoginController {
         }
     }
 
-    public void onSignUpClicked(ActionEvent actionEvent) throws IOException {
+    public void onSignUpClicked(ActionEvent actionEvent)  {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup.fxml"));
-        Parent parent = fxmlLoader.load();
+        Parent parent = null;
+        try {
+            parent = fxmlLoader.load();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
         Scene scene = new Scene(parent, 320, 400);
 
         Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -97,7 +118,7 @@ public class LoginController {
         stage.show();
     }
 
-    public void onLoginViaEnter(KeyEvent keyEvent) throws SQLException, IOException, NoSuchAlgorithmException {
+    public void onLoginViaEnter(KeyEvent keyEvent)  {
         if(keyEvent.getCode()== KeyCode.ENTER){
             onLoginClicked(null);
         }

@@ -21,7 +21,11 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
+/**
+ *  a javafx controller class for the signup page
+ */
 public class SignUpController {
+
     @FXML
     public Button signUpButton;
 
@@ -41,7 +45,7 @@ public class SignUpController {
     public PasswordField confirmPasswordField;
 
     @FXML
-    public void signUpClicked(ActionEvent actionEvent) throws IOException {
+    public void signUpClicked(ActionEvent actionEvent) {
         String error = "";
         try {
             Controller.getInstance().signup(
@@ -64,19 +68,28 @@ public class SignUpController {
         else
         {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 320, 400);
+            Scene scene = null;
+            try {
+                scene = new Scene(fxmlLoader.load(), 320, 400);
+            } catch (IOException e) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText(e.getMessage());
+                alert.show();
+            }
 
             Stage stage = (Stage) signUpButton.getScene().getWindow();
-
             stage.close();
-
             stage.setScene(scene);
-
             stage.show();
         }
     }
 
-    public void signUpViaEnter(KeyEvent keyEvent) throws IOException {
+    /**
+     * @param keyEvent if ENTER is pressed tries to sign up the user
+     */
+    public void signUpViaEnter(KeyEvent keyEvent)  {
         if(keyEvent.getCode()== KeyCode.ENTER){
             signUpClicked(null);
         }
