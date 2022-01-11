@@ -4,19 +4,13 @@ import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
-import Repo.DatabaseFriendshipRepository;
-import Repo.DatabaseMessageRepository;
-import Repo.DatabaseUserRepository;
-import Repo.Repository;
+import Repo.*;
 import Service.Service;
 import Utils.Constants;
 import Utils.Graph;
 import Utils.Hasher;
 import Utils.UtilsFunctions;
-import Validate.FriendshipValidator;
-import Validate.MessageValidator;
-import Validate.UserValidator;
-import Validate.Validator;
+import Validate.*;
 import Service.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -27,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -40,6 +35,7 @@ public class Controller {
     private final Service<Integer, User> userService;
     private final Service<Integer, Friendship> friendshipService;
     private Service<Integer, Message> messageService;
+    private Service<Integer, Event> eventService;
 
     /**
      *  private constructor, we are using the singleton design pattern
@@ -61,6 +57,11 @@ public class Controller {
                 url, "postgres", password);
         Validator<Integer, Message> messageValidator = new Validator<>(new MessageValidator());
         messageService = new MessageService(messageRepository, messageValidator);
+
+        Repository<Integer, Event> eventRepository = new DatabaseEventRepository(
+                url, "postgres", password);
+        Validator<Integer, Event> eventValidator = new Validator<>(new EventValidator());
+        eventService = new EventService(eventRepository, eventValidator);
     }
 
     /**
@@ -884,5 +885,49 @@ public class Controller {
 
         pdDocument.save(file_dest);
         pdDocument.close();
+    }
+
+    public void createEvent(int id_user, String title, String description, Timestamp date) throws ValidateException, BusinessException, SQLException, RepoException {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(date);
+        params.add(title);
+        params.add(description);
+
+        int id = eventService.createRecord(params);
+
+        params = new ArrayList<>();
+        params.add(id);
+        params.add(id_user);
+        params.add(1);
+
+        eventService.createRecord(params);
+    }
+
+    public void joinEvent(int id_user, int id_event) throws SQLException, BusinessException, ValidateException, RepoException {
+        if(((List<Event>) eventService.getRecords()).stream().anyMatch((x) -> x.getUser() == id_user && x.getId() == id_event)) {
+            throw new BusinessException("The user is already on this event!\n");
+        }
+
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(id_user);
+        params.add(id_event);
+        params.add(1);
+
+        eventService.createRecord(params);
+    }
+
+    public void deleteEvent(int id_user, int id_event) throws SQLException, BusinessException, RepoException {
+        if(((List<Event>) eventService.getRecords()).stream()
+                .noneMatch((x) -> x.getUser() == id_user && Objects.equals(x.getId(), id_event))) {
+            throw new BusinessException("The user is not on this event!\n");
+        }
+
+        eventService.deleteRecord(id_event);
+    }
+
+    public Iterable<Event> getAllEvents() throws SQLException {
+        return ((List<Event>) eventService.getRecords()).stream()
+                .filter((x) -> x.getStatus().toUpperCase(Locale.ROOT).equals("ORGANIZER"))
+                .collect(Collectors.toList());
     }
 }
