@@ -77,7 +77,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
     public Event delete(Integer integer) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "DELETE FROM messages WHERE id = " + integer + "RETURNING *"
+                "DELETE FROM events_users WHERE id = " + integer + "RETURNING *"
         );
         ResultSet resultSet = preparedStatement.executeQuery();
         if(!resultSet.next())
