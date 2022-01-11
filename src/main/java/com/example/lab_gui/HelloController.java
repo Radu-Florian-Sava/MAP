@@ -42,7 +42,8 @@ public class HelloController {
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
     private UserDTO currentUserControl = null;
-    private UserDTO passiveUserControl = null;
+    private UserDTO messageUserControl = null;
+    private UserDTO changeStatusUserControl = null;
     private FriendshipDTO selectedFriendship = null;
     private int idToReply=-1;
 
@@ -160,7 +161,7 @@ public class HelloController {
             if (hiddenUserDTO.isEmpty()) {
                 hiddenTable.setPlaceholder(new Label("For the moment there are no friends to show \n" +
                         "Try again after you make some :P"));
-                passiveUserControl = null;
+                changeStatusUserControl = null;
             }
         }
     }
@@ -193,41 +194,40 @@ public class HelloController {
             if (hiddenUserDTO.isEmpty()) {
                 hiddenTable.setPlaceholder(new Label("It looks like you've got lots of friends \n" +
                         "There's no one to add at the moment XD"));
-                passiveUserControl = null;
+                changeStatusUserControl = null;
             }
         }
     }
 
     private void hideRelationsMenu() throws SQLException {
         changeStatusSection.setVisible(false);
+        hiddenTable.setVisible(false);
         changeFriendStatus.setText("Unfriend\\Befriend");
-        passiveUserControl = null;
+        changeStatusUserControl = null;
         passiveUserName.setText("Nume Prenume");
         loadFriendships();
     }
 
     private void hideMessages(){
         messageFunctionality.setVisible(false);
-        passiveUserControl=null;
+        messageUserControl =null;
     }
 
     private void showMessages(){
-        if(passiveUserControl!=null)
+        if(messageUserControl !=null)
         {
             messageFunctionality.setVisible(true);
-            changeStatusSection.setVisible(false);
-            hiddenTable.setVisible(false);
             messageColumn.setText("Messages with " +
-                    passiveUserControl.getFirstName() +
+                    messageUserControl.getFirstName() +
                     " " +
-                    passiveUserControl.getSurname()
+                    messageUserControl.getSurname()
             );
         }
     }
 
     private Iterable<MessageDTO> getMessages() throws SQLException {
-        if(currentUserControl!=null && passiveUserControl!=null){
-             return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
+        if(currentUserControl!=null && messageUserControl !=null){
+             return controller.getMessagesBy2Users(currentUserControl.getId(), messageUserControl.getId());
         }
         return null;
     }
@@ -258,24 +258,11 @@ public class HelloController {
     }
 
     @FXML
-    private void selectedUser(MouseEvent mouseEvent) throws SQLException {
-        if (currentUserControl != null) {
-            selectedUser.setText(
-                    currentUserControl.toString()
-            );
-            loadFriendships();
-            hideRelationsMenu();
-            hideMessages();
-        }
-    }
-
-    @FXML
     private void setPassiveUser(MouseEvent mouseEvent) {
-        messageFunctionality.setVisible(false);
-        passiveUserControl = hiddenTable.getSelectionModel().getSelectedItem();
-        if (passiveUserControl != null) {
+        changeStatusUserControl = hiddenTable.getSelectionModel().getSelectedItem();
+        if (changeStatusUserControl != null) {
             passiveUserName.setText(
-                    passiveUserControl.toString()
+                    changeStatusUserControl.toString()
             );
         }
     }
@@ -290,28 +277,28 @@ public class HelloController {
     }
 
     public void changeStatusOfFriendship(ActionEvent actionEvent) throws ValidateException, BusinessException, SQLException, RepoException {
-        if (passiveUserControl != null && currentUserControl != null) {
+        if (changeStatusUserControl != null && currentUserControl != null) {
 
             if (Objects.equals(changeFriendStatus.getText(), "Send request")) {
-                controller.sendFriendship(currentUserControl.getId(), passiveUserControl.getId());
+                controller.sendFriendship(currentUserControl.getId(), changeStatusUserControl.getId());
                 hideRelationsMenu();
-                hideMessages();
             } else if (Objects.equals(changeFriendStatus.getText(), "Unfriend")) {
                 Iterable<Friendship> friendshipList = controller.getFriendshipsOf(currentUserControl.getId());
                 friendshipList.forEach(friendship -> {
-                            if (friendship.getSender() == passiveUserControl.getId() ||
-                                    friendship.getReceiver() == passiveUserControl.getId()) {
+                            if (friendship.getSender() == changeStatusUserControl.getId() ||
+                                    friendship.getReceiver() == changeStatusUserControl.getId()) {
                                 try {
                                     controller.deleteFriendship(friendship.getId());
+                                    if(changeStatusUserControl.getId() == messageUserControl.getId())
+                                        hideMessages();
                                     hideRelationsMenu();
-                                    hideMessages();
                                 } catch (RepoException | SQLException ignored) {
                                 }
                             }
                         }
                 );
                 hideRelationsMenu();
-                hideMessages();
+
             }
 
         }
@@ -416,7 +403,7 @@ public class HelloController {
             idToReply = -1;
             int passive_user_id = Integer.parseInt(selectedFriendship.getSecondName().split(";")[0]);
             User tempUser = controller.findUser(passive_user_id);
-            passiveUserControl=new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname(),tempUser.getUsername());
+            messageUserControl =new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname(),tempUser.getUsername());
         }
 
         showMessages();
@@ -430,15 +417,15 @@ public class HelloController {
 
     @FXML
     public void sendMessage(ActionEvent actionEvent) throws ValidateException, BusinessException, SQLException, RepoException {
-        if(currentUserControl!=null && passiveUserControl!=null){
+        if(currentUserControl!=null && messageUserControl !=null){
             String message = messageBody.getText();
             if(message.length()!=0)
             {
                 if(idToReply==-1)
-                    controller.sendMessage(currentUserControl.getId(),passiveUserControl.getId(),message,null);
+                    controller.sendMessage(currentUserControl.getId(), messageUserControl.getId(),message,null);
                 else
                 {
-                    controller.sendMessage(currentUserControl.getId(),passiveUserControl.getId(),message,idToReply);
+                    controller.sendMessage(currentUserControl.getId(), messageUserControl.getId(),message,idToReply);
                     idToReply=-1;
                     sendMessageButton.setText("Send \nMessage");
                 }
@@ -503,7 +490,7 @@ public class HelloController {
             Scene scene = new Scene(parent, 321, 400);
             PdfController pdfController = fxmlLoader.getController();
 
-            pdfController.setUp(2, currentUserControl.getId(), passiveUserControl);
+            pdfController.setUp(2, currentUserControl.getId(), messageUserControl);
 
             Stage stage = new Stage();
 
@@ -521,6 +508,7 @@ public class HelloController {
         }
     }
 
+    @FXML
     public void selectReply(MouseEvent mouseEvent) {
         idToReply = messageTable.getSelectionModel().getSelectedItem().getId();
         sendMessageButton.setText("Send \nReply");

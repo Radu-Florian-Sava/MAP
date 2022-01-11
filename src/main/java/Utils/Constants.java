@@ -7,5 +7,5 @@ package Utils;
 public class Constants {
     public final static int PENDING_FRIENDSHIP=0;
     public final static int REJECTED_FRIENDSHIP=1;
-    public final static int ACCEPTED_FRIENDSHIP=0;
+    public final static int ACCEPTED_FRIENDSHIP=2;
 }

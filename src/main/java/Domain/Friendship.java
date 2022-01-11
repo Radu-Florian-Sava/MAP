@@ -68,9 +68,7 @@ public class Friendship implements Identifiable<Integer> {
      * @param id makes each friendship uniquely identifiable
      * @param sender the person who sent the friendship request
      * @param receiver the person who received the friendship request
-     * @deprecated only to be used with a non-GUI
      */
-    @Deprecated
     public Friendship(int id, int sender, int receiver) {
         this.id = id;
         this.sender = sender;

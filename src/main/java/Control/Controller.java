@@ -291,7 +291,6 @@ public class Controller {
             Message message1 = messageService.findRecord(id_reply);
             if ((message1.getTo() != id_from || message1.getFrom() != id_to) &&
                     (message1.getTo() != id_to || message1.getFrom() != id_from)) {
-                // System.out.println(message1.getTo() + " " + id_to + " " + message1.getFrom() + " " + id_from);
                 throw new BusinessException("Mesajul replied nu apartine acestei conversatii\n");
             }
         }

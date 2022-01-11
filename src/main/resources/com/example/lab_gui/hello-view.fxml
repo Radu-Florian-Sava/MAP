@@ -57,7 +57,7 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <TableView fx:id="userTable" onMouseClicked="#selectedUser" prefHeight="150.0" prefWidth="342.0" style="-fx-background-color: #644ccc; -fx-border-color: midnightblue;">
+            <TableView fx:id="userTable" prefHeight="150.0" prefWidth="342.0" style="-fx-background-color: #644ccc; -fx-border-color: midnightblue;">
               <columns>
                 <TableColumn fx:id="userID" prefWidth="36.80006265640259" resizable="false" text="ID" />
                   <TableColumn fx:id="userFirstName" prefWidth="153.60003662109375" resizable="false" text="First Name" />
