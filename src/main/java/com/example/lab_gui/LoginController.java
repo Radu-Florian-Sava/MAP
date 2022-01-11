@@ -49,7 +49,7 @@ public class LoginController {
         else {
             user = Controller.getInstance().login(username, password);
             if (user == null)
-                err += "User does not exist!\n";
+                err += "Authentication error!\n";
         }
 
 
