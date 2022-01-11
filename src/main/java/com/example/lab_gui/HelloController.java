@@ -348,7 +348,6 @@ public class HelloController {
                 acceptOrReject.setContentText("The user " + selectedFriendship.getSecondName() +
                         " has sent you a friend request");
 
-                hideRelationsMenu();
                 ButtonType acceptRequest = new ButtonType("Accept");
                 ButtonType rejectRequest = new ButtonType("Reject");
                 ButtonType ignore = new ButtonType("Ignore for now", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -373,7 +372,6 @@ public class HelloController {
                 acceptOrReject.setContentText("You have sent a friendship request to " +
                         selectedFriendship.getSecondName());
 
-                hideRelationsMenu();
                 ButtonType deleteRequest = new ButtonType("Yes");
                 ButtonType ignore = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
 
