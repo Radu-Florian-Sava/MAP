@@ -79,7 +79,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
     public Event delete(Integer integer) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "DELETE FROM events_users WHERE id = " + integer + "RETURNING *"
+                "DELETE FROM events_users WHERE id = " + integer + " RETURNING *"
         );
         ResultSet resultSet = preparedStatement.executeQuery();
         if(!resultSet.next())
@@ -128,7 +128,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "SELECT" +
-                        "E.id as id," +
+                        "U.id as id," +
                         "E.title as title," +
                         "E.date as date," +
                         "E.description as description," +
@@ -165,7 +165,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
         int old_id = -1;
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "SELECT " +
-                        "E.id as id, " +
+                        "U.id as id, " +
                         "E.title as title, " +
                         "E.date as date, " +
                         "E.description as description, " +
@@ -176,7 +176,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
                         "INNER JOIN events E ON E.id = U.id_event");
         ResultSet resultSet = preparedStatement.executeQuery();
         if(resultSet.next()) {
-            old_id = resultSet.getInt("id");
+            old_id = resultSet.getInt("id_event");
             Event event = new Event(
                     resultSet.getInt("id_event"),
                     resultSet.getTimestamp("date"),
@@ -189,7 +189,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
             );
             eventArrayList.add(event);
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
+                int id = resultSet.getInt("id_event");
                 if (id == old_id) {
                     event.add(resultSet.getInt("id_user"), resultSet.getInt("status") == 0
                             ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT, resultSet.getInt("id"));
