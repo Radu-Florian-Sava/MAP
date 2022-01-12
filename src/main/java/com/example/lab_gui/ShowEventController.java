@@ -40,7 +40,7 @@ public class ShowEventController {
     private void load() {
         titleColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getTitle()));
         dateColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getDate().toString()));
-        dateColumn.setCellValueFactory((data) ->
+        statusColumn.setCellValueFactory((data) ->
                 new SimpleStringProperty(data.getValue().getUsers().get(id_user).getKey().getStatus()));
 
         load_all_events();

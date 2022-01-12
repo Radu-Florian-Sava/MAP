@@ -4,6 +4,9 @@ import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
 import Repo.*;
 import Service.Service;
 import Utils.Constants;
@@ -910,8 +913,8 @@ public class Controller {
         }
 
         ArrayList<Object> params = new ArrayList<>();
-        params.add(id_user);
         params.add(id_user_event);
+        params.add(id_user);
         params.add(0);
 
         eventService.createRecord(params);
