@@ -71,11 +71,10 @@ public class ShowEventController {
     public void load_my_events() {
         try {
             List<Event> events = (List<Event>) Controller.getInstance().getMyEvents(id_user);
-            if(events != null && events.size() != 0)
-                myEvents.setItems(FXCollections.observableList(events));
-            else
-                myEvents.setPlaceholder(new Label("There are no events yet\n" +
+            myEvents.setItems(FXCollections.observableList(events));
+            myEvents.setPlaceholder(new Label("There are no events yet\n" +
                         " Looks like it's time to change that"));
+            myEvents.refresh();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
