@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="347.0" prefWidth="304.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.CreateEventController">
+   <children>
+      <Label layoutX="14.0" layoutY="20.0" text="Title" />
+      <Label layoutX="14.0" layoutY="51.0" text="Description" />
+      <TextField fx:id="titleBox" layoutX="85.0" layoutY="16.0" prefHeight="26.0" prefWidth="200.0" />
+      <TextArea fx:id="descriptionBox" layoutX="85.0" layoutY="51.0" prefHeight="200.0" prefWidth="200.0" />
+      <DatePicker fx:id="datePicker" layoutX="85.0" layoutY="260.0" prefHeight="26.0" prefWidth="200.0" promptText="Pick a date" />
+      <Button layoutX="12.0" layoutY="302.0" mnemonicParsing="false" onAction="#onCreateEventClicked" prefHeight="26.0" prefWidth="273.0" text="Button" />
+      <Label layoutX="12.0" layoutY="265.0" text="Date" />
+   </children>
+</AnchorPane>
