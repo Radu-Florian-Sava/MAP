@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -891,6 +892,12 @@ public class Controller {
     }
 
     public void createEvent(int id_user, String title, String description, Timestamp date) throws ValidateException, BusinessException, SQLException, RepoException {
+        if(title == null)
+            title = "";
+        if(description == null)
+            description = "";
+        if(date == null)
+            date = Timestamp.from(Instant.MIN);
         ArrayList<Object> params = new ArrayList<>();
         params.add(date);
         params.add(title);

@@ -27,7 +27,7 @@ public class EventValidator implements Validation<Integer, Event> {
         }
         if(event.getDate() != null) {
             if(event.getDate().compareTo(Timestamp.from(Instant.now())) < 0) {
-                err += "The date must be higher than this day!\n";
+                err += "The date must be higher than this moment!\n";
             }
         }
         if(event.getDescription() != null) {

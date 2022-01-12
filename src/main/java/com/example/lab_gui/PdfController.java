@@ -56,8 +56,13 @@ public class PdfController {
     @FXML
     public void onCreatePDFClicked()  {
         String err = "";
-        Date date_start = new Date(dateStart.getValue().toEpochDay() * 3600 * 24 * 1000);
-        Date date_end = new Date(dateEnd.getValue().toEpochDay() * 3600 * 24 * 1000);
+        Date date_start = null;
+        Date date_end = null;
+        if(dateStart.getValue() != null && dateEnd.getValue() != null) {
+            date_start = new Date(dateStart.getValue().toEpochDay() * 3600 * 24 * 1000);
+            date_end = new Date(dateEnd.getValue().toEpochDay() * 3600 * 24 * 1000);
+        }
+
         System.out.println(date_start);
         File file = null;
         try {
