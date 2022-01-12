@@ -926,7 +926,7 @@ public class Controller {
                         x.getUsers().containsKey(id_user) && x.getUsers().get(id_user).getValue() == id_user_event)) {
             throw new BusinessException("The user is not on this event!\n");
         }
-
+        System.out.println(id_user_event);
         eventService.deleteRecord(id_user_event);
     }
 

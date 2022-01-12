@@ -108,7 +108,7 @@ public class ShowEventController {
 
     @FXML
     public void onLeaveEventClicked(ActionEvent actionEvent) {
-        Event event = allEvents.getSelectionModel().getSelectedItem();
+        Event event = myEvents.getSelectionModel().getSelectedItem();
         if(event == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
