@@ -114,7 +114,6 @@ public class LoginController {
 
         stage.setTitle("Sign Up");
         stage.setScene(scene);
-
         stage.show();
     }
 

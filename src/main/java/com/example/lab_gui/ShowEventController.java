@@ -96,6 +96,7 @@ public class ShowEventController {
         else {
             try {
                 Controller.getInstance().joinEvent(id_user, event.getId());
+                load_my_events();
             } catch (SQLException | BusinessException | ValidateException | RepoException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -117,6 +118,7 @@ public class ShowEventController {
         else {
             try {
                 Controller.getInstance().deleteEvent(id_user, event.getUsers().get(id_user).getValue());
+                load_my_events();
             } catch (SQLException | BusinessException | RepoException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
