@@ -903,31 +903,36 @@ public class Controller {
         eventService.createRecord(params);
     }
 
-    public void joinEvent(int id_user, int id_event) throws SQLException, BusinessException, ValidateException, RepoException {
-        if(((List<Event>) eventService.getRecords()).stream().anyMatch((x) -> x.getUser() == id_user && x.getId() == id_event)) {
+    public void joinEvent(int id_user, int id_user_event) throws SQLException, BusinessException, ValidateException, RepoException {
+        if(((List<Event>) eventService.getRecords()).stream().anyMatch((x) ->
+                x.getUsers().containsKey(id_user) && x.getUsers().get(id_user).getValue() == id_user_event)) {
             throw new BusinessException("The user is already on this event!\n");
         }
 
         ArrayList<Object> params = new ArrayList<>();
         params.add(id_user);
-        params.add(id_event);
-        params.add(1);
+        params.add(id_user_event);
+        params.add(0);
 
         eventService.createRecord(params);
     }
 
-    public void deleteEvent(int id_user, int id_event) throws SQLException, BusinessException, RepoException {
+    public void deleteEvent(int id_user, int id_user_event) throws SQLException, BusinessException, RepoException {
         if(((List<Event>) eventService.getRecords()).stream()
-                .noneMatch((x) -> x.getUser() == id_user && Objects.equals(x.getId(), id_event))) {
+                .noneMatch((x) ->
+                        x.getUsers().containsKey(id_user) && x.getUsers().get(id_user).getValue() == id_user_event)) {
             throw new BusinessException("The user is not on this event!\n");
         }
 
-        eventService.deleteRecord(id_event);
+        eventService.deleteRecord(id_user_event);
     }
 
     public Iterable<Event> getAllEvents() throws SQLException {
-        return ((List<Event>) eventService.getRecords()).stream()
-                .filter((x) -> x.getStatus().toUpperCase(Locale.ROOT).equals("ORGANIZER"))
-                .collect(Collectors.toList());
+        return eventService.getRecords();
+    }
+
+    public Iterable<Event> getMyEvents(int id) throws SQLException {
+        return ((List<Event>) eventService.getRecords()).stream().filter(
+                (x) -> x.getUsers().containsKey(id)).collect(Collectors.toList());
     }
 }
