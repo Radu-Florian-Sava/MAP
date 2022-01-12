@@ -182,7 +182,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
                     resultSet.getString("title"),
                     resultSet.getString("description"),
                     resultSet.getInt("id_user"),
-                    resultSet.getInt("id_status") == 0
+                    resultSet.getInt("status") == 0
                             ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
                     resultSet.getInt("id")
             );
@@ -190,7 +190,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 if (id == old_id) {
-                    event.add(resultSet.getInt("id_user"), resultSet.getInt("id_status") == 0
+                    event.add(resultSet.getInt("id_user"), resultSet.getInt("status") == 0
                             ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT, resultSet.getInt("id"));
                 } else {
                     event = new Event(
@@ -199,7 +199,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
                             resultSet.getString("title"),
                             resultSet.getString("description"),
                             resultSet.getInt("id_user"),
-                            resultSet.getInt("id_status") == 0
+                            resultSet.getInt("status") == 0
                                     ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
                             resultSet.getInt("id")
 
