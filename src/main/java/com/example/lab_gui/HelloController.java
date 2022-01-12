@@ -278,9 +278,6 @@ public class HelloController {
         hiddenSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));
 
         messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().toString()));
-
-        loadFriendships();
-        loadUsers();
     }
 
     @FXML
@@ -532,6 +529,7 @@ public class HelloController {
         selectedUser.setText(
                 userPage.getMainUser().toString()
         );
+        loadUsers();
         loadFriendships();
         hideRelationsMenu();
         hideMessages();
