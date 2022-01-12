@@ -92,29 +92,6 @@ public class LoginController {
             stage.setScene(scene);
 
             stage.show();
-
-            fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("showEvent.fxml"));
-            try {
-                parent = fxmlLoader.load();
-            } catch (IOException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText(e.getMessage());
-                alert.show();
-            }
-            scene = new Scene(parent, 320, 400);
-            ShowEventController showEventController = fxmlLoader.getController();
-
-            showEventController.setUp(user.getId());
-
-            stage = new Stage();
-
-            stage.setResizable(false);
-            stage.setTitle("Webber");
-            stage.setScene(scene);
-            stage.setWidth(620);
-            stage.setHeight(430);
-            stage.show();
         }
     }
 
