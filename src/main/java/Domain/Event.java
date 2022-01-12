@@ -3,22 +3,22 @@ package Domain;
 import Utils.StatusEventUser;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Event implements Identifiable<Integer> {
     private final int id;
     private Timestamp date;
     private String title;
     private String description;
-    private int user;
-    private StatusEventUser status;
+    private Map<Integer, StatusEventUser> users_with_status = new HashMap<>();
 
     public Event(int id, Timestamp date, String title, String description, int user, StatusEventUser status) {
         this.id = id;
         this.date = date;
         this.title = title;
         this.description = description;
-        this.user = user;
-        this.status = status;
+        users_with_status.put(user, status);
     }
 
     public Event(Timestamp date, String title, String description) {
@@ -57,11 +57,11 @@ public class Event implements Identifiable<Integer> {
         return id;
     }
 
-    public int getUser() {
-        return user;
+    public Map<Integer, StatusEventUser> getUsers() {
+        return users_with_status;
     }
 
-    public String getStatus() {
-        return status.getStatus();
+    public void add(int id_user, StatusEventUser status) {
+        users_with_status.put(id_user, status);
     }
 }
