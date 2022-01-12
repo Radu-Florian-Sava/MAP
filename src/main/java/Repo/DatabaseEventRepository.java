@@ -176,6 +176,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
                         "INNER JOIN events E ON E.id = U.id_event");
         ResultSet resultSet = preparedStatement.executeQuery();
         if(resultSet.next()) {
+            old_id = resultSet.getInt("id");
             Event event = new Event(
                     resultSet.getInt("id_event"),
                     resultSet.getTimestamp("date"),
