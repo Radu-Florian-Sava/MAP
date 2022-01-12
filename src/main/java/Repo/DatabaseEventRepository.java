@@ -41,7 +41,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
         Connection connection = DriverManager.getConnection(url, username, password);
         if(event.getTitle() == null) {
             int user = event.getUsers().keySet().iterator().next();
-            int status = event.getUsers().get(user) == StatusEventUser.PARTICIPANT ? 0 : 1;
+            int status = event.getUsers().get(user).getKey() == StatusEventUser.PARTICIPANT ? 0 : 1;
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO events_users (id_event, id_user, status) VALUES " +
                             "(" +
@@ -86,12 +86,13 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
             throw new RepoException("Id invalid!\n");
 
         return new Event(
-                resultSet.getInt("id"),
-                resultSet.getTimestamp("date"),
-                resultSet.getString("title"),
-                resultSet.getString("description"),
-                0,
-                StatusEventUser.PARTICIPANT
+                resultSet.getInt("id_event"),
+                null,
+                null,
+                null,
+                resultSet.getInt("id_user"),
+                resultSet.getInt("status") == 1 ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
+                resultSet.getInt("id")
         );
 
     }
@@ -126,19 +127,30 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
     public Event find(Integer integer) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT * FROM events WHERE id = " + integer);
+                "SELECT" +
+                        "E.id as id," +
+                        "E.title as title," +
+                        "E.date as date," +
+                        "E.description as description," +
+                        "U.id_user as id_user," +
+                        "U.status as status," +
+                        "U.id_event as id_event " +
+                        "FROM events_users U" +
+                        "INNER JOIN events E ON E.id = U.id_event" +
+                        " WHERE U.id = " + integer);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         if(!resultSet.next())
             return null;
 
         return new Event(
-                resultSet.getInt("id"),
+                resultSet.getInt("id_event"),
                 resultSet.getTimestamp("date"),
                 resultSet.getString("title"),
                 resultSet.getString("description"),
-                0,
-                StatusEventUser.PARTICIPANT
+                resultSet.getInt("id_user"),
+                StatusEventUser.PARTICIPANT,
+                resultSet.getInt("id")
         );
     }
 
@@ -158,35 +170,39 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
                         "E.date as date, " +
                         "E.description as description, " +
                         "U.id_user as id_user, " +
-                        "U.status as status " +
+                        "U.status as status, " +
+                        "U.id_event as id_event " +
                         "FROM events_users U " +
                         "INNER JOIN events E ON E.id = U.id_event");
         ResultSet resultSet = preparedStatement.executeQuery();
         if(resultSet.next()) {
             Event event = new Event(
-                    resultSet.getInt("id"),
+                    resultSet.getInt("id_event"),
                     resultSet.getTimestamp("date"),
                     resultSet.getString("title"),
                     resultSet.getString("description"),
                     resultSet.getInt("id_user"),
                     resultSet.getInt("id_status") == 0
-                            ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT
+                            ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
+                    resultSet.getInt("id")
             );
             eventArrayList.add(event);
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 if (id == old_id) {
                     event.add(resultSet.getInt("id_user"), resultSet.getInt("id_status") == 0
-                            ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT);
+                            ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT, resultSet.getInt("id"));
                 } else {
                     event = new Event(
-                            resultSet.getInt("id"),
+                            resultSet.getInt("id_event"),
                             resultSet.getTimestamp("date"),
                             resultSet.getString("title"),
                             resultSet.getString("description"),
                             resultSet.getInt("id_user"),
                             resultSet.getInt("id_status") == 0
-                                    ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT
+                                    ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
+                            resultSet.getInt("id")
+
                     );
                     eventArrayList.add(event);
                 }

@@ -1,6 +1,7 @@
 package Domain;
 
 import Utils.StatusEventUser;
+import javafx.util.Pair;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -11,14 +12,20 @@ public class Event implements Identifiable<Integer> {
     private Timestamp date;
     private String title;
     private String description;
-    private Map<Integer, StatusEventUser> users_with_status = new HashMap<>();
+    private Map<Integer, Pair<StatusEventUser, Integer>> users_with_status = new HashMap<>();
 
-    public Event(int id, Timestamp date, String title, String description, int user, StatusEventUser status) {
+    public Event(int id,
+                 Timestamp date,
+                 String title,
+                 String description,
+                 int user,
+                 StatusEventUser status,
+                 int id_user_event) {
         this.id = id;
         this.date = date;
         this.title = title;
         this.description = description;
-        users_with_status.put(user, status);
+        users_with_status.put(user, new Pair<>(status, id_user_event));
     }
 
     public Event(Timestamp date, String title, String description) {
@@ -57,11 +64,16 @@ public class Event implements Identifiable<Integer> {
         return id;
     }
 
-    public Map<Integer, StatusEventUser> getUsers() {
+    public Map<Integer, Pair<StatusEventUser, Integer>> getUsers() {
         return users_with_status;
     }
 
-    public void add(int id_user, StatusEventUser status) {
-        users_with_status.put(id_user, status);
+    public void add(int id_user, StatusEventUser status, int id_user_event) {
+        users_with_status.put(id_user, new Pair<>(status, id_user_event));
+    }
+
+    @Override
+    public String toString() {
+        return title + " at the date: " + date + "\nDescription: " + description;
     }
 }
