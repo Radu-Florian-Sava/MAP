@@ -8,6 +8,7 @@ import Utils.StatusEventUser;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  *  specialised repository which contains events created by users or only users
@@ -39,12 +40,13 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
     public Integer add(Event event) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         if(event.getTitle() == null) {
-            int status = event.getStatus().toUpperCase(Locale.ROOT) == "PARTICIPANT" ? 0 : 1;
+            int user = event.getUsers().keySet().iterator().next();
+            int status = event.getUsers().get(user).getKey() == StatusEventUser.PARTICIPANT ? 0 : 1;
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO events_users (id_event, id_user, status) VALUES " +
                             "(" +
                             event.getId() + ", " +
-                            event.getUser() + ", " +
+                            user + ", " +
                             status + ") RETURNING id");
 
 
@@ -84,12 +86,13 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
             throw new RepoException("Id invalid!\n");
 
         return new Event(
-                resultSet.getInt("id"),
-                resultSet.getTimestamp("date"),
-                resultSet.getString("title"),
-                resultSet.getString("description"),
-                0,
-                StatusEventUser.PARTICIPANT
+                resultSet.getInt("id_event"),
+                null,
+                null,
+                null,
+                resultSet.getInt("id_user"),
+                resultSet.getInt("status") == 1 ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
+                resultSet.getInt("id")
         );
 
     }
@@ -124,19 +127,30 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
     public Event find(Integer integer) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT * FROM events WHERE id = " + integer);
+                "SELECT" +
+                        "E.id as id," +
+                        "E.title as title," +
+                        "E.date as date," +
+                        "E.description as description," +
+                        "U.id_user as id_user," +
+                        "U.status as status," +
+                        "U.id_event as id_event " +
+                        "FROM events_users U" +
+                        "INNER JOIN events E ON E.id = U.id_event" +
+                        " WHERE U.id = " + integer);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         if(!resultSet.next())
             return null;
 
         return new Event(
-                resultSet.getInt("id"),
+                resultSet.getInt("id_event"),
                 resultSet.getTimestamp("date"),
                 resultSet.getString("title"),
                 resultSet.getString("description"),
-                0,
-                StatusEventUser.PARTICIPANT
+                resultSet.getInt("id_user"),
+                StatusEventUser.PARTICIPANT,
+                resultSet.getInt("id")
         );
     }
 
@@ -146,33 +160,56 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
      */
     @Override
     public Iterable<Event> getAll() throws SQLException {
-        ArrayList<Event> friendshipArrayList = new ArrayList<>();
+        ArrayList<Event> eventArrayList = new ArrayList<>();
         Connection connection = DriverManager.getConnection(url, username, password);
+        int old_id = -1;
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "SELECT " +
-                        "U.id as id, " +
+                        "E.id as id, " +
                         "E.title as title, " +
                         "E.date as date, " +
                         "E.description as description, " +
                         "U.id_user as id_user, " +
-                        "U.status as status " +
+                        "U.status as status, " +
+                        "U.id_event as id_event " +
                         "FROM events_users U " +
                         "INNER JOIN events E ON E.id = U.id_event");
         ResultSet resultSet = preparedStatement.executeQuery();
-
-        while (resultSet.next()) {
-
-            friendshipArrayList.add(new Event(
-                    resultSet.getInt("id"),
+        if(resultSet.next()) {
+            Event event = new Event(
+                    resultSet.getInt("id_event"),
                     resultSet.getTimestamp("date"),
                     resultSet.getString("title"),
                     resultSet.getString("description"),
                     resultSet.getInt("id_user"),
                     resultSet.getInt("id_status") == 0
-                            ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT
-            ));
+                            ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
+                    resultSet.getInt("id")
+            );
+            eventArrayList.add(event);
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                if (id == old_id) {
+                    event.add(resultSet.getInt("id_user"), resultSet.getInt("id_status") == 0
+                            ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT, resultSet.getInt("id"));
+                } else {
+                    event = new Event(
+                            resultSet.getInt("id_event"),
+                            resultSet.getTimestamp("date"),
+                            resultSet.getString("title"),
+                            resultSet.getString("description"),
+                            resultSet.getInt("id_user"),
+                            resultSet.getInt("id_status") == 0
+                                    ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
+                            resultSet.getInt("id")
+
+                    );
+                    eventArrayList.add(event);
+                }
+                old_id = id;
+            }
         }
-        return friendshipArrayList;
+        return eventArrayList;
     }
 
     /**

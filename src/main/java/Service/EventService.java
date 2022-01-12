@@ -62,7 +62,8 @@ public class EventService extends AbstractService<Integer, Event> {
                     null,
                     null,
                     (Integer) params.get(1),
-                    (Integer) params.get(2) == 1 ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT
+                    (Integer) params.get(2) == 1 ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
+                    0
             );
         else
             event = new Event(
