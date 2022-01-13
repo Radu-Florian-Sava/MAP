@@ -643,7 +643,7 @@ public class HelloController {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Create an event");
-            stage.setHeight(370);
+            stage.setHeight(410);
             stage.setWidth(317);
             stage.setResizable(false);
             stage.show();
