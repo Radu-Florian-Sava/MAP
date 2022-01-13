@@ -3,8 +3,6 @@ package com.example.lab_gui;
 import Control.Controller;
 import Domain.User;
 import Domain.UserDTO;
-import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,18 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
 
 public class LoginController {
     @FXML
@@ -37,7 +30,7 @@ public class LoginController {
 
 
     @FXML
-    public void onLoginClicked(ActionEvent actionEvent)  {
+    public void onLoginClicked()  {
         String username = usernameBox.getText();
         String password = passwordBox.getText();
         User user = null;
@@ -69,58 +62,49 @@ public class LoginController {
         }
         else {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-            Parent parent = null;
+            Parent parent;
             try {
                 parent = fxmlLoader.load();
+                Scene scene = new Scene(parent, 320, 400);
+                HelloController helloController = fxmlLoader.getController();
+                helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname(),user.getUsername()));
+                Stage stage = (Stage) loginButton.getScene().getWindow();
+                stage.setResizable(true);
+                stage.setMaximized(true);
+                stage.setTitle("Webber");
+                stage.setScene(scene);
+                stage.show();
             } catch (IOException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText(e.getMessage());
                 alert.show();
             }
-            Scene scene = new Scene(parent, 320, 400);
-            HelloController helloController = fxmlLoader.getController();
-
-            helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname(),user.getUsername()));
-
-
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-
-            stage.setResizable(true);
-            stage.setMaximized(true);
-            stage.setTitle("Webber");
-            stage.setScene(scene);
-
-            stage.show();
         }
     }
 
-    public void onSignUpClicked(ActionEvent actionEvent)  {
+    public void onSignUpClicked()  {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup.fxml"));
-        Parent parent = null;
+        Parent parent;
         try {
             parent = fxmlLoader.load();
+            Scene scene = new Scene(parent, 320, 400);
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            stage.close();
+            stage.setTitle("Sign Up");
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText(e.getMessage());
             alert.show();
         }
-        Scene scene = new Scene(parent, 320, 400);
-
-        Stage stage = (Stage) loginButton.getScene().getWindow();
-
-        stage.close();
-
-        stage.setTitle("Sign Up");
-        stage.setScene(scene);
-
-        stage.show();
     }
 
     public void onLoginViaEnter(KeyEvent keyEvent)  {
         if(keyEvent.getCode()== KeyCode.ENTER){
-            onLoginClicked(null);
+            onLoginClicked();
         }
     }
 }

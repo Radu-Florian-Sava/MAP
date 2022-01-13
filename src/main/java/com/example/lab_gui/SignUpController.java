@@ -67,9 +67,13 @@ public class SignUpController {
         else
         {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
-            Scene scene = null;
+            Scene scene;
             try {
                 scene = new Scene(fxmlLoader.load(), 320, 400);
+                Stage stage = (Stage) signUpButton.getScene().getWindow();
+                stage.close();
+                stage.setScene(scene);
+                stage.show();
             } catch (IOException e) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -77,11 +81,6 @@ public class SignUpController {
                 alert.setContentText(e.getMessage());
                 alert.show();
             }
-
-            Stage stage = (Stage) signUpButton.getScene().getWindow();
-            stage.close();
-            stage.setScene(scene);
-            stage.show();
         }
     }
 
