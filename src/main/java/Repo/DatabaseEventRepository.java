@@ -85,7 +85,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
         if(!resultSet.next())
             throw new RepoException("Id invalid!\n");
 
-        return new Event(
+        Event event = new Event(
                 resultSet.getInt("id_event"),
                 null,
                 null,
@@ -94,7 +94,14 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
                 resultSet.getInt("status") == 1 ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
                 resultSet.getInt("id")
         );
-
+        if(event.getUsers().get(integer).getKey() == StatusEventUser.ORGANIZER) {
+            connection = DriverManager.getConnection(url, username, password);
+            preparedStatement = connection.prepareStatement(
+                    "DELETE FROM events WHERE id = " + event.getId()
+            );
+            preparedStatement.execute();
+        }
+        return event;
     }
 
     /**
