@@ -5,6 +5,7 @@ import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import Utils.Constants;
 import Utils.StatusFriendship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -161,7 +162,11 @@ public class HelloController {
                         x -> {
                             try {
                                 return controller.areFriends(userPage.getMainUser().getId(), x.getId());
-                            } catch (SQLException ignored) {
+                            } catch (SQLException e) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setContentText(e.getMessage());
+                                alert.show();
                             }
                             return false;
                         }
@@ -200,7 +205,11 @@ public class HelloController {
                                                         y -> y.getFriendshipRequest() == 0 || y.getFriendshipRequest() == 2
                                                 ).toList()
                                                 .contains(new Friendship(0, userPage.getMainUser() .getId(), x.getId()));
-                            } catch (SQLException ignored) {
+                            } catch (SQLException e) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setContentText(e.getMessage());
+                                alert.show();
                             }
                             return false;
                         }
@@ -312,14 +321,19 @@ public class HelloController {
                             .getAcceptedFriendshipsOf(userPage.getMainUser().getId());
                     friendshipList.forEach(friendship -> {
                                 if (friendship.getSender() == userPage.getFriendshipUser().getId() ||
-                                        friendship.getReceiver() == userPage.getFriendshipUser().getId()) {
+                                        friendship.getReceiver() == userPage.getFriendshipUser()
+                                                .getId()) {
                                     try {
                                         controller.deleteFriendship(friendship.getId());
                                         if (userPage.getFriendshipUser().getId()
                                                 == userPage.getMessageUser().getId())
                                             hideMessages();
                                         hideRelationsMenu();
-                                    } catch (RepoException | SQLException ignored) {
+                                    } catch (RepoException | SQLException e) {
+                                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                                        alert.setTitle("Error");
+                                        alert.setContentText(e.getMessage());
+                                        alert.show();
                                     }
                                 }
                             }
@@ -450,7 +464,7 @@ public class HelloController {
     public void loadMessages()  {
         if(userPage.getFriendshipFocus()!=null)
         {
-            userPage.setIdToReply(-1);
+            userPage.setIdToReply(Constants.NO_MESSAGE_ID);
             int passive_user_id = Integer.parseInt(userPage.getFriendshipFocus().getSecondName().split(";")[0]);
             User tempUser;
             try {
@@ -481,13 +495,13 @@ public class HelloController {
             if(message.length()!=0)
             {
                 try {
-                    if (userPage.getIdToReply() == -1)
+                    if (userPage.getIdToReply() == Constants.NO_MESSAGE_ID)
                         controller.sendMessage(userPage.getMainUser().getId(),
                                 userPage.getMessageUser().getId(), message, null);
                     else {
                         controller.sendMessage(userPage.getMainUser().getId(),
                                 userPage.getMessageUser().getId(), message, userPage.getIdToReply());
-                        userPage.setIdToReply(-1);
+                        userPage.setIdToReply(Constants.NO_MESSAGE_ID);
                         sendMessageButton.setText("Send \nMessage");
                     }
 
@@ -516,7 +530,10 @@ public class HelloController {
                         try {
                             return controller.areFriends(x.getId(),user.getId());
                         } catch (SQLException e) {
-                            e.printStackTrace();
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setContentText(e.getMessage());
+                            alert.show();
                         }
                         return false;
                     }).toList(),
@@ -524,7 +541,10 @@ public class HelloController {
                     (List<Message>) controller.getMessages()
             );
         } catch (SQLException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.show();
         }
         selectedUser.setText(
                 userPage.getMainUser().toString()
@@ -535,26 +555,8 @@ public class HelloController {
         hideMessages();
     }
 
-    @FXML
-    public void onPDFSimpleClicked()  {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
-        Parent parent = null;
-        try {
-            parent = fxmlLoader.load();
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.show();
-        }
-        Scene scene = new Scene(parent, 321, 400);
-        PdfController pdfController = fxmlLoader.getController();
-
-        pdfController.setUp(1, userPage.getMainUser().getId(), null);
-
-        Stage stage = new Stage();
-
-        stage.setTitle("Generate PDF");
+    private void setPDFData(String title,Stage stage,Scene scene){
+        stage.setTitle(title);
         stage.setScene(scene);
         stage.setMinHeight(175);
         stage.setMinWidth(400);
@@ -562,8 +564,27 @@ public class HelloController {
         stage.setWidth(400);
         stage.setMaxHeight(175);
         stage.setMaxWidth(400);
-
         stage.show();
+    }
+
+    @FXML
+    public void onPDFSimpleClicked()  {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
+        Parent parent;
+        try {
+            parent = fxmlLoader.load();
+            Scene scene = new Scene(parent, 321, 400);
+            PdfController pdfController = fxmlLoader.getController();
+            pdfController.setUp(1, userPage.getMainUser().getId(), null);
+            Stage stage = new Stage();
+            setPDFData("Generate PDF",stage,scene);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+
     }
 
     @FXML
@@ -578,45 +599,32 @@ public class HelloController {
         }
         else {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
-            Parent parent = null;
+            Parent parent;
             try {
                 parent = fxmlLoader.load();
+                Scene scene = new Scene(parent, 321, 400);
+                PdfController pdfController = fxmlLoader.getController();
+                pdfController.setUp(2, userPage.getMainUser().getId(), userPage.getMessageUser());
+                Stage stage = new Stage();
+                setPDFData("Generate PDF for a friend",stage,scene);
             } catch (IOException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText(e.getMessage());
                 alert.show();
             }
-            Scene scene = new Scene(parent, 321, 400);
-            PdfController pdfController = fxmlLoader.getController();
-
-            pdfController.setUp(2, userPage.getMainUser().getId(), userPage.getMessageUser());
-
-            Stage stage = new Stage();
-
-            stage.setTitle("Generate PDF for a friend");
-            stage.setScene(scene);
-
-            stage.setMinHeight(175);
-            stage.setMinWidth(400);
-            stage.setHeight(175);
-            stage.setWidth(400);
-            stage.setMaxHeight(175);
-            stage.setMaxWidth(400);
-
-            stage.show();
         }
     }
 
     @FXML
     public void selectReply() {
-        if(userPage.getIdToReply()==-1)
+        if(userPage.getIdToReply()==Constants.NO_MESSAGE_ID)
         {
             userPage.setIdToReply(messageTable.getSelectionModel().getSelectedItem().getId());
             sendMessageButton.setText("Send \nReply");
         }
         else{
-            userPage.setIdToReply(-1);
+            userPage.setIdToReply(Constants.NO_MESSAGE_ID);
             sendMessageButton.setText("Send \nMessage");
         }
     }
