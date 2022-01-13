@@ -14,7 +14,7 @@
       <Label layoutX="196.0" layoutY="35.0" text="Date end" />
       <Label layoutX="14.0" layoutY="73.0" text="File name" />
       <TextField fx:id="filenameBox" layoutX="72.0" layoutY="68.0" prefHeight="26.0" prefWidth="108.0" />
-      <Button layoutX="14.0" layoutY="104.0" mnemonicParsing="false" onAction="#onCreatePDFClicked" prefHeight="26.0" prefWidth="356.0" text="Create PDF" />
+      <Button fx:id="createPDFButton" layoutX="14.0" layoutY="104.0" mnemonicParsing="false" onAction="#onCreatePDFClicked" prefHeight="26.0" prefWidth="356.0" text="Create PDF" />
       <Button fx:id="chooseFileButton" layoutX="289.0" layoutY="68.0" mnemonicParsing="false" onAction="#onChooseFileClicked" prefHeight="26.0" prefWidth="80.0" text="Choose File" />
       <TextField fx:id="pathBox" editable="false" layoutX="195.0" layoutY="68.0" prefHeight="26.0" prefWidth="80.0" promptText="Path" />
       <Label fx:id="optionLabel" layoutX="16.0" layoutY="5.0" text="&quot;Create a PDF for all your messages from a friend between a date&quot;" />
