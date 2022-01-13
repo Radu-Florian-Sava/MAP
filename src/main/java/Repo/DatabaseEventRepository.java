@@ -201,7 +201,7 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
                             resultSet.getString("description"),
                             resultSet.getInt("id_user"),
                             resultSet.getInt("status") == 0
-                                    ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
+                                    ? StatusEventUser.PARTICIPANT : StatusEventUser.ORGANIZER,
                             resultSet.getInt("id")
 
                     );
