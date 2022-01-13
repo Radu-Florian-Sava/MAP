@@ -20,35 +20,32 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage)  {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
-        Scene scene = null;
+        Scene scene;
         try {
             scene = new Scene(fxmlLoader.load(), 320, 400);
+            //makes all windows related to this application to use the same icon given by the relative path
+            Window.getWindows().addListener((ListChangeListener<Window>) c -> {
+                while (c.next()) {
+                    for (Window window : c.getAddedSubList()) {
+                        if (window instanceof Stage) {
+                            ((Stage) window).getIcons().setAll(new Image("file:src/main/resources/Images/Webber.png"));
+                        }
+                    }
+                }
+            });
+
+            stage.setScene(scene);
+            stage.setTitle("Log in");
+            stage.setWidth(450);
+            stage.setHeight(400);
+            stage.setResizable(false);
+            stage.show();
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText(e.getMessage());
             alert.show();
         }
-
-        //makes all windows related to this application to use the same icon given by the relative path
-        Window.getWindows().addListener((ListChangeListener<Window>) c -> {
-            while (c.next()) {
-                for (Window window : c.getAddedSubList()) {
-                    if (window instanceof Stage) {
-                        ((Stage) window).getIcons().setAll(new Image("file:src/main/resources/Images/Webber.png"));
-                    }
-                }
-            }
-        });
-
-        stage.setScene(scene);
-        stage.setTitle("Log in");
-
-        stage.setWidth(450);
-        stage.setHeight(400);
-        stage.setResizable(false);
-
-        stage.show();
     }
 
     /**

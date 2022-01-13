@@ -5,6 +5,7 @@ import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import Utils.Constants;
 import Utils.StatusFriendship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -39,11 +40,7 @@ public class HelloController {
 
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
-    private UserDTO currentUserControl = null;
-    private UserDTO messageUserControl = null;
-    private UserDTO changeStatusUserControl = null;
-    private FriendshipDTO selectedFriendship = null;
-    private int idToReply=-1;
+    private Page userPage = null;
 
     // messages
     @FXML
@@ -118,9 +115,9 @@ public class HelloController {
 
         List<FriendshipDTO> friendships = null;
 
-        if (currentUserControl != null) {
+        if (userPage.getMainUser() != null) {
             try {
-                friendships = controller.getAllTypesOfFriendshipsOf(currentUserControl.getId());
+                friendships = controller.getAllTypesOfFriendshipsOf(userPage.getMainUser().getId());
                 friendshipTable.setItems(FXCollections.observableList(friendships));
 
             } catch (SQLException e) {
@@ -152,7 +149,7 @@ public class HelloController {
 
     private void loadFriends() {
 
-        if (currentUserControl != null) {
+        if (userPage.getMainUser() != null) {
 
             List<UserDTO> hiddenUserDTO = null;
 
@@ -164,8 +161,12 @@ public class HelloController {
                 hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
                         x -> {
                             try {
-                                return controller.areFriends(currentUserControl.getId(), x.getId());
-                            } catch (SQLException ignored) {
+                                return controller.areFriends(userPage.getMainUser().getId(), x.getId());
+                            } catch (SQLException e) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setContentText(e.getMessage());
+                                alert.show();
                             }
                             return false;
                         }
@@ -181,13 +182,13 @@ public class HelloController {
             if (hiddenUserDTO==null) {
                 hiddenTable.setPlaceholder(new Label("For the moment there are no friends to show \n" +
                         "Try again after you make some :P"));
-                changeStatusUserControl = null;
+                userPage.setFriendshipUser(null);
             }
         }
     }
 
     private void loadBefriendable()  {
-        if (currentUserControl != null) {
+        if (userPage.getMainUser() != null) {
             List<UserDTO> hiddenUserDTO = null;
 
             hiddenTable.setVisible(true);
@@ -198,13 +199,17 @@ public class HelloController {
                 hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
                         x -> {
                             try {
-                                return !controller.areFriends(currentUserControl.getId(), x.getId()) &&
-                                        x.getId() != currentUserControl.getId() &&
-                                        !controller.getSentFriendships(currentUserControl.getId()).stream().filter(
+                                return !controller.areFriends(userPage.getMainUser() .getId(), x.getId()) &&
+                                        x.getId() != userPage.getMainUser() .getId() &&
+                                        !controller.getSentFriendships(userPage.getMainUser() .getId()).stream().filter(
                                                         y -> y.getFriendshipRequest() == 0 || y.getFriendshipRequest() == 2
                                                 ).toList()
-                                                .contains(new Friendship(0, currentUserControl.getId(), x.getId()));
-                            } catch (SQLException ignored) {
+                                                .contains(new Friendship(0, userPage.getMainUser() .getId(), x.getId()));
+                            } catch (SQLException e) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setContentText(e.getMessage());
+                                alert.show();
                             }
                             return false;
                         }
@@ -221,8 +226,7 @@ public class HelloController {
             if (hiddenUserDTO==null) {
                 hiddenTable.setPlaceholder(new Label("It looks like you've got lots of friends \n" +
                         "There's no one to add at the moment XD"));
-                changeStatusUserControl = null;
-            }
+                userPage.setFriendshipUser(null);            }
         }
     }
 
@@ -230,32 +234,33 @@ public class HelloController {
         changeStatusSection.setVisible(false);
         hiddenTable.setVisible(false);
         changeFriendStatus.setText("Unfriend\\Befriend");
-        changeStatusUserControl = null;
+        userPage.setFriendshipUser(null);
         passiveUserName.setText("Nume Prenume");
         loadFriendships();
     }
 
     private void hideMessages(){
         messageFunctionality.setVisible(false);
-        messageUserControl =null;
+        userPage.setMessageUser(null) ;
     }
 
     private void showMessages(){
-        if(messageUserControl !=null)
+        if(userPage.getMessageUser() !=null)
         {
             messageFunctionality.setVisible(true);
             messageColumn.setText("Messages with " +
-                    messageUserControl.getFirstName() +
+                    userPage.getMessageUser().getFirstName() +
                     " " +
-                    messageUserControl.getSurname()
+                    userPage.getMessageUser().getSurname()
             );
         }
     }
 
     private Iterable<MessageDTO> getMessages()  {
-        if(currentUserControl!=null && messageUserControl !=null){
+        if(userPage.getMainUser()!=null && userPage.getMessageUser()!=null){
             try {
-                return controller.getMessagesBy2Users(currentUserControl.getId(), messageUserControl.getId());
+                return controller.getMessagesBy2Users(userPage.getMainUser().getId(),
+                        userPage.getMessageUser().getId());
             } catch (SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -282,19 +287,14 @@ public class HelloController {
         hiddenSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));
 
         messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().toString()));
-
-        loadFriendships();
-        loadUsers();
-
-
     }
 
     @FXML
     private void setPassiveUser() {
-        changeStatusUserControl = hiddenTable.getSelectionModel().getSelectedItem();
-        if (changeStatusUserControl != null) {
+        userPage.setFriendshipUser(hiddenTable.getSelectionModel().getSelectedItem());
+        if (userPage.getFriendshipUser() != null) {
             passiveUserName.setText(
-                    changeStatusUserControl.toString()
+                    userPage.getFriendshipUser().toString()
             );
         }
     }
@@ -310,22 +310,30 @@ public class HelloController {
 
     public void changeStatusOfFriendship()  {
         try {
-            if (changeStatusUserControl != null && currentUserControl != null) {
+            if (userPage.getFriendshipUser() != null && userPage.getMainUser() != null) {
 
                 if (Objects.equals(changeFriendStatus.getText(), "Send request")) {
-                    controller.sendFriendship(currentUserControl.getId(), changeStatusUserControl.getId());
+                    controller.sendFriendship(userPage.getMainUser().getId(),
+                            userPage.getFriendshipUser().getId());
                     hideRelationsMenu();
                 } else if (Objects.equals(changeFriendStatus.getText(), "Unfriend")) {
-                    Iterable<Friendship> friendshipList = controller.getAcceptedFriendshipsOf(currentUserControl.getId());
+                    Iterable<Friendship> friendshipList = controller
+                            .getAcceptedFriendshipsOf(userPage.getMainUser().getId());
                     friendshipList.forEach(friendship -> {
-                                if (friendship.getSender() == changeStatusUserControl.getId() ||
-                                        friendship.getReceiver() == changeStatusUserControl.getId()) {
+                                if (friendship.getSender() == userPage.getFriendshipUser().getId() ||
+                                        friendship.getReceiver() == userPage.getFriendshipUser()
+                                                .getId()) {
                                     try {
                                         controller.deleteFriendship(friendship.getId());
-                                        if (changeStatusUserControl.getId() == messageUserControl.getId())
+                                        if (userPage.getFriendshipUser().getId()
+                                                == userPage.getMessageUser().getId())
                                             hideMessages();
                                         hideRelationsMenu();
-                                    } catch (RepoException | SQLException ignored) {
+                                    } catch (RepoException | SQLException e) {
+                                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                                        alert.setTitle("Error");
+                                        alert.setContentText(e.getMessage());
+                                        alert.show();
                                     }
                                 }
                             }
@@ -382,17 +390,19 @@ public class HelloController {
 
     public void selectFriendship()  {
         try {
-            selectedFriendship = friendshipTable.getSelectionModel().getSelectedItem();
+            userPage.setFriendshipFocus(friendshipTable.getSelectionModel().getSelectedItem());
 
-            if (selectedFriendship != null &&
-                    Objects.equals(selectedFriendship.getStatus(), "Waiting...")
+            if (userPage.getFriendshipFocus() != null &&
+                    Objects.equals(userPage.getFriendshipFocus()
+                            .getStatus(), "Waiting...")
             ) {
                 Alert acceptOrReject = new Alert(Alert.AlertType.CONFIRMATION);
                 acceptOrReject.setGraphic(acceptOrReject.getDialogPane().getGraphic());
-                if (selectedFriendship.getRelation() == 1) {
+                if (userPage.getFriendshipFocus().getRelation() == 1) {
 
                     acceptOrReject.setTitle("Do you confirm this friendship request ?");
-                    acceptOrReject.setContentText("The user " + selectedFriendship.getSecondName() +
+                    acceptOrReject.setContentText("The user " + userPage.getFriendshipFocus()
+                            .getSecondName() +
                             " has sent you a friend request");
 
                     ButtonType acceptRequest = new ButtonType("Accept");
@@ -400,24 +410,27 @@ public class HelloController {
                     ButtonType ignore = new ButtonType("Ignore for now", ButtonBar.ButtonData.CANCEL_CLOSE);
 
                     acceptOrReject.getButtonTypes().setAll(acceptRequest, rejectRequest, ignore);
-                    int user_id = Integer.parseInt(selectedFriendship.getFirstName().split(";")[0]);
+                    int user_id = Integer.parseInt(userPage.getFriendshipFocus()
+                            .getFirstName().split(";")[0]);
 
                     Optional<ButtonType> result = acceptOrReject.showAndWait();
 
                     if (result.isPresent()) {
                         if (result.get() == acceptRequest) {
-                            controller.acceptFriendship(selectedFriendship.getId(), user_id);
+                            controller.acceptFriendship(userPage.getFriendshipFocus()
+                                    .getId(), user_id);
                         } else if (result.get() == rejectRequest) {
-                            controller.rejectFriendship(selectedFriendship.getId(), user_id);
+                            controller.rejectFriendship(userPage.getFriendshipFocus()
+                                    .getId(), user_id);
                         }
-                        selectedFriendship = null;
+                        userPage.setFriendshipFocus(null);
 
                         loadFriendships();
                     }
                 } else {
                     acceptOrReject.setTitle("Do you cancel this friendship request ?");
                     acceptOrReject.setContentText("You have sent a friendship request to " +
-                            selectedFriendship.getSecondName());
+                            userPage.getFriendshipFocus().getSecondName());
 
                     ButtonType deleteRequest = new ButtonType("Yes");
                     ButtonType ignore = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -427,16 +440,16 @@ public class HelloController {
 
                     if (result.isPresent()) {
                         if (result.get() == deleteRequest) {
-                            controller.deleteFriendship(selectedFriendship.getId());
+                            controller.deleteFriendship(userPage.getFriendshipFocus().getId());
                         }
-                        selectedFriendship = null;
+                        userPage.setFriendshipFocus(null);
                         loadFriendships();
                     }
                 }
             }
 
-            if (selectedFriendship != null &&
-                    Objects.equals(selectedFriendship.getStatus(), "Accepted")
+            if (userPage.getFriendshipFocus() != null &&
+                    Objects.equals(userPage.getFriendshipFocus().getStatus(), "Accepted")
             ) {
                 loadMessages();
             }
@@ -449,20 +462,21 @@ public class HelloController {
     }
 
     public void loadMessages()  {
-        if(selectedFriendship!=null)
+        if(userPage.getFriendshipFocus()!=null)
         {
-            idToReply = -1;
-            int passive_user_id = Integer.parseInt(selectedFriendship.getSecondName().split(";")[0]);
-            User tempUser = null;
+            userPage.setIdToReply(Constants.NO_MESSAGE_ID);
+            int passive_user_id = Integer.parseInt(userPage.getFriendshipFocus().getSecondName().split(";")[0]);
+            User tempUser;
             try {
                 tempUser = controller.findUser(passive_user_id);
+                userPage.setMessageUser(new UserDTO(tempUser.getId(),tempUser.getFirstName(),
+                        tempUser.getSurname(),tempUser.getUsername()));
             } catch (SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText(e.getMessage());
                 alert.show();
             }
-            messageUserControl =new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname(),tempUser.getUsername());
         }
 
         showMessages();
@@ -476,16 +490,18 @@ public class HelloController {
 
     @FXML
     public void sendMessage() {
-        if(currentUserControl!=null && messageUserControl !=null){
+        if(userPage.getMainUser()!=null && userPage.getMessageUser() !=null){
             String message = messageBody.getText();
             if(message.length()!=0)
             {
                 try {
-                    if (idToReply == -1)
-                        controller.sendMessage(currentUserControl.getId(), messageUserControl.getId(), message, null);
+                    if (userPage.getIdToReply() == Constants.NO_MESSAGE_ID)
+                        controller.sendMessage(userPage.getMainUser().getId(),
+                                userPage.getMessageUser().getId(), message, null);
                     else {
-                        controller.sendMessage(currentUserControl.getId(), messageUserControl.getId(), message, idToReply);
-                        idToReply = -1;
+                        controller.sendMessage(userPage.getMainUser().getId(),
+                                userPage.getMessageUser().getId(), message, userPage.getIdToReply());
+                        userPage.setIdToReply(Constants.NO_MESSAGE_ID);
                         sendMessageButton.setText("Send \nMessage");
                     }
 
@@ -507,37 +523,40 @@ public class HelloController {
         }
     }
 
-    @FXML
     public void login(UserDTO user)  {
-        currentUserControl = user;
-        selectedUser.setText(
-                currentUserControl.toString()
-        );
-        loadFriendships();
-        hideRelationsMenu();
-        hideMessages();
-    }
-
-    @FXML
-    public void onPDFSimpleClicked()  {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
-        Parent parent = null;
         try {
-            parent = fxmlLoader.load();
-        } catch (IOException e) {
+            userPage=new Page(user,controller.getAllUsersDTO().stream()
+                    .filter(x-> {
+                        try {
+                            return controller.areFriends(x.getId(),user.getId());
+                        } catch (SQLException e) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setContentText(e.getMessage());
+                            alert.show();
+                        }
+                        return false;
+                    }).toList(),
+                    controller.getAllTypesOfFriendshipsOf(user.getId()),
+                    (List<Message>) controller.getMessages()
+            );
+        } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText(e.getMessage());
             alert.show();
         }
-        Scene scene = new Scene(parent, 321, 400);
-        PdfController pdfController = fxmlLoader.getController();
+        selectedUser.setText(
+                userPage.getMainUser().toString()
+        );
+        loadUsers();
+        loadFriendships();
+        hideRelationsMenu();
+        hideMessages();
+    }
 
-        pdfController.setUp(1, currentUserControl.getId(), null);
-
-        Stage stage = new Stage();
-
-        stage.setTitle("Generate PDF");
+    private void setPDFData(String title,Stage stage,Scene scene){
+        stage.setTitle(title);
         stage.setScene(scene);
         stage.setMinHeight(175);
         stage.setMinWidth(400);
@@ -545,13 +564,34 @@ public class HelloController {
         stage.setWidth(400);
         stage.setMaxHeight(175);
         stage.setMaxWidth(400);
-
         stage.show();
     }
 
     @FXML
+    public void onPDFSimpleClicked()  {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
+        Parent parent;
+        try {
+            parent = fxmlLoader.load();
+            Scene scene = new Scene(parent, 321, 400);
+            PdfController pdfController = fxmlLoader.getController();
+            pdfController.setUp(1, userPage.getMainUser().getId(), null);
+            Stage stage = new Stage();
+            setPDFData("Generate PDF",stage,scene);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+
+    }
+
+    @FXML
     public void onPDFFriendClicked()  {
-        if(selectedFriendship==null || selectedFriendship.getStatus() != StatusFriendship.ACCEPT.getStatus()) {
+        if(userPage.getFriendshipFocus()==null ||
+                !Objects.equals(userPage.getFriendshipFocus().getStatus(),
+                        StatusFriendship.ACCEPT.getStatus())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("You must choose a friend for this PDF");
@@ -559,45 +599,32 @@ public class HelloController {
         }
         else {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pdf.fxml"));
-            Parent parent = null;
+            Parent parent;
             try {
                 parent = fxmlLoader.load();
+                Scene scene = new Scene(parent, 321, 400);
+                PdfController pdfController = fxmlLoader.getController();
+                pdfController.setUp(2, userPage.getMainUser().getId(), userPage.getMessageUser());
+                Stage stage = new Stage();
+                setPDFData("Generate PDF for a friend",stage,scene);
             } catch (IOException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText(e.getMessage());
                 alert.show();
             }
-            Scene scene = new Scene(parent, 321, 400);
-            PdfController pdfController = fxmlLoader.getController();
-
-            pdfController.setUp(2, currentUserControl.getId(), messageUserControl);
-
-            Stage stage = new Stage();
-
-            stage.setTitle("Generate PDF for a friend");
-            stage.setScene(scene);
-
-            stage.setMinHeight(175);
-            stage.setMinWidth(400);
-            stage.setHeight(175);
-            stage.setWidth(400);
-            stage.setMaxHeight(175);
-            stage.setMaxWidth(400);
-
-            stage.show();
         }
     }
 
     @FXML
     public void selectReply() {
-        if(idToReply==-1)
+        if(userPage.getIdToReply()==Constants.NO_MESSAGE_ID)
         {
-            idToReply = messageTable.getSelectionModel().getSelectedItem().getId();
+            userPage.setIdToReply(messageTable.getSelectionModel().getSelectedItem().getId());
             sendMessageButton.setText("Send \nReply");
         }
         else{
-            idToReply = -1;
+            userPage.setIdToReply(Constants.NO_MESSAGE_ID);
             sendMessageButton.setText("Send \nMessage");
         }
     }
