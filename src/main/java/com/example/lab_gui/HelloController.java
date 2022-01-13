@@ -20,6 +20,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.PlusMinusSlider;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -260,9 +262,9 @@ public class HelloController {
     private Iterable<MessageDTO> getMessages()  {
         if(userPage.getMainUser()!=null && userPage.getMessageUser()!=null){
             try {
-                return controller.getMessagesBy2Users(userPage.getMainUser().getId(),
-                        userPage.getMessageUser().getId());
-            } catch (SQLException e) {
+                return controller.getAllMessagesPaged(userPage.getMainUser().getId(),
+                        userPage.getMessageUser().getId(), 0);
+            } catch (SQLException | BusinessException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText(e.getMessage());
@@ -619,7 +621,8 @@ public class HelloController {
 
     @FXML
     public void selectReply() {
-        if(userPage.getIdToReply()==Constants.NO_MESSAGE_ID)
+        if(userPage.getIdToReply()==Constants.NO_MESSAGE_ID
+                && messageTable.getSelectionModel().getSelectedItem() != null)
         {
             userPage.setIdToReply(messageTable.getSelectionModel().getSelectedItem().getId());
             sendMessageButton.setText("Send \nReply");

@@ -40,6 +40,7 @@ public class Controller {
     private final Service<Integer, Friendship> friendshipService;
     private Service<Integer, Message> messageService;
     private Service<Integer, Event> eventService;
+    Repository<Integer, Message> messageRepository;
 
     /**
      *  private constructor, we are using the singleton design pattern
@@ -57,7 +58,7 @@ public class Controller {
         Validator<Integer, Friendship> friendshipValidator = new Validator<>(new FriendshipValidator());
         friendshipService = new FriendshipService(friendshipRepository, friendshipValidator);
 
-        Repository<Integer, Message> messageRepository = new DatabaseMessageRepository(
+        messageRepository = new DatabaseMessageRepoPaged(
                 url, "postgres", password);
         Validator<Integer, Message> messageValidator = new Validator<>(new MessageValidator());
         messageService = new MessageService(messageRepository, messageValidator);
@@ -944,5 +945,48 @@ public class Controller {
     public Iterable<Event> getMyEvents(int id) throws SQLException {
         return ((List<Event>) eventService.getRecords()).stream().filter(
                 (x) -> x.getUsers().containsKey(id)).collect(Collectors.toList());
+    }
+
+    public Iterable<MessageDTO> getAllMessagesPaged(int id_user_from, int id_user_to, int page) throws BusinessException, SQLException {
+        List<MessageDTO> messageDTOList = new ArrayList<>();
+
+        if(!messageRepository.getClass().isAssignableFrom(DatabaseMessageRepoPaged.class))
+            throw new BusinessException("You need a special repo for that!\n");
+
+        if(page > getNrMaxPages(id_user_from, id_user_to))
+            throw  new BusinessException("The page number is invalid!\n");
+
+        User user1 = userService.findRecord(id_user_from);
+        User user2 = userService.findRecord(id_user_to);
+
+        List<Message> messageList = ((DatabaseMessageRepoPaged) messageRepository).getAllForAUser(page, id_user_from, id_user_to);
+        for(Message message : messageList) {
+            User user;
+            if(message.getFrom() == user1.getId())
+                user = user1;
+            else
+                user = user2;
+            if (message.getIdReply() == null)
+                messageDTOList.add(new MessageDTO(
+                        message.getId(),
+                        message.getMessage(),
+                        user.getFirstName() + " " + user.getSurname()
+                ));
+            else
+                messageDTOList.add(new MessageDTO(
+                        message.getId(),
+                        message.getMessage(),
+                        messageService.findRecord(message.getIdReply()).getMessage(),
+                        user.getFirstName() + " " + user.getSurname()
+                ));
+        }
+
+        return messageDTOList;
+    }
+
+    public int getNrMaxPages(int id_user_1, int id_user_2) throws BusinessException, SQLException {
+        if(!messageRepository.getClass().isAssignableFrom(DatabaseMessageRepoPaged.class))
+            throw new BusinessException("You need a special repo for that!\n");
+        return ((DatabaseMessageRepoPaged) messageRepository).nrOfPages(id_user_1, id_user_2);
     }
 }
