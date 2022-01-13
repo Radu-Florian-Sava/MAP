@@ -70,10 +70,10 @@ public class LoginController {
                 helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname(),user.getUsername()));
                 Stage stage = (Stage) loginButton.getScene().getWindow();
                 stage.setResizable(true);
-                stage.setMaximized(true);
                 stage.setTitle("Webber");
                 stage.setScene(scene);
                 stage.show();
+                stage.setMaximized(true);
             } catch (IOException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");

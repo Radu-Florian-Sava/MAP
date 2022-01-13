@@ -4,6 +4,7 @@ import Control.Controller;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import Utils.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -33,7 +34,7 @@ public class CreateEventController {
         if(datePicker.getValue() == null)
             timestamp = null;
         else {
-            timestamp = new Timestamp(datePicker.getValue().toEpochDay() * 3600 * 24 * 1000);
+            timestamp = new Timestamp(datePicker.getValue().toEpochDay() * Constants.MILLISECONDS_IN_A_DAY);
         }
 
         try {
