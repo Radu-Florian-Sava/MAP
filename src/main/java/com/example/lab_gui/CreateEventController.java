@@ -4,17 +4,24 @@ import Control.Controller;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+
 import Utils.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class CreateEventController {
+
     private int id_user;
 
+    @FXML
+    public Spinner<Integer> minuteBox;
+    @FXML
+    public Spinner<Integer> hourBox;
     @FXML
     public Button createEventButton;
     @FXML
@@ -26,6 +33,10 @@ public class CreateEventController {
 
     public void setUp(int id_user) {
         this.id_user = id_user;
+        minuteBox.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+        hourBox.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
     }
 
     @FXML
@@ -34,7 +45,8 @@ public class CreateEventController {
         if(datePicker.getValue() == null)
             timestamp = null;
         else {
-            timestamp = new Timestamp(datePicker.getValue().toEpochDay() * Constants.MILLISECONDS_IN_A_DAY);
+            timestamp = new Timestamp(datePicker.getValue().toEpochDay() * Constants.MILLISECONDS_IN_A_DAY
+            + minuteBox.getValue() * 60 * 1000 + hourBox.getValue() * 3600 * 1000);
         }
 
         try {
@@ -43,6 +55,7 @@ public class CreateEventController {
                     titleBox.getText(),
                     descriptionBox.getText(),
                     timestamp);
+            ((Stage) createEventButton.getScene().getWindow()).close();
         } catch (ValidateException | BusinessException | SQLException | RepoException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
