@@ -6,6 +6,8 @@ import Exceptions.BusinessException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -27,6 +29,8 @@ public class PdfController {
     public Label optionLabel;
     @FXML
     public Button chooseFileButton;
+    @FXML
+    public Button createPDFButton;
     private int option;
     private int id = 1;
     private UserDTO friend;
@@ -58,15 +62,22 @@ public class PdfController {
         String err = "";
         Date date_start = null;
         Date date_end = null;
+        System.out.println(date_start);
         if(dateStart.getValue() != null && dateEnd.getValue() != null) {
             date_start = new Date(dateStart.getValue().toEpochDay() * 3600 * 24 * 1000);
             date_end = new Date(dateEnd.getValue().toEpochDay() * 3600 * 24 * 1000);
         }
-
-        System.out.println(date_start);
+        else
+            err += "The dates must be initialized!\n";
+        if(pathBox.getText().length() == 0)
+            err += "The path must not be null!\n";
+        if(filenameBox.getText().length() == 0)
+            err += "The filename must not be null!\n";
         File file = null;
         try {
-            file = new File(pathBox.getText() + "/" + filenameBox.getText() + ".pdf");
+            if(filenameBox.getText().length() != 0 && filenameBox.getText().length() != 0) {
+                file = new File(pathBox.getText() + "/" + filenameBox.getText() + ".pdf");
+            }
         } catch(Exception error) {
             err += "The path is not good!";
         }
@@ -76,9 +87,8 @@ public class PdfController {
             alert.setTitle("Error");
             alert.setHeaderText(err);
             alert.show();
-            return;
         }
-        if(option == 1) {
+        else if(option == 1) {
             try {
                 Controller.getInstance().friendsAndMessagesBetweenADatePDF(
                         id,
@@ -86,6 +96,9 @@ public class PdfController {
                         date_end,
                         file
                 );
+                Stage stage = (Stage) createPDFButton.getScene().getWindow();
+                System.out.println("ok");
+                stage.close();
             } catch (IOException | SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -102,6 +115,9 @@ public class PdfController {
                         friend,
                         file
                 );
+                Stage stage = (Stage) createPDFButton.getScene().getWindow();
+                System.out.println("ok");
+                stage.close();
             } catch (IOException | BusinessException | SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");

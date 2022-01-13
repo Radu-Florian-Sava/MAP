@@ -88,12 +88,12 @@
                         <DropShadow />
                      </effect>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: MediumOrchid;" text="Create event" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                  <Button mnemonicParsing="false" onAction="#onCreateEventClicked" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: MediumOrchid;" text="Create event" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                      <effect>
                         <DropShadow />
                      </effect>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: MediumOrchid;" text="Show event" GridPane.rowIndex="1">
+                  <Button mnemonicParsing="false" onAction="#onShowEventClicked" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: MediumOrchid;" text="Show event" GridPane.rowIndex="1">
                      <effect>
                         <DropShadow />
                      </effect>

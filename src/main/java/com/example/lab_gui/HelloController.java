@@ -9,6 +9,7 @@ import Utils.Constants;
 import Utils.StatusFriendship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -626,6 +627,56 @@ public class HelloController {
         else{
             userPage.setIdToReply(Constants.NO_MESSAGE_ID);
             sendMessageButton.setText("Send \nMessage");
+        }
+    }
+
+    @FXML
+    public void onCreateEventClicked(ActionEvent actionEvent) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("createEvent.fxml"));
+        Parent parent;
+        try {
+            parent = fxmlLoader.load();
+            Scene scene = new Scene(parent, 321, 400);
+            CreateEventController createEventController = fxmlLoader.getController();
+            createEventController.setUp(userPage.getMainUser().getId());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Create an event");
+            stage.setHeight(370);
+            stage.setWidth(317);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+    }
+
+    @FXML
+    public void onShowEventClicked(ActionEvent actionEvent) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("showEvent.fxml"));
+        Parent parent;
+        try {
+            parent = fxmlLoader.load();
+            Scene scene = new Scene(parent, 321, 400);
+            ShowEventController showEventController = fxmlLoader.getController();
+            showEventController.setUp(userPage.getMainUser().getId());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setHeight(430);
+            stage.setWidth(620);
+            stage.setTitle("Show events");
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.show();
         }
     }
 }

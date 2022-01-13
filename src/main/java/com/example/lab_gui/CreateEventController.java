@@ -6,17 +6,16 @@ import Exceptions.RepoException;
 import Exceptions.ValidateException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class CreateEventController {
-
     private int id_user;
+
+    @FXML
+    public Button createEventButton;
     @FXML
     public TextField titleBox;
     @FXML
