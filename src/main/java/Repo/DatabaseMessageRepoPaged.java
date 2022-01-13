@@ -8,7 +8,7 @@ import java.util.List;
 
 public class DatabaseMessageRepoPaged extends DatabaseMessageRepository {
 
-    private int nrOfRows = 10;
+    private int nrOfRows = 4;
     /**
      * constructor
      *
@@ -67,7 +67,7 @@ public class DatabaseMessageRepoPaged extends DatabaseMessageRepository {
                         "(U.id_from = " + id_user_2 + " AND U.id_to = " + id_user_1 + ")");
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
-        return resultSet.getInt("COUNT") / nrOfRows;
+        return resultSet.getInt("COUNT") / nrOfRows + 1;
 
     }
 
