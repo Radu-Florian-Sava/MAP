@@ -913,14 +913,14 @@ public class Controller {
         eventService.createRecord(params);
     }
 
-    public void joinEvent(int id_user, int id_user_event) throws SQLException, BusinessException, ValidateException, RepoException {
+    public void joinEvent(int id_user, int id_event) throws SQLException, BusinessException, ValidateException, RepoException {
         if(((List<Event>) eventService.getRecords()).stream().anyMatch((x) ->
-                x.getUsers().containsKey(id_user) && x.getUsers().get(id_user).getValue() == id_user_event)) {
+                x.getUsers().containsKey(id_user) && x.getId() == id_event)) {
             throw new BusinessException("The user is already on this event!\n");
         }
 
         ArrayList<Object> params = new ArrayList<>();
-        params.add(id_user_event);
+        params.add(id_event);
         params.add(id_user);
         params.add(0);
 
