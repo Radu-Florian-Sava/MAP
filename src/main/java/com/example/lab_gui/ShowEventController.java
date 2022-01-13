@@ -118,6 +118,7 @@ public class ShowEventController {
             try {
                 Controller.getInstance().deleteEvent(id_user, event.getUsers().get(id_user).getValue());
                 load_my_events();
+                load_all_events();
             } catch (SQLException | BusinessException | RepoException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");

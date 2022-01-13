@@ -94,7 +94,8 @@ public class DatabaseEventRepository implements Repository<Integer, Event> {
                 resultSet.getInt("status") == 1 ? StatusEventUser.ORGANIZER : StatusEventUser.PARTICIPANT,
                 resultSet.getInt("id")
         );
-        if(event.getUsers().get(integer).getKey() == StatusEventUser.ORGANIZER) {
+        if(event.getUsers().get(event.getUsers().keySet().iterator().next())
+                .getKey() == StatusEventUser.ORGANIZER) {
             connection = DriverManager.getConnection(url, username, password);
             preparedStatement = connection.prepareStatement(
                     "DELETE FROM events WHERE id = " + event.getId()
