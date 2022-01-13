@@ -10,9 +10,9 @@ import java.util.ArrayList;
  *  specialised repository which contains messages between users in a database
  */
 public class DatabaseMessageRepository implements Repository<Integer, Message> {
-    private final String url;
-    private final String username;
-    private final String password;
+    protected final String url;
+    protected final String username;
+    protected final String password;
 
     /**
      * constructor
