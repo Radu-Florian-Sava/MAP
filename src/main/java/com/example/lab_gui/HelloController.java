@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -40,6 +41,9 @@ public class HelloController {
     public HBox containingWindow;
     @FXML
     public Button pdfSimpleButton;
+
+    @FXML
+    public Spinner<Integer> pageSpinner;
 
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
@@ -263,7 +267,7 @@ public class HelloController {
         if(userPage.getMainUser()!=null && userPage.getMessageUser()!=null){
             try {
                 return controller.getAllMessagesPaged(userPage.getMainUser().getId(),
-                        userPage.getMessageUser().getId(), 0);
+                        userPage.getMessageUser().getId(), userPage.getPageNumber());
             } catch (SQLException | BusinessException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -468,10 +472,11 @@ public class HelloController {
         if(userPage.getFriendshipFocus()!=null)
         {
             userPage.setIdToReply(Constants.NO_MESSAGE_ID);
-            int passive_user_id = Integer.parseInt(userPage.getFriendshipFocus().getSecondName().split(";")[0]);
+            int passiveUserId = Integer.parseInt(userPage.getFriendshipFocus().getSecondName().split(";")[0]);
             User tempUser;
             try {
-                tempUser = controller.findUser(passive_user_id);
+
+                tempUser = controller.findUser(passiveUserId);
                 userPage.setMessageUser(new UserDTO(tempUser.getId(),tempUser.getFirstName(),
                         tempUser.getSurname(),tempUser.getUsername()));
             } catch (SQLException e) {
@@ -681,5 +686,17 @@ public class HelloController {
             alert.setContentText(e.getMessage());
             alert.show();
         }
+    }
+
+    @FXML
+    public void changeMessagePage() {
+        //userPage.setPageNumber(0);
+        // pageSpinner.setValueFactory(
+        //        new SpinnerValueFactory.IntegerSpinnerValueFactory(0, controller.
+        //                getNrMaxPages(userPage.getMainUser().getId(),userPage.getMessageUser().getId()),
+        //                0));
+
+        userPage.setPageNumber(pageSpinner.getValue());
+        loadMessages();
     }
 }

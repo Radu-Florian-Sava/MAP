@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -153,7 +154,7 @@
          <children>
             <VBox fx:id="messageFunctionality" AnchorPane.bottomAnchor="956.8000000000001" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <SplitPane dividerPositions="0.9595090293453724" orientation="VERTICAL" style="-fx-background-color: Mediumslateblue;">
+                  <SplitPane orientation="VERTICAL" style="-fx-background-color: Mediumslateblue;">
                     <items>
                         <TableView fx:id="messageTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#selectReply" style="-fx-background-color: MediumOrchid; -fx-border-color: midnightblue;">
                           <columns>
@@ -166,6 +167,18 @@
                               <InnerShadow />
                            </effect>
                         </TableView>
+                    </items>
+                  </SplitPane>
+                  <GridPane alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                    </rowConstraints>
+                     <children>
                         <AnchorPane>
                            <children>
                               <HBox>
@@ -195,8 +208,9 @@
                               </HBox>
                            </children>
                         </AnchorPane>
-                    </items>
-                  </SplitPane>
+                        <Spinner fx:id="pageSpinner" onMouseClicked="#changeMessagePage" prefHeight="26.0" prefWidth="458.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
                </children>
             </VBox>
          </children>

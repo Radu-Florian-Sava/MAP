@@ -12,6 +12,7 @@ public class Page {
     private UserDTO friendshipUser;
     private FriendshipDTO friendshipFocus;
     private int idToReply;
+    private int pageNumber;
 
     public Page(UserDTO mainUser,
                 List<UserDTO> friends,
@@ -25,6 +26,11 @@ public class Page {
         this.friendshipUser=null;
         this.friendshipFocus=null;
         this.idToReply=-1;
+        this.pageNumber=0;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     public void setMessageUser(UserDTO messageUser) {
@@ -73,6 +79,10 @@ public class Page {
 
     public List<Message> getMessages() {
         return messages;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
     }
 
 }
