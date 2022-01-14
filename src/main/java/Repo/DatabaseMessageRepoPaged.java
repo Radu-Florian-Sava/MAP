@@ -67,7 +67,8 @@ public class DatabaseMessageRepoPaged extends DatabaseMessageRepository {
                         "(U.id_from = " + id_user_2 + " AND U.id_to = " + id_user_1 + ")");
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
-        return resultSet.getInt("COUNT") / nrOfRows + 1;
+        int ret = resultSet.getInt("COUNT");
+        return  (ret % nrOfRows == 0)  ? ret / nrOfRows : ret / nrOfRows + 1;
 
     }
 
