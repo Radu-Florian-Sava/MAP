@@ -458,6 +458,23 @@ public class HelloController {
             if (userPage.getFriendshipFocus() != null &&
                     Objects.equals(userPage.getFriendshipFocus().getStatus(), "Accepted")
             ) {
+                User tempUser;
+                try {
+                    int passiveUserId = Integer.parseInt(userPage.getFriendshipFocus().getSecondName().split(";")[0]);
+                    tempUser = controller.findUser(passiveUserId);
+                    userPage.setMessageUser(new UserDTO(tempUser.getId(),tempUser.getFirstName(),
+                            tempUser.getSurname(),tempUser.getUsername()));
+                    int nrOfPages = controller.getNrMaxPages(userPage.getMainUser().getId(),userPage.getMessageUser().getId());
+                    pageSpinner.setValueFactory(
+                            new SpinnerValueFactory
+                                    .IntegerSpinnerValueFactory(0, nrOfPages - 1, nrOfPages - 1));
+                    userPage.setPageNumber(nrOfPages - 1);
+                } catch (SQLException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText(e.getMessage());
+                    alert.show();
+                }
                 loadMessages();
             }
         }catch(SQLException| ValidateException| BusinessException| RepoException e){
@@ -472,19 +489,6 @@ public class HelloController {
         if(userPage.getFriendshipFocus()!=null)
         {
             userPage.setIdToReply(Constants.NO_MESSAGE_ID);
-            int passiveUserId = Integer.parseInt(userPage.getFriendshipFocus().getSecondName().split(";")[0]);
-            User tempUser;
-            try {
-
-                tempUser = controller.findUser(passiveUserId);
-                userPage.setMessageUser(new UserDTO(tempUser.getId(),tempUser.getFirstName(),
-                        tempUser.getSurname(),tempUser.getUsername()));
-            } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText(e.getMessage());
-                alert.show();
-            }
         }
 
         showMessages();
@@ -512,7 +516,11 @@ public class HelloController {
                         userPage.setIdToReply(Constants.NO_MESSAGE_ID);
                         sendMessageButton.setText("Send \nMessage");
                     }
-
+                    int nrOfPages = controller.getNrMaxPages(userPage.getMainUser().getId(),userPage.getMessageUser().getId());
+                    pageSpinner.setValueFactory(
+                            new SpinnerValueFactory
+                                    .IntegerSpinnerValueFactory(0, nrOfPages - 1, nrOfPages - 1));
+                    userPage.setPageNumber(nrOfPages - 1);
                     loadMessages();
                     messageBody.setText("");
                 }catch (BusinessException|SQLException|ValidateException|RepoException e){
