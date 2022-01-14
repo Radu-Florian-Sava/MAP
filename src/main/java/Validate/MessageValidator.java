@@ -2,7 +2,6 @@ package Validate;
 
 import Domain.Message;
 import Exceptions.ValidateException;
-
 import java.util.Objects;
 
 /**

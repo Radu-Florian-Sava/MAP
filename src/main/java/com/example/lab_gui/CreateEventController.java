@@ -4,13 +4,10 @@ import Control.Controller;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
-
 import Utils.Constants;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
@@ -40,7 +37,7 @@ public class CreateEventController {
     }
 
     @FXML
-    public void onCreateEventClicked(ActionEvent actionEvent) {
+    public void onCreateEventClicked() {
         Timestamp timestamp;
         if(datePicker.getValue() == null)
             timestamp = null;

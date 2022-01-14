@@ -1,14 +1,10 @@
 package Repo;
 
 import Domain.Event;
-import Domain.Message;
 import Exceptions.RepoException;
 import Utils.StatusEventUser;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 /**
  *  specialised repository which contains events created by users or only users

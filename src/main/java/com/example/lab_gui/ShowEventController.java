@@ -2,24 +2,20 @@ package com.example.lab_gui;
 
 import Control.Controller;
 import Domain.Event;
-import Domain.MessageDTO;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import java.sql.SQLException;
 import java.util.List;
 
 public class ShowEventController {
 
-    int id_user;
-    int id_event;
+    int idUser;
 
     @FXML
     public TableColumn<Event, String> titleColumn;
@@ -33,7 +29,7 @@ public class ShowEventController {
     public ListView<Event> allEvents;
 
     public void setUp(int id_user) {
-        this.id_user = id_user;
+        this.idUser = id_user;
         load();
     }
 
@@ -41,7 +37,7 @@ public class ShowEventController {
         titleColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getTitle()));
         dateColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getDate().toString()));
         statusColumn.setCellValueFactory((data) ->
-                new SimpleStringProperty(data.getValue().getUsers().get(id_user).getKey().getStatus()));
+                new SimpleStringProperty(data.getValue().getUsers().get(idUser).getKey().getStatus()));
 
         load_all_events();
         load_my_events();
@@ -70,7 +66,7 @@ public class ShowEventController {
 
     public void load_my_events() {
         try {
-            List<Event> events = (List<Event>) Controller.getInstance().getMyEvents(id_user);
+            List<Event> events = (List<Event>) Controller.getInstance().getMyEvents(idUser);
             myEvents.setItems(FXCollections.observableList(events));
             myEvents.setPlaceholder(new Label("There are no events yet\n" +
                         " Looks like it's time to change that"));
@@ -84,7 +80,7 @@ public class ShowEventController {
     }
 
     @FXML
-    public void onJoinEventClicked(ActionEvent actionEvent) {
+    public void onJoinEventClicked() {
         Event event = allEvents.getSelectionModel().getSelectedItem();
         if(event == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -94,7 +90,7 @@ public class ShowEventController {
         }
         else {
             try {
-                Controller.getInstance().joinEvent(id_user, event.getId());
+                Controller.getInstance().joinEvent(idUser, event.getId());
                 load_my_events();
             } catch (SQLException | BusinessException | ValidateException | RepoException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -106,7 +102,7 @@ public class ShowEventController {
     }
 
     @FXML
-    public void onLeaveEventClicked(ActionEvent actionEvent) {
+    public void onLeaveEventClicked() {
         Event event = myEvents.getSelectionModel().getSelectedItem();
         if(event == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -116,7 +112,7 @@ public class ShowEventController {
         }
         else {
             try {
-                Controller.getInstance().deleteEvent(id_user, event.getUsers().get(id_user).getValue());
+                Controller.getInstance().deleteEvent(idUser, event.getUsers().get(idUser).getValue());
                 load_my_events();
                 load_all_events();
             } catch (SQLException | BusinessException | RepoException e) {

@@ -2,7 +2,6 @@ package Domain;
 
 import Utils.StatusEventUser;
 import javafx.util.Pair;
-
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +11,7 @@ public class Event implements Identifiable<Integer> {
     private Timestamp date;
     private String title;
     private String description;
-    private Map<Integer, Pair<StatusEventUser, Integer>> users_with_status = new HashMap<>();
+    private final Map<Integer, Pair<StatusEventUser, Integer>> users_with_status = new HashMap<>();
 
     public Event(int id,
                  Timestamp date,
@@ -39,17 +38,11 @@ public class Event implements Identifiable<Integer> {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public Timestamp getDate() {
         return date;

@@ -3,11 +3,11 @@ package com.example.lab_gui;
 import Control.Controller;
 import Domain.UserDTO;
 import Exceptions.BusinessException;
+import Utils.Constants;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -60,12 +60,12 @@ public class PdfController {
     @FXML
     public void onCreatePDFClicked()  {
         String err = "";
-        Date date_start = null;
-        Date date_end = null;
-        System.out.println(date_start);
-        if(dateStart.getValue() != null && dateEnd.getValue() != null) {
-            date_start = new Date(dateStart.getValue().toEpochDay() * 3600 * 24 * 1000);
-            date_end = new Date(dateEnd.getValue().toEpochDay() * 3600 * 24 * 1000);
+        Date dateStart = null;
+        Date dateEnd = null;
+        System.out.println(dateStart);
+        if(this.dateStart.getValue() != null && this.dateEnd.getValue() != null) {
+            dateStart = new Date(this.dateStart.getValue().toEpochDay() * Constants.MILLISECONDS_IN_A_DAY);
+            dateEnd = new Date(this.dateEnd.getValue().toEpochDay() * Constants.MILLISECONDS_IN_A_DAY);
         }
         else
             err += "The dates must be initialized!\n";
@@ -92,8 +92,8 @@ public class PdfController {
             try {
                 Controller.getInstance().friendsAndMessagesBetweenADatePDF(
                         id,
-                        date_start,
-                        date_end,
+                        dateStart,
+                        dateEnd,
                         file
                 );
                 Stage stage = (Stage) createPDFButton.getScene().getWindow();
@@ -109,8 +109,8 @@ public class PdfController {
         else {
             try {
                 Controller.getInstance().messagesFromAFriendBetweenDatesPDF(
-                        date_start,
-                        date_end,
+                        dateStart,
+                        dateEnd,
                         id,
                         friend,
                         file

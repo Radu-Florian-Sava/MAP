@@ -9,7 +9,6 @@ import Utils.Constants;
 import Utils.StatusFriendship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,12 +16,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.controlsfx.control.PlusMinusSlider;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -120,25 +116,19 @@ public class HelloController {
 
     private void loadFriendships()  {
 
-        List<FriendshipDTO> friendships = null;
-
-        if (userPage.getMainUser() != null) {
-            try {
-                friendships = controller.getAllTypesOfFriendshipsOf(userPage.getMainUser().getId());
-                friendshipTable.setItems(FXCollections.observableList(friendships));
-
-            } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText(e.getMessage());
-                alert.show();
+        List<FriendshipDTO> friendships;
+        try {
+            friendships = controller.getAllTypesOfFriendshipsOf(userPage.getMainUser().getId());
+            friendshipTable.setItems(FXCollections.observableList(friendships));
+            if (friendships.isEmpty()) {
+                friendshipTable.setPlaceholder(new Label("There are no friendships to show \n for now :'("));
             }
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.show();
         }
-
-        if (friendships == null || friendships.isEmpty()) {
-            friendshipTable.setPlaceholder(new Label("There are no friendships to show \n for now :'("));
-        }
-
     }
 
     private void loadUsers()  {
@@ -155,15 +145,10 @@ public class HelloController {
     }
 
     private void loadFriends() {
-
-        if (userPage.getMainUser() != null) {
-
-            List<UserDTO> hiddenUserDTO = null;
-
+            List<UserDTO> hiddenUserDTO;
             hiddenTable.setVisible(true);
             changeStatusSection.setVisible(true);
             changeFriendStatus.setText("Unfriend");
-
             try {
                 hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
                         x -> {
@@ -185,13 +170,6 @@ public class HelloController {
                 alert.setContentText(e.getMessage());
                 alert.show();
             }
-
-            if (hiddenUserDTO==null) {
-                hiddenTable.setPlaceholder(new Label("For the moment there are no friends to show \n" +
-                        "Try again after you make some :P"));
-                userPage.setFriendshipUser(null);
-            }
-        }
     }
 
     private void loadBefriendable()  {
@@ -556,19 +534,19 @@ public class HelloController {
                     controller.getAllTypesOfFriendshipsOf(user.getId()),
                     (List<Message>) controller.getMessages()
             );
+            selectedUser.setText(
+                    userPage.getMainUser().toString()
+            );
+            loadUsers();
+            loadFriendships();
+            hideRelationsMenu();
+            hideMessages();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText(e.getMessage());
             alert.show();
         }
-        selectedUser.setText(
-                userPage.getMainUser().toString()
-        );
-        loadUsers();
-        loadFriendships();
-        hideRelationsMenu();
-        hideMessages();
     }
 
     private void setPDFData(String title,Stage stage,Scene scene){
@@ -647,7 +625,7 @@ public class HelloController {
     }
 
     @FXML
-    public void onCreateEventClicked(ActionEvent actionEvent) {
+    public void onCreateEventClicked() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("createEvent.fxml"));
         Parent parent;
@@ -672,7 +650,7 @@ public class HelloController {
     }
 
     @FXML
-    public void onShowEventClicked(ActionEvent actionEvent) {
+    public void onShowEventClicked() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("showEvent.fxml"));
         Parent parent;
@@ -698,12 +676,6 @@ public class HelloController {
 
     @FXML
     public void changeMessagePage() {
-        //userPage.setPageNumber(0);
-        // pageSpinner.setValueFactory(
-        //        new SpinnerValueFactory.IntegerSpinnerValueFactory(0, controller.
-        //                getNrMaxPages(userPage.getMainUser().getId(),userPage.getMessageUser().getId()),
-        //                0));
-
         userPage.setPageNumber(pageSpinner.getValue());
         loadMessages();
     }

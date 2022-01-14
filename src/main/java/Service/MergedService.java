@@ -9,7 +9,6 @@ import Repo.Repository;
 import Utils.MergeGraph;
 import Validate.FriendshipValidator;
 import Validate.UserValidator;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;

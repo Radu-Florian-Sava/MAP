@@ -1,12 +1,9 @@
 package Validate;
 
 import Domain.Event;
-import Domain.Message;
 import Exceptions.ValidateException;
-
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Objects;
 
 /**
  * validates an event

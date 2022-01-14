@@ -3,7 +3,6 @@ package Utils;
 import Domain.Friendship;
 import Domain.User;
 import Service.MergedService;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;

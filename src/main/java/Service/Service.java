@@ -4,7 +4,6 @@ import Domain.Identifiable;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 

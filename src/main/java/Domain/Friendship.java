@@ -10,9 +10,10 @@ import java.util.Objects;
  * creates a friendship relationship between the users(see User class)
  */
 public class Friendship implements Identifiable<Integer> {
-    private int id;
-    private int sender, receiver;
-    private Date date;
+    private final int id;
+    private final int sender;
+    private final int receiver;
+    private final Date date;
     private int friendshipRequest;
 
     /**

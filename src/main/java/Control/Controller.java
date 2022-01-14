@@ -4,9 +4,6 @@ import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
-
 import Repo.*;
 import Service.Service;
 import Utils.Constants;
@@ -19,7 +16,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -294,44 +290,44 @@ public class Controller {
     }
 
     /**
-     * @param id_from is the ID of the user who sent the message
-     * @param id_to is the ID of the user who received the message
+     * @param idFrom is the ID of the user who sent the message
+     * @param idTo is the ID of the user who received the message
      * @param message is the message body
-     * @param id_reply is the ID of the message it refers as a reply (or null if it's not a reply)
+     * @param idReply is the ID of the message it refers as a reply (or null if it's not a reply)
      * @throws ValidateException if the message is void("") or the IDs are not natural numbers
      * @throws RepoException  if the entities referred via the IDs do not exist
      * @throws SQLException if the database cannot be accessed
      * @throws BusinessException if there are unforeseen collisions with the other application entities
      */
-    public void sendMessage(int id_from, int id_to, String message, Integer id_reply) throws SQLException, ValidateException, BusinessException, RepoException {
-        if (userService.findRecord(id_from) == null || userService.findRecord(id_to) == null)
+    public void sendMessage(int idFrom, int idTo, String message, Integer idReply) throws SQLException, ValidateException, BusinessException, RepoException {
+        if (userService.findRecord(idFrom) == null || userService.findRecord(idTo) == null)
             throw new ValidateException("Id utilizatori invalid\n");
 
         ArrayList<Object> params = new ArrayList<>();
-        params.add(id_from);
-        params.add(id_to);
+        params.add(idFrom);
+        params.add(idTo);
         params.add(message);
-        params.add(id_reply);
+        params.add(idReply);
         List<Friendship> friendships = (List<Friendship>) friendshipService.getRecords();
         boolean ok = friendships.stream().anyMatch((x) ->
-                ((x.getSender() == id_from && x.getReceiver() == id_to) ||
-                        (x.getSender() == id_to && x.getReceiver() == id_from)) &&
+                ((x.getSender() == idFrom && x.getReceiver() == idTo) ||
+                        (x.getSender() == idTo && x.getReceiver() == idFrom)) &&
                         x.getFriendshipRequest() == Constants.ACCEPTED_FRIENDSHIP);
         if (!ok)
             throw new BusinessException("Nu exista prietenie dintre cei doi utilizatori\n");
-        if (id_reply != null) {
+        if (idReply != null) {
             List<Message> messages = (List<Message>) messageService.getRecords();
-            if (messages.stream().noneMatch((x) -> (x.getFrom() == id_from && x.getTo() == id_to)
-            || (x.getFrom() == id_to && x.getTo() == id_from))) {
+            if (messages.stream().noneMatch((x) -> (x.getFrom() == idFrom && x.getTo() == idTo)
+            || (x.getFrom() == idTo && x.getTo() == idFrom))) {
                 throw new BusinessException("Mesajul replied nu apartine acestei conversatii\n");
             }
         }
         int id_message = messageService.createRecord(params);
         params = new ArrayList<>();
-        params.add(id_from);
-        params.add(id_to);
+        params.add(idFrom);
+        params.add(idTo);
         params.add(id_message);
-        params.add(id_reply);
+        params.add(idReply);
         messageService.createRecord(params);
     }
 
