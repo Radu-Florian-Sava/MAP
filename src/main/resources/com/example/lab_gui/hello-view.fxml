@@ -25,16 +25,6 @@
             <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity">
                <children>
                   <AnchorPane />
-                  <TableView fx:id="userTable" prefHeight="150.0" prefWidth="342.0" style="-fx-background-color: #644ccc; -fx-border-color: midnightblue;">
-                    <columns>
-                      <TableColumn fx:id="userID" prefWidth="36.80006265640259" resizable="false" text="ID" />
-                        <TableColumn fx:id="userFirstName" prefWidth="153.60003662109375" resizable="false" text="First Name" />
-                        <TableColumn fx:id="userSurname" prefWidth="151.19995880126953" resizable="false" text="Surname" />
-                    </columns>
-                     <effect>
-                        <InnerShadow />
-                     </effect>
-                  </TableView>
                   <GridPane alignment="CENTER">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -152,7 +142,7 @@
    <right>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="messageFunctionality" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox fx:id="messageFunctionality" alignment="BOTTOM_RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <SplitPane orientation="VERTICAL" style="-fx-background-color: Mediumslateblue;">
                     <items>
@@ -185,7 +175,7 @@
                                  <children>
                                     <AnchorPane HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Button fx:id="sendMessageButton" mnemonicParsing="false" onAction="#sendMessage" prefHeight="54.0" prefWidth="66.0" style="-fx-background-color: MediumOrchid;" text="Send&#10;Message" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <Button fx:id="sendMessageButton" mnemonicParsing="false" onAction="#sendMessage" prefHeight="54.4" prefWidth="66.4" style="-fx-background-color: MediumOrchid;" text="Send&#10;Message" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <font>
                                                 <Font name="Times New Roman" size="12.0" />
                                              </font>
@@ -197,7 +187,7 @@
                                     </AnchorPane>
                                     <AnchorPane HBox.hgrow="ALWAYS">
                                        <children>
-                                          <TextField fx:id="messageBody" layoutY="-331.0" onKeyPressed="#sendMessageViaEnter" prefHeight="54.0" prefWidth="334.0" style="-fx-background-color: #644ccc; -fx-border-color: midnightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TextField fx:id="messageBody" layoutY="-331.0" onKeyPressed="#sendMessageViaEnter" prefHeight="54.4" prefWidth="334.4" style="-fx-background-color: #644ccc; -fx-border-color: midnightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <effect>
                                                 <InnerShadow />
                                              </effect>
@@ -209,6 +199,11 @@
                            </children>
                         </AnchorPane>
                         <Spinner fx:id="pageSpinner" onMouseClicked="#changeMessagePage" prefHeight="26.0" prefWidth="458.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                        <Label alignment="BOTTOM_CENTER" text="Message Page Number" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
                      </children>
                   </GridPane>
                </children>

@@ -67,14 +67,6 @@ public class HelloController {
     @FXML
     private TextField selectedUser;
     @FXML
-    private TableColumn<UserDTO, String> userID;
-    @FXML
-    private TableColumn<UserDTO, String> userSurname;
-    @FXML
-    private TableColumn<UserDTO, String> userFirstName;
-    @FXML
-    private TableView<UserDTO> userTable;
-    @FXML
     private Button changeFriendStatus;
 
 
@@ -123,19 +115,6 @@ public class HelloController {
             if (friendships.isEmpty()) {
                 friendshipTable.setPlaceholder(new Label("There are no friendships to show \n for now :'("));
             }
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.show();
-        }
-    }
-
-    private void loadUsers()  {
-        List<UserDTO> userDTOS;
-        try {
-            userDTOS = controller.getAllUsersDTO();
-            userTable.setItems(FXCollections.observableList(userDTOS));
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -259,12 +238,10 @@ public class HelloController {
     public void load() {
 
         relationColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStringRelation()));
-        userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecondName()));
-        statusColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStatus()));
+        userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecondName()
+                .replace(';',' ')));
 
-        userID.setCellValueFactory((data) -> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
-        userFirstName.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getFirstName()));
-        userSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));
+        statusColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStatus()));
 
         hiddenID.setCellValueFactory((data) -> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
         hiddenFirstName.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getFirstName()));
@@ -536,7 +513,6 @@ public class HelloController {
             selectedUser.setText(
                     userPage.getMainUser().toString()
             );
-            loadUsers();
             loadFriendships();
             hideRelationsMenu();
             hideMessages();
