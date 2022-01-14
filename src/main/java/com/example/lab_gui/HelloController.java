@@ -262,7 +262,6 @@ public class HelloController {
         userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecondName()));
         statusColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStatus()));
 
-
         userID.setCellValueFactory((data) -> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
         userFirstName.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getFirstName()));
         userSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));

@@ -22,7 +22,7 @@
    <center>
       <HBox fx:id="containingWindow" alignment="TOP_CENTER" style="-fx-background-color: MEDIUMSLATEBLUE;">
          <children>
-            <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1419.0" prefWidth="342.0">
+            <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity">
                <children>
                   <AnchorPane />
                   <TableView fx:id="userTable" prefHeight="150.0" prefWidth="342.0" style="-fx-background-color: #644ccc; -fx-border-color: midnightblue;">
@@ -152,7 +152,7 @@
    <right>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="messageFunctionality" AnchorPane.bottomAnchor="956.8000000000001" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox fx:id="messageFunctionality" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <SplitPane orientation="VERTICAL" style="-fx-background-color: Mediumslateblue;">
                     <items>

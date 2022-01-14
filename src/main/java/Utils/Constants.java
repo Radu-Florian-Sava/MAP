@@ -10,4 +10,6 @@ public class Constants {
     public final static int REJECTED_FRIENDSHIP=1;
     public final static int ACCEPTED_FRIENDSHIP=2;
     public final static int MILLISECONDS_IN_A_DAY=3600 * 24 * 1000;
+    public final static int MILLISECONDS_IN_AN_HOUR=3600 * 1000;
+    public final static int MILLISECONDS_IN_A_MINUTE=60 * 1000;
 }
