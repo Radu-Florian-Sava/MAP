@@ -122,7 +122,9 @@ public class Controller {
      * @return a vector which contains the IDs of the friendship relationships of the user
      * WARNING: all relationships, REGARDLESS of the friendship FLAG
      * @throws SQLException if the database cannot be accessed
+     * @deprecated this method is no longer relevant in our application due to GUI standards
      */
+    @Deprecated
     private Vector<Integer> friendsOf(int id) throws SQLException {
         Vector<Integer> friendshipVector = new Vector<>();
         for (Friendship friendship : friendshipService.getRecords()) {
@@ -357,7 +359,9 @@ public class Controller {
      * @return an iterable containing the conversation between the two users as MessageDTOs, not Messages
      * @throws SQLException if the database cannot be accessed
      * this kind of iterable can be used to transfer information to the GUI
+     * @deprecated this method is no longer used due to GUI incompatibility
      */
+    @Deprecated
     public Iterable<MessageDTO> getMessagesBy2Users(int id1, int id2) throws SQLException {
         List<Message> messages = (List<Message>) messageService.getRecords();
         ArrayList<MessageDTO> messages_filtered = new ArrayList<>();
@@ -447,7 +451,9 @@ public class Controller {
      * @param id of the user whose friendship relationships we want to find
      * @return an iterable containing the PENDING friendships RECEIVED by the user with the given ID
      * @throws SQLException if the database cannot be accessed
+     * @deprecated this method is no longer used due to GUI incompatibility
      */
+    @Deprecated
     public Iterable<Friendship> getPendingFriendshipsReceivedBy(int id) throws SQLException {
         return StreamSupport.stream(friendshipService.getRecords().spliterator(), false)
                 .filter((x) -> x.getReceiver() == id && x.getFriendshipRequest() == Constants.PENDING_FRIENDSHIP)
@@ -696,7 +702,7 @@ public class Controller {
      * @return the user who logged in
      * @throws SQLException if the database cannot be accessed
      * @throws NoSuchAlgorithmException if the hashing algorithm used cannot be accessed
-     * @implNote : we use a SHA-256 algorithm to hash the passwords and keep the hashed passwords
+     * @implNote : we use the SHA-256 algorithm to hash the passwords and keep the hashed passwords
      *             instead of just the passwords
      */
     public User login(String username, String password) throws SQLException, NoSuchAlgorithmException {

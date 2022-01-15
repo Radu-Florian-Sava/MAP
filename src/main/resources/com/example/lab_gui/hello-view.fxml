@@ -75,7 +75,7 @@
                   <Font name="Times New Roman" size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="selectedUser" alignment="CENTER" editable="false" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#tryToFindUserByID" prefHeight="67.0" prefWidth="243.0" style="-fx-background-color: #644ccc;">
+            <TextField fx:id="selectedUser" alignment="CENTER" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="67.0" prefWidth="243.0" style="-fx-background-color: #644ccc;">
                <effect>
                   <InnerShadow />
                </effect>

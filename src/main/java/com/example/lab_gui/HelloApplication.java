@@ -23,12 +23,14 @@ public class HelloApplication extends Application {
         Scene scene;
         try {
             scene = new Scene(fxmlLoader.load(), 320, 400);
-            //makes all windows related to this application to use the same icon given by the relative path
+            //makes all windows related to this application to use the same icon
+            // given by the relative path
             Window.getWindows().addListener((ListChangeListener<Window>) c -> {
                 while (c.next()) {
                     for (Window window : c.getAddedSubList()) {
                         if (window instanceof Stage) {
-                            ((Stage) window).getIcons().setAll(new Image("file:src/main/resources/Images/Webber.png"));
+                            ((Stage) window).getIcons().setAll(
+                                    new Image("file:src/main/resources/Images/Webber.png"));
                         }
                     }
                 }

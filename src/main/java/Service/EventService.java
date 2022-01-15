@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
- *  service used for storing messages
+ *  service used for storing events
  */
 public class EventService extends AbstractService<Integer, Event> {
 
@@ -75,16 +75,11 @@ public class EventService extends AbstractService<Integer, Event> {
     /**
      * we do not actually use this method, a message cannot be modified
      * instead we agreed on using the classic '*it was a typo, sorry'
-     * @param integer id of the message to be modified
-     * @param params the parameters we need to update a message
-     * @throws SQLException if the database cannot be accessed
-     * @throws BusinessException for unforeseen errors which might appear when the entities in our application
-     *                           interact with one another
-     * @throws ValidateException if the element contains invalid data
-     * @throws RepoException if there is no element with the given ID parameter
+     * @param integer id of the event to be modified
+     * @param params the parameters we need to update an event
      */
     @Override
-    public void updateRecord(Integer integer, ArrayList<Object> params) throws BusinessException, ValidateException, SQLException, RepoException {
+    public void updateRecord(Integer integer, ArrayList<Object> params) {
 
     }
 }

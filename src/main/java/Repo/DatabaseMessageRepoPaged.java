@@ -5,6 +5,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * a page repository class used for loading messages more efficient
+ */
 public class DatabaseMessageRepoPaged extends DatabaseMessageRepository {
 
     private int nrOfRows = 4;

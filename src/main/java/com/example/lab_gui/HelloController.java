@@ -5,7 +5,6 @@ import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
-import Repo.DatabaseUserRepository;
 import Utils.Constants;
 import Utils.StatusFriendship;
 import javafx.application.Platform;
@@ -75,9 +74,9 @@ public class HelloController {
     @FXML
     private TextField messageBody;
 
-    ContextMenu messageContextMenu = new ContextMenu();
-    MenuItem deleteMessage = new MenuItem("Delete Message");
-    MenuItem broadcastMessage = new MenuItem("Broadcast Message");
+    private final ContextMenu messageContextMenu = new ContextMenu();
+    private final MenuItem deleteMessage = new MenuItem("Delete Message");
+    private final MenuItem broadcastMessage = new MenuItem("Broadcast Message");
 
     // all users
     @FXML
@@ -256,7 +255,7 @@ public class HelloController {
     }
 
     private Iterable<MessageDTO> getMessages()  {
-        if(userPage.getMainUser()!=null && userPage.getMessageUser()!=null){
+        if(userPage.getMessageUser()!=null){
             try {
                 return controller.getAllMessagesPaged(userPage.getMainUser().getId(),
                         userPage.getMessageUser().getId(), userPage.getPageNumber());
@@ -270,18 +269,21 @@ public class HelloController {
         return null;
     }
 
-    public void load() {
-
+    private void initFriendshipTable(){
         relationColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStringRelation()));
         userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecondName()
                 .replace(';',' ')));
 
         statusColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStatus()));
+    }
 
+    private void initAddOrDeleteFriendTable(){
         hiddenID.setCellValueFactory((data) -> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
         hiddenFirstName.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getFirstName()));
         hiddenSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));
+    }
 
+    private void initMessageFactory(){
         messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().toString()));
 
         deleteMessage.setOnAction((ActionEvent e) -> {
@@ -369,6 +371,16 @@ public class HelloController {
         messageContextMenu.getItems().addAll(deleteMessage,broadcastMessage);
     }
 
+    public void load() {
+
+        initFriendshipTable();
+
+        initAddOrDeleteFriendTable();
+
+        initMessageFactory();
+
+    }
+
     @FXML
     private void setPassiveUser() {
         userPage.setFriendshipUser(hiddenTable.getSelectionModel().getSelectedItem());
@@ -379,18 +391,20 @@ public class HelloController {
         }
     }
 
+    @FXML
     public void revealPotentialFriends()  {
         loadBefriendable();
 
     }
 
+    @FXML
     public void revealCurrentFriends()  {
         loadFriends();
     }
 
     public void changeStatusOfFriendship()  {
         try {
-            if (userPage.getFriendshipUser() != null && userPage.getMainUser() != null) {
+            if (userPage.getFriendshipUser() != null ) {
 
                 if (Objects.equals(changeFriendStatus.getText(), "Send request")) {
                     controller.sendFriendship(userPage.getMainUser().getId(),
@@ -419,7 +433,6 @@ public class HelloController {
                             }
                     );
                     hideRelationsMenu();
-
                 }
 
             }
@@ -445,29 +458,7 @@ public class HelloController {
         messageBox.show();
     }
 
-    public void tryToFindUserByID(KeyEvent keyEvent)  {
-        if (keyEvent.getCode() != KeyCode.ENTER)
-            return;
-        try {
-            int tempId = Integer.parseInt(selectedUser.getText());
-            User tempUser = null;
-            try {
-                tempUser = controller.findUser(tempId);
-            } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText(e.getMessage());
-                alert.show();
-            }
-            if (tempUser != null)
-                selectedUser.setText(new UserDTO(tempId, tempUser.getFirstName(), tempUser.getSurname(),tempUser.getUsername()).toString());
-            else
-                throw new NumberFormatException("This is not the user that you are looking for");
-        } catch (NumberFormatException numberFormatException) {
-            summonMessageBox("Try searching by id number");
-        }
-    }
-
+    @FXML
     public void selectFriendship()  {
         try {
             userPage.setFriendshipFocus(friendshipTable.getSelectionModel().getSelectedItem());
@@ -606,6 +597,7 @@ public class HelloController {
         }
     }
 
+    @FXML
     public void sendMessageViaEnter(KeyEvent keyEvent) {
         if(keyEvent.getCode()==KeyCode.ENTER){
             sendMessage();
@@ -642,7 +634,6 @@ public class HelloController {
             alert.show();
         }
     }
-
     private void setPDFData(String title,Stage stage,Scene scene){
         stage.setTitle(title);
         stage.setScene(scene);
