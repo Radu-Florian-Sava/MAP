@@ -22,10 +22,23 @@
    <center>
       <HBox fx:id="containingWindow" alignment="TOP_CENTER" style="-fx-background-color: MEDIUMSLATEBLUE;">
          <children>
-            <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity">
+            <VBox fx:id="addOrRemoverFriendBox" alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity">
                <children>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <TextField fx:id="firstNameFilter" onKeyPressed="#filterFirstName" />
+                        <TextField fx:id="surnameFilter" onKeyPressed="#filterSurname" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
                   <AnchorPane />
-                  <TableView fx:id="hiddenTable" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#setPassiveUser" prefHeight="157.0" prefWidth="342.0" style="-fx-background-color: MediumOrchid; -fx-border-color: midnightblue;" visible="false">
+                  <TableView fx:id="hiddenTable" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#setPassiveUser" prefHeight="157.0" prefWidth="342.0" style="-fx-background-color: MediumOrchid; -fx-border-color: midnightblue;">
                     <columns>
                       <TableColumn fx:id="hiddenID" prefWidth="31.999924063682556" resizable="false" text="ID" />
                         <TableColumn fx:id="hiddenFirstName" prefWidth="156.7999267578125" resizable="false" text="First Name" />
@@ -35,7 +48,7 @@
                         <InnerShadow />
                      </effect>
                   </TableView>
-                  <HBox fx:id="changeStatusSection" prefHeight="29.0" prefWidth="342.0" style="-fx-border-color: midnightblue; -fx-background-color: MediumOrchid;" visible="false">
+                  <HBox fx:id="changeStatusSection" prefHeight="29.0" prefWidth="342.0" style="-fx-border-color: midnightblue; -fx-background-color: MediumOrchid;">
                      <children>
                         <Button fx:id="changeFriendStatus" mnemonicParsing="false" onAction="#changeStatusOfFriendship" prefHeight="26.0" prefWidth="128.0" style="-fx-background-color: MediumOrchid;" text="Unfriend/Befriend">
                            <effect>

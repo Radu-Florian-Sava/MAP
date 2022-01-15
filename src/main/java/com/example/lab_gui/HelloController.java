@@ -22,8 +22,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -50,6 +48,15 @@ public class HelloController {
     @FXML
     public Label updatingTextLabel;
 
+    @FXML
+    public TextField firstNameFilter;
+
+    @FXML
+    public TextField surnameFilter;
+
+    @FXML
+    public VBox addOrRemoverFriendBox;
+
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
     private Page userPage = null;
@@ -72,6 +79,7 @@ public class HelloController {
 
     ContextMenu messageContextMenu = new ContextMenu();
     MenuItem deleteMessage = new MenuItem("Delete Message");
+    MenuItem broadcastMessage = new MenuItem("Broadcast Message");
 
     // all users
     @FXML
@@ -157,8 +165,7 @@ public class HelloController {
 
     private void loadFriends() {
             List<UserDTO> hiddenUserDTO;
-            hiddenTable.setVisible(true);
-            changeStatusSection.setVisible(true);
+            addOrRemoverFriendBox.setVisible(true);
             changeFriendStatus.setText("Unfriend");
             try {
                 hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
@@ -187,8 +194,7 @@ public class HelloController {
         if (userPage.getMainUser() != null) {
             List<UserDTO> hiddenUserDTO = null;
 
-            hiddenTable.setVisible(true);
-            changeStatusSection.setVisible(true);
+            addOrRemoverFriendBox.setVisible(true);
             changeFriendStatus.setText("Send request");
 
             try {
@@ -227,8 +233,7 @@ public class HelloController {
     }
 
     private void hideRelationsMenu()  {
-        changeStatusSection.setVisible(false);
-        hiddenTable.setVisible(false);
+        addOrRemoverFriendBox.setVisible(false);
         changeFriendStatus.setText("Unfriend\\Befriend");
         userPage.setFriendshipUser(null);
         passiveUserName.setText("Nume Prenume");
@@ -297,7 +302,10 @@ public class HelloController {
                 alert.show();
             }
         });
-        messageContextMenu.getItems().addAll(deleteMessage);
+        broadcastMessage.setOnAction((ActionEvent e) -> {
+
+        });
+        messageContextMenu.getItems().addAll(deleteMessage,broadcastMessage);
     }
 
     @FXML
@@ -709,5 +717,39 @@ public class HelloController {
     @FXML
     public void openMouseContextMenu(ContextMenuEvent contextMenuEvent) {
         messageContextMenu.show(messageTable,contextMenuEvent.getScreenX(),contextMenuEvent.getScreenY());
+    }
+
+    public void filterFirstName(KeyEvent keyEvent) {
+        if(keyEvent.getCode()==KeyCode.ENTER){
+            hiddenTable.setItems(FXCollections.observableList(
+            hiddenTable.getItems().stream().filter(x->x.getFirstName().contains(firstNameFilter.getText())).toList()
+            ));
+        }else isBackSpace(keyEvent, firstNameFilter, surnameFilter);
+    }
+
+    public void filterSurname(KeyEvent keyEvent) {
+        if(keyEvent.getCode()==KeyCode.ENTER) {
+            hiddenTable.setItems(FXCollections.observableList(
+                    hiddenTable.getItems().stream().filter(x -> x.getSurname().contains(surnameFilter.getText())).toList()
+            ));
+        }
+        else {
+            isBackSpace(keyEvent, surnameFilter, firstNameFilter);
+        }
+    }
+
+    private void isBackSpace(KeyEvent keyEvent, TextField surnameFilter, TextField firstNameFilter) {
+        if(keyEvent.getCode()== KeyCode.BACK_SPACE){
+            if(Objects.equals(surnameFilter.getText(), "")){
+                firstNameFilter.setText("");
+                if(Objects.equals(changeFriendStatus.getText(), "Unfriend")){
+                    loadFriends();
+                }
+                else if(Objects.equals(changeFriendStatus.getText(), "Send request")){
+                    loadBefriendable();
+                }
+            }
+
+        }
     }
 }
