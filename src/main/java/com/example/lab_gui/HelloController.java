@@ -7,6 +7,8 @@ import Exceptions.RepoException;
 import Exceptions.ValidateException;
 import Utils.Constants;
 import Utils.StatusFriendship;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -25,9 +27,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -67,6 +73,7 @@ public class HelloController {
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
     private Page userPage = null;
+    Timeline timeline;
 
     // messages
     @FXML
@@ -306,24 +313,32 @@ public class HelloController {
         messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().toString()));
 
         deleteMessage.setOnAction((ActionEvent e) -> {
-            int idToRemove = messageTable.getSelectionModel().getSelectedItem().getId();
-            try {
-                controller.deleteMessage(idToRemove);
-                if(userPage.getIdToReply()==idToRemove){
-                    userPage.setIdToReply(Constants.NO_MESSAGE_ID);
-                    sendMessageButton.setText("Send \nMessage");
-                }
-                int nrOfPages = controller.getNrMaxPages(userPage.getMainUser().getId(),userPage.getMessageUser().getId());
-                pageSpinner.setValueFactory(
-                        new SpinnerValueFactory
-                                .IntegerSpinnerValueFactory(0, nrOfPages - 1, nrOfPages - 1));
-                userPage.setPageNumber(nrOfPages - 1);
-                loadMessages();
-            } catch (SQLException | RepoException | BusinessException ex) {
+            MessageDTO messageDTO = messageTable.getSelectionModel().getSelectedItem();
+            if (messageDTO == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
-                alert.setContentText(ex.getMessage());
+                alert.setContentText("You must select a message for this action!\n");
                 alert.show();
+            } else {
+                int idToRemove = messageDTO.getId();
+                try {
+                    controller.deleteMessage(idToRemove);
+                    if (userPage.getIdToReply() == idToRemove) {
+                        userPage.setIdToReply(Constants.NO_MESSAGE_ID);
+                        sendMessageButton.setText("Send \nMessage");
+                    }
+                    int nrOfPages = controller.getNrMaxPages(userPage.getMainUser().getId(), userPage.getMessageUser().getId());
+                    pageSpinner.setValueFactory(
+                            new SpinnerValueFactory
+                                    .IntegerSpinnerValueFactory(0, nrOfPages - 1, nrOfPages - 1));
+                    userPage.setPageNumber(nrOfPages - 1);
+                    loadMessages();
+                } catch (SQLException | RepoException | BusinessException ex) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText(ex.getMessage());
+                    alert.show();
+                }
             }
         });
         broadcastMessage.setOnAction((ActionEvent e) -> {
@@ -380,9 +395,6 @@ public class HelloController {
                         messageFunctionality.getChildren().remove(broadcastTable);
                     }
                 });
-                replyAllMessage.setOnAction(event -> {}
-                        //TO DO
-                );
                 broadcastTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
                 broadcastTable.setVisible(true);
                 broadcastTable.setMaxHeight(100);
@@ -393,6 +405,32 @@ public class HelloController {
                 alert.setTitle("Error");
                 alert.setContentText(ex.getMessage());
                 alert.show();
+            }
+        });
+        replyAllMessage.setOnAction((ActionEvent event) -> {
+            MessageDTO messageDTO = messageTable.getSelectionModel().getSelectedItem();
+            if (messageDTO == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("You must select a message!\n");
+                alert.show();
+            } else {
+                int id_reply = messageDTO.getId();
+                int id_user = userPage.getMainUser().getId();
+                try {
+                    controller.replyAll(id_user, messageBody.getText(), id_reply);
+                    int nrOfPages = controller.getNrMaxPages(userPage.getMainUser().getId(), userPage.getMessageUser().getId());
+                    pageSpinner.setValueFactory(
+                            new SpinnerValueFactory
+                                    .IntegerSpinnerValueFactory(0, nrOfPages - 1, nrOfPages - 1));
+                    userPage.setPageNumber(nrOfPages - 1);
+                    loadMessages();
+                } catch (ValidateException | BusinessException | SQLException | RepoException ex) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText(ex.getMessage());
+                    alert.show();
+                }
             }
         });
         messageContextMenu.getItems().addAll(deleteMessage,broadcastMessage,replyAllMessage);
@@ -637,6 +675,26 @@ public class HelloController {
             selectedUser.setText(
                     userPage.getMainUser().toString()
             );
+            timeline = new Timeline(new KeyFrame(Duration.seconds(30), e -> {
+                try {
+                    List<Event> myEvents = (List<Event>) controller.getMyEvents(user.getId());
+                    for(Event event: myEvents) {
+                        long time_event = event.getDate().getTime() / 1000;
+                        long time_now = Timestamp.from(Instant.now()).getTime() / 1000;
+                        if(time_event >= time_now - 16 && time_event <= time_now + 16) {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Event");
+                            alert.setHeaderText(event.getTitle());
+                            alert.setContentText(event.getDescription() + "\nAt the date: " + event.getDate().toString());
+                            alert.show();
+                        }
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }));
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
             loadFriendships();
             hideRelationsMenu();
             hideMessages();

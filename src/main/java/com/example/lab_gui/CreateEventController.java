@@ -53,7 +53,7 @@ public class CreateEventController {
         else {
             timestamp = new Timestamp(datePicker.getValue().toEpochDay() * Constants.MILLISECONDS_IN_A_DAY
             + minuteBox.getValue() * Constants.MILLISECONDS_IN_A_MINUTE +
-                    hourBox.getValue() * Constants.MILLISECONDS_IN_AN_HOUR);
+                    hourBox.getValue() * Constants.MILLISECONDS_IN_AN_HOUR - 120 * Constants.MILLISECONDS_IN_A_MINUTE);
         }
 
         try {

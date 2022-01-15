@@ -1049,4 +1049,39 @@ public class Controller {
             throw new BusinessException("You need a special repo for that!\n");
         return ((DatabaseMessageRepoPaged) messageRepository).nrOfPages(idUser1, idUser2);
     }
+
+    /**
+     * @param id_user
+     * @param message
+     * @param id_reply
+     * @throws ValidateException
+     * @throws BusinessException
+     * @throws SQLException
+     * @throws RepoException
+     */
+    public void replyAll(int id_user, String message, int id_reply) throws ValidateException, BusinessException, SQLException, RepoException {
+        ArrayList<Object> params = new ArrayList<>();
+
+        params.add(null);
+        params.add(null);
+        params.add(message);
+        params.add(null);
+
+        int id_message = messageService.createRecord(params);
+
+        List<Integer> id_friends = ((List<Friendship>) getAcceptedFriendshipsOf(id_user))
+                .stream().map((x) -> x.getReceiver() == id_user ? x.getSender() : x.getReceiver())
+                .collect(Collectors.toList());
+
+        for(Integer id : id_friends) {
+            params = new ArrayList<>();
+
+            params.add(id_user);
+            params.add(id);
+            params.add(id_message);
+            params.add(id_reply);
+
+            messageService.createRecord(params);
+        }
+    }
 }
