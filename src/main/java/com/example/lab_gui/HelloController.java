@@ -87,10 +87,9 @@ public class HelloController {
     private final ContextMenu messageContextMenu = new ContextMenu();
     private final MenuItem deleteMessage = new MenuItem("Delete Message");
     private final MenuItem broadcastMessage = new MenuItem("Broadcast Message");
+    private final MenuItem replyAllMessage = new MenuItem("Reply all");
 
     // all users
-    @FXML
-    private Alert messageBox;
     @FXML
     private TextField selectedUser;
     @FXML
@@ -381,6 +380,9 @@ public class HelloController {
                         messageFunctionality.getChildren().remove(broadcastTable);
                     }
                 });
+                replyAllMessage.setOnAction(event -> {}
+                        //TO DO
+                );
                 broadcastTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
                 broadcastTable.setVisible(true);
                 broadcastTable.setMaxHeight(100);
@@ -393,7 +395,7 @@ public class HelloController {
                 alert.show();
             }
         });
-        messageContextMenu.getItems().addAll(deleteMessage,broadcastMessage);
+        messageContextMenu.getItems().addAll(deleteMessage,broadcastMessage,replyAllMessage);
     }
 
     public void load() {
@@ -467,20 +469,6 @@ public class HelloController {
             alert.setContentText(e.getMessage());
             alert.show();
         }
-    }
-
-    private void initMessageBox() {
-        messageBox = new Alert(Alert.AlertType.INFORMATION);
-        messageBox.setTitle("Warning");
-        messageBox.setHeaderText("You've really done it now");
-        messageBox.setContentText("This is a secret message, congratulations! ");
-    }
-
-    public void summonMessageBox(String newText) {
-        if (messageBox == null)
-            initMessageBox();
-        messageBox.setContentText(newText);
-        messageBox.show();
     }
 
     @FXML

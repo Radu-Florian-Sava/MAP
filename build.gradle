@@ -29,7 +29,7 @@ application {
 
 javafx {
     version = '17-ea+11'
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.base']
+    modules = ['javafx.controls','javafx.web', 'javafx.fxml', 'javafx.base']
 }
 
 dependencies {

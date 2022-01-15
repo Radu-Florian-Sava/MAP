@@ -6,20 +6,40 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="382.0" prefWidth="304.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.CreateEventController">
+<AnchorPane prefHeight="382.0" prefWidth="304.0" style="-fx-background-color: MEDIUMSLATEBLUE;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.CreateEventController">
    <children>
       <Label layoutX="14.0" layoutY="20.0" text="Title" />
       <Label layoutX="14.0" layoutY="51.0" text="Description" />
-      <TextField fx:id="titleBox" layoutX="85.0" layoutY="16.0" prefHeight="26.0" prefWidth="200.0" />
-      <TextArea fx:id="descriptionBox" layoutX="85.0" layoutY="51.0" prefHeight="200.0" prefWidth="200.0" />
-      <DatePicker fx:id="datePicker" layoutX="85.0" layoutY="260.0" prefHeight="26.0" prefWidth="200.0" promptText="Pick a date" />
-      <Button fx:id="createEventButton" layoutX="15.0" layoutY="341.0" mnemonicParsing="false" onAction="#onCreateEventClicked" prefHeight="26.0" prefWidth="273.0" text="Create an event" />
+      <TextField fx:id="titleBox" layoutX="85.0" layoutY="16.0" prefHeight="26.0" prefWidth="200.0">
+         <effect>
+            <InnerShadow />
+         </effect></TextField>
+      <TextArea fx:id="descriptionBox" layoutX="85.0" layoutY="51.0" prefHeight="200.0" prefWidth="200.0">
+         <effect>
+            <InnerShadow />
+         </effect></TextArea>
+      <DatePicker fx:id="datePicker" layoutX="85.0" layoutY="260.0" prefHeight="26.0" prefWidth="200.0" promptText="Pick a date">
+         <effect>
+            <InnerShadow />
+         </effect></DatePicker>
+      <Button fx:id="createEventButton" layoutX="15.0" layoutY="341.0" mnemonicParsing="false" onAction="#onCreateEventClicked" prefHeight="26.0" prefWidth="273.0" text="Create an event">
+         <effect>
+            <DropShadow />
+         </effect></Button>
       <Label layoutX="12.0" layoutY="265.0" text="Date" />
       <Label layoutX="12.0" layoutY="308.0" text="Hour" />
       <Label layoutX="145.0" layoutY="308.0" text="Minute" />
-      <Spinner fx:id="hourBox" layoutX="44.0" layoutY="304.0" prefHeight="26.0" prefWidth="94.0" />
-      <Spinner fx:id="minuteBox" layoutX="191.0" layoutY="305.0" prefHeight="26.0" prefWidth="94.0" />
+      <Spinner fx:id="hourBox" layoutX="44.0" layoutY="304.0" prefHeight="26.0" prefWidth="94.0">
+         <effect>
+            <InnerShadow />
+         </effect></Spinner>
+      <Spinner fx:id="minuteBox" layoutX="191.0" layoutY="305.0" prefHeight="26.0" prefWidth="94.0">
+         <effect>
+            <InnerShadow />
+         </effect></Spinner>
    </children>
 </AnchorPane>

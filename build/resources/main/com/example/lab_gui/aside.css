@@ -1,0 +1,15 @@
+.root{
+    -fx-background-color: #644ccc;
+}
+
+.label {
+    -fx-font-family: "Calibri";
+}
+
+.button {
+    -fx-text-fill: cyan;
+    -fx-background-color: #ba55d3;
+    -fx-font-family: "Times New Roman";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
