@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
 <BorderPane style="-fx-background-color: MEDIUMSLATEBLUE;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.HelloController">
    <center>
@@ -62,6 +63,11 @@
                         </Label>
                      </children>
                   </HBox>
+                  <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" />
+                  <Button fx:id="searchButton" alignment="CENTER" mnemonicParsing="false" onAction="#searchOnTheInternet" prefHeight="26.0" prefWidth="342.0" style="-fx-background-color: MediumOrchid;" text="Search on the internet" VBox.vgrow="ALWAYS">
+                     <effect>
+                        <DropShadow />
+                     </effect></Button>
                </children>
             </VBox>
          </children>

@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -21,8 +22,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -53,6 +57,12 @@ public class HelloController {
 
     @FXML
     public VBox addOrRemoverFriendBox;
+
+    @FXML
+    public WebView webView;
+
+    @FXML
+    public Button searchButton;
 
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
@@ -117,6 +127,16 @@ public class HelloController {
     public void initialize() {
         load();
         setController(Controller.getInstance());
+        Runnable runnable = ()-> {
+            WebEngine webEngine = webView.getEngine();
+            webEngine.loadContent("<html> <body style=\"background-color:#7b68ee;\"> <body> <iframe width=\"300\" " +
+                    "height=\"180\" src=\"https://www.youtube.com/embed/qlXoh54zock\" " +
+                    "title=\"YouTube video player\" frameborder=\"0\" " +
+                    "allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" +
+                    " picture-in-picture\" allowfullscreen></iframe> </body> </html>");
+        };
+        Thread thread= new Thread(runnable);
+        Platform.runLater(thread::run);
     }
 
     private void setController(Controller controller) {
@@ -814,5 +834,21 @@ public class HelloController {
             }
 
         }
+    }
+
+    public void searchOnTheInternet() {
+            Runnable runnable = ()-> {
+                WebEngine webEngine = webView.getEngine();
+                webEngine.loadContent("<html> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> " +
+                        "<button id=\"search\">Search</button>\n" +
+                        "<script>\n" +
+                        "var q = \" \";\n" +
+                        "document.getElementById('search').onclick = function() {\n" +
+                        "    window.open('http://google.com/search?q='+q);\n" +
+                        "};\n" +
+                        "</script> </html>");
+            };
+            Thread thread= new Thread(runnable);
+            Platform.runLater(thread::run);
     }
 }

@@ -8,6 +8,7 @@ module com.example.lab_gui {
     requires java.sql;
     requires junit;
     requires org.apache.pdfbox;
+    requires javafx.web;
 
     opens com.example.lab_gui to javafx.fxml;
     exports com.example.lab_gui;
