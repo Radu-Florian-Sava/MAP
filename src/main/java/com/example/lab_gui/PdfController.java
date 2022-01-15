@@ -36,6 +36,11 @@ public class PdfController {
     private UserDTO friend;
 
 
+    /**
+     * @param option the option for the PDF, it can represent messages with a friend or just app activity
+     * @param id the ID of the user whose activity we'll report
+     * @param friend the friend with which the user conversed if we print the conversation
+     */
     void setUp(int option, int id, UserDTO friend) {
         this.option = option;
         this.id = id;
@@ -57,6 +62,9 @@ public class PdfController {
             optionLabel.setText("Create a PDF for all your messages from a friend between a date");
     }
 
+    /**
+     *  creates a PDF when clicked
+     */
     @FXML
     public void onCreatePDFClicked()  {
         String err = "";
@@ -127,6 +135,9 @@ public class PdfController {
         }
     }
 
+    /**
+     * allows the user to choose the path where the PDF will be saved
+     */
     @FXML
     public void onChooseFileClicked() {
         DirectoryChooser directoryChooser = new DirectoryChooser();

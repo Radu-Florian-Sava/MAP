@@ -7,12 +7,14 @@ import Exceptions.RepoException;
 import Exceptions.ValidateException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ *  the class corresponding to the show event fxml
+ */
 public class ShowEventController {
 
     int idUser;
@@ -28,19 +30,27 @@ public class ShowEventController {
     @FXML
     public ListView<Event> allEvents;
 
-    public void setUp(int id_user) {
-        this.idUser = id_user;
+    /**
+     * @param idUser the id of the current user
+     * it does the initial setup of the event window
+     */
+    public void setUp(int idUser) {
+        this.idUser = idUser;
         load();
     }
 
+    /**
+     *  initialises each table column with the data it extracts
+     *  loads all the events and the events in which the user will participate in
+     */
     private void load() {
         titleColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getTitle()));
         dateColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getDate().toString()));
         statusColumn.setCellValueFactory((data) ->
                 new SimpleStringProperty(data.getValue().getUsers().get(idUser).getKey().getStatus()));
 
-        load_all_events();
-        load_my_events();
+        loadAllEvents();
+        loadMyEvents();
     }
 
     @FXML
@@ -48,7 +58,10 @@ public class ShowEventController {
 
     }
 
-    public void load_all_events() {
+    /**
+     *  loads all the events which exist in the application
+     */
+    public void loadAllEvents() {
         try {
             List<Event> events = (List<Event>) Controller.getInstance().getAllEvents();
             if(events != null && events.size() != 0)
@@ -64,7 +77,10 @@ public class ShowEventController {
         }
     }
 
-    public void load_my_events() {
+    /**
+     * loads all the events of a user from the application
+     */
+    public void loadMyEvents() {
         try {
             List<Event> events = (List<Event>) Controller.getInstance().getMyEvents(idUser);
             myEvents.setItems(FXCollections.observableList(events));
@@ -79,6 +95,9 @@ public class ShowEventController {
         }
     }
 
+    /**
+     * if the button is clicked the event will be joined
+     */
     @FXML
     public void onJoinEventClicked() {
         Event event = allEvents.getSelectionModel().getSelectedItem();
@@ -91,7 +110,7 @@ public class ShowEventController {
         else {
             try {
                 Controller.getInstance().joinEvent(idUser, event.getId());
-                load_my_events();
+                loadMyEvents();
             } catch (SQLException | BusinessException | ValidateException | RepoException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -101,6 +120,9 @@ public class ShowEventController {
         }
     }
 
+    /**
+     *  if leave event is pressed, the GUI lists will update
+     */
     @FXML
     public void onLeaveEventClicked() {
         Event event = myEvents.getSelectionModel().getSelectedItem();
@@ -113,8 +135,8 @@ public class ShowEventController {
         else {
             try {
                 Controller.getInstance().deleteEvent(idUser, event.getUsers().get(idUser).getValue());
-                load_my_events();
-                load_all_events();
+                loadMyEvents();
+                loadAllEvents();
             } catch (SQLException | BusinessException | RepoException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");

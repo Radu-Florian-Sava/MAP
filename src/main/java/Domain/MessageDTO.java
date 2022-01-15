@@ -10,13 +10,24 @@ public class MessageDTO {
     private final String message_reply;
     private final String userFrom;
 
-    public MessageDTO(int id, String message, String message_reply, String userFrom) {
+    /**
+     * @param id of the message
+     * @param message is the message body
+     * @param messageReply the reply of the message
+     * @param userFrom the name of the user who sent the message
+     */
+    public MessageDTO(int id, String message, String messageReply, String userFrom) {
         this.id = id;
         this.message = message;
-        this.message_reply = message_reply;
+        this.message_reply = messageReply;
         this.userFrom = userFrom;
     }
 
+    /**
+     * @param id of the message
+     * @param message is the message body
+     * @param userFrom the name of the user who sent the message
+     */
     public MessageDTO(int id, String message, String userFrom) {
         this.id = id;
         this.message = message;
@@ -24,18 +35,17 @@ public class MessageDTO {
         message_reply = null;
     }
 
-    public String getMessage_reply() {
-        return message_reply;
-    }
-
+    /**
+     * @return the message body as a string
+     */
     public String getMessage() {
         return message;
     }
 
-    public String getUserFrom() {
-        return userFrom;
-    }
-
+    /**
+     * @return an extended message containing the replied message, the person who sent the message
+     *         and the message body as a string
+     */
     @Override
     public String toString() {
         return
@@ -44,6 +54,9 @@ public class MessageDTO {
                 "Reply la " + message_reply + "\n" + userFrom + ": " + message;
     }
 
+    /**
+     * @return the ID of the message
+     */
     public int getId() {
         return id;
     }

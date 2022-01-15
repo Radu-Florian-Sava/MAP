@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ *  the class corresponding to the create event fxml
+ */
 public class CreateEventController {
 
     private int id_user;
@@ -28,14 +31,20 @@ public class CreateEventController {
     @FXML
     public DatePicker datePicker;
 
-    public void setUp(int id_user) {
-        this.id_user = id_user;
+    /**
+     * @param idUser the ID of the user who created the event
+     */
+    public void setUp(int idUser) {
+        this.id_user = idUser;
         minuteBox.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
         hourBox.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
     }
 
+    /**
+     * when clicked it tries to load the event, which can be accepted if the data introduced is valid
+     */
     @FXML
     public void onCreateEventClicked() {
         Timestamp timestamp;

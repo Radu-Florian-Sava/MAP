@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
+/**
+ *  the class corresponding to the login fxml
+ */
 public class LoginController {
     @FXML
     public TextField usernameBox;
@@ -29,6 +32,11 @@ public class LoginController {
     public Button signupButton;
 
 
+    /**
+     * if the login button is pressed the credentials will be checked and
+     * the application will print an error message if the credentials are not correct or
+     * will allow the user to enter the application with the associated account
+     */
     @FXML
     public void onLoginClicked()  {
         String username = usernameBox.getText();

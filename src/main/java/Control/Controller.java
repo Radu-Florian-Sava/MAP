@@ -848,7 +848,7 @@ public class Controller {
      * @throws IOException if the input/output interfaces malfunction
      * @throws SQLException if the database cannot be accessed
      * @throws BusinessException if there are unforeseen errors produced by interactions between
-     *                           entities of the applications
+     *                           entities of the application
      */
     public void messagesFromAFriendBetweenDatesPDF(Date date_start,
                                                    Date date_end,
@@ -894,7 +894,18 @@ public class Controller {
         pdDocument.close();
     }
 
-    public void createEvent(int id_user, String title, String description, Timestamp date) throws ValidateException, BusinessException, SQLException, RepoException {
+    /**
+     * @param idUser the ID of the user who creates the event
+     * @param title of the event
+     * @param description of the event, what it is about
+     * @param date on which the event will take place
+     * @throws ValidateException the date in invalid or user ID not found
+     * @throws SQLException if the database cannot be accessed
+     * @throws BusinessException if there are unforeseen errors produced by interactions between
+     *                           entities of the application
+     * @throws RepoException if the ID given by the repository is duplicated
+     */
+    public void createEvent(int idUser, String title, String description, Timestamp date) throws ValidateException, BusinessException, SQLException, RepoException {
         if(title == null)
             title = "";
         if(description == null)
@@ -910,58 +921,96 @@ public class Controller {
 
         params = new ArrayList<>();
         params.add(id);
-        params.add(id_user);
+        params.add(idUser);
         params.add(1);
 
         eventService.createRecord(params);
     }
 
-    public void joinEvent(int id_user, int id_event) throws SQLException, BusinessException, ValidateException, RepoException {
+    /**
+     * @param idUser the ID of the user who joins the event
+     * @param idEvent the ID of the joined event
+     * @throws SQLException if the database cannot be accessed
+     * @throws BusinessException if there are unforeseen errors produced by interactions between
+     *                           entities of the applications
+     * @throws ValidateException if the IDs are not valid
+     * @throws RepoException if the ID given by the repository is duplicated
+     */
+    public void joinEvent(int idUser, int idEvent) throws SQLException, BusinessException, ValidateException, RepoException {
         if(((List<Event>) eventService.getRecords()).stream().anyMatch((x) ->
-                x.getUsers().containsKey(id_user) && x.getId() == id_event)) {
+                x.getUsers().containsKey(idUser) && x.getId() == idEvent)) {
             throw new BusinessException("The user is already on this event!\n");
         }
 
         ArrayList<Object> params = new ArrayList<>();
-        params.add(id_event);
-        params.add(id_user);
+        params.add(idEvent);
+        params.add(idUser);
         params.add(0);
 
         eventService.createRecord(params);
     }
 
-    public void deleteEvent(int id_user, int id_user_event) throws SQLException, BusinessException, RepoException {
+    /**
+     * actually, it deletes a user's request to join the vent
+     * @param idUser the ID of the user who will leave the event
+     * @param idUserEvent the ID of the left event
+     * @throws SQLException if the database cannot be accessed
+     * @throws BusinessException if there are unforeseen errors produced by interactions between
+     *                           entities of the applications
+     * @throws RepoException if key element formed by the ID pair doesn't exist
+     */
+    public void deleteEvent(int idUser, int idUserEvent) throws SQLException, BusinessException, RepoException {
         if(((List<Event>) eventService.getRecords()).stream()
                 .noneMatch((x) ->
-                        x.getUsers().containsKey(id_user) && x.getUsers().get(id_user).getValue() == id_user_event)) {
+                        x.getUsers().containsKey(idUser) && x.getUsers().get(idUser).getValue() == idUserEvent)) {
             throw new BusinessException("The user is not on this event!\n");
         }
-        System.out.println(id_user_event);
-        eventService.deleteRecord(id_user_event);
+        System.out.println(idUserEvent);
+        eventService.deleteRecord(idUserEvent);
     }
 
+    /**
+     * @return an iterable containing all the events
+     * @throws SQLException if the database cannot be accessed
+     */
     public Iterable<Event> getAllEvents() throws SQLException {
         return eventService.getRecords();
     }
 
+    /**
+     * @param id the ID of the user whose events we are looking for
+     * @return an iterable containing the events in which the user is participating
+     * @throws SQLException if the database cannot be accessed
+     */
     public Iterable<Event> getMyEvents(int id) throws SQLException {
         return ((List<Event>) eventService.getRecords()).stream().filter(
                 (x) -> x.getUsers().containsKey(id)).collect(Collectors.toList());
     }
 
-    public Iterable<MessageDTO> getAllMessagesPaged(int id_user_from, int id_user_to, int page) throws BusinessException, SQLException {
+    /**
+     * @param idUserFrom the ID of the user who sent the messages
+     * @param idUserTo the ID of the user who received the messages
+     * @param page of the messages
+     * @return an iterable containing the corresponding messages of the two users
+     * @throws BusinessException if there are unforeseen errors produced by interactions between
+     *                           entities of the applications
+     * @throws SQLException if the database cannot be accessed
+     */
+    public Iterable<MessageDTO> getAllMessagesPaged(int idUserFrom,
+                                                    int idUserTo,
+                                                    int page) throws BusinessException, SQLException {
         List<MessageDTO> messageDTOList = new ArrayList<>();
 
         if(!messageRepository.getClass().isAssignableFrom(DatabaseMessageRepoPaged.class))
             throw new BusinessException("You need a special repo for that!\n");
 
-        if(page > getNrMaxPages(id_user_from, id_user_to))
+        if(page > getNrMaxPages(idUserFrom, idUserTo))
             throw  new BusinessException("The page number is invalid!\n");
 
-        User user1 = userService.findRecord(id_user_from);
-        User user2 = userService.findRecord(id_user_to);
+        User user1 = userService.findRecord(idUserFrom);
+        User user2 = userService.findRecord(idUserTo);
 
-        List<Message> messageList = ((DatabaseMessageRepoPaged) messageRepository).getAllForAUser(page, id_user_from, id_user_to);
+        List<Message> messageList = ((DatabaseMessageRepoPaged) messageRepository).getAllForAUser(page, idUserFrom, idUserTo);
         for(Message message : messageList) {
             User user;
             if(message.getFrom() == user1.getId())
@@ -986,9 +1035,18 @@ public class Controller {
         return messageDTOList;
     }
 
-    public int getNrMaxPages(int id_user_1, int id_user_2) throws BusinessException, SQLException {
+    /**
+     * @param idUser1 the ID of one of the users
+     * @param idUser2 the ID of the other user
+     * @return an integer containing the maximum number of pages of the conversation
+     * @throws BusinessException if there are unforeseen errors produced by interactions between
+     *                           entities of the applications
+     *
+     * @throws SQLException if the database cannot be accessed
+     */
+    public int getNrMaxPages(int idUser1, int idUser2) throws BusinessException, SQLException {
         if(!messageRepository.getClass().isAssignableFrom(DatabaseMessageRepoPaged.class))
             throw new BusinessException("You need a special repo for that!\n");
-        return ((DatabaseMessageRepoPaged) messageRepository).nrOfPages(id_user_1, id_user_2);
+        return ((DatabaseMessageRepoPaged) messageRepository).nrOfPages(idUser1, idUser2);
     }
 }

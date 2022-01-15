@@ -17,6 +17,9 @@ import java.io.IOException;
  */
 public class HelloApplication extends Application {
 
+    /**
+     * @param stage the stage loaded when the application starts
+     */
     @Override
     public void start(Stage stage)  {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));

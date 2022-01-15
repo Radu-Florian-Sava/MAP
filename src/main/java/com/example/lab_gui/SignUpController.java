@@ -43,6 +43,10 @@ public class SignUpController {
     @FXML
     public PasswordField confirmPasswordField;
 
+    /**
+     *  when the signUp button is clicked it tries to go back to the login page
+     *  or alerts the user if the data he introduced were wrong
+     */
     @FXML
     public void signUpClicked() {
         String error = "";
