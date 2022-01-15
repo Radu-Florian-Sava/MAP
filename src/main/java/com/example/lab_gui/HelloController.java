@@ -395,7 +395,7 @@ public class HelloController {
             else
                 throw new NumberFormatException("This is not the user that you are looking for");
         } catch (NumberFormatException numberFormatException) {
-            summonMessageBox("Try searchig by id number");
+            summonMessageBox("Try searching by id number");
         }
     }
 
