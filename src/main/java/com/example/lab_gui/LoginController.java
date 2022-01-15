@@ -94,6 +94,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * the user tries to sign up with a unique username and introducing his first name, surname
+     * and password(twice, just to be sure)
+     * if SignUp fails, the user will receive an alert
+     */
     public void onSignUpClicked()  {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup.fxml"));
         Parent parent;
