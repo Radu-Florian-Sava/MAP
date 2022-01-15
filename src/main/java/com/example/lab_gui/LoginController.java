@@ -74,6 +74,8 @@ public class LoginController {
             try {
                 parent = fxmlLoader.load();
                 Scene scene = new Scene(parent, 320, 400);
+                scene.getStylesheets().add(HelloApplication.class.getResource("format.css")
+                        .toExternalForm());
                 HelloController helloController = fxmlLoader.getController();
                 helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname(),user.getUsername()));
                 Stage stage = (Stage) loginButton.getScene().getWindow();
