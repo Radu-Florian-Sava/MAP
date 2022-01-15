@@ -294,8 +294,13 @@ public class HelloController {
                     userPage.setIdToReply(Constants.NO_MESSAGE_ID);
                     sendMessageButton.setText("Send \nMessage");
                 }
+                int nrOfPages = controller.getNrMaxPages(userPage.getMainUser().getId(),userPage.getMessageUser().getId());
+                pageSpinner.setValueFactory(
+                        new SpinnerValueFactory
+                                .IntegerSpinnerValueFactory(0, nrOfPages - 1, nrOfPages - 1));
+                userPage.setPageNumber(nrOfPages - 1);
                 loadMessages();
-            } catch (SQLException | RepoException ex) {
+            } catch (SQLException | RepoException | BusinessException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText(ex.getMessage());
