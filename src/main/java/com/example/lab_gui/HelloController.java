@@ -5,6 +5,7 @@ import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import Repo.DatabaseUserRepository;
 import Utils.Constants;
 import Utils.StatusFriendship;
 import javafx.application.Platform;
@@ -24,10 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 /**
  *  controller of the main window
@@ -303,7 +301,70 @@ public class HelloController {
             }
         });
         broadcastMessage.setOnAction((ActionEvent e) -> {
+            try {
+                Iterable<Friendship> friendships = controller
+                        .getAcceptedFriendshipsOf(userPage.getMainUser().getId());
+                ArrayList<Integer> friendIDs = new ArrayList<>();
+                TableView<User> broadcastTable =new TableView<>();
+                TableColumn<User,String > friendNames=new TableColumn<>();
+                friendNames.setCellValueFactory((data)->new SimpleStringProperty(data.getValue().getFirstName()
+                        +" "+data.getValue().getSurname()));
+                broadcastTable.getColumns().add(friendNames);
+                for (Friendship friendship :friendships) {
+                    if(friendship.getSender() == userPage.getMainUser().getId()){
+                        friendIDs.add(friendship.getReceiver());
+                    }
+                    else
+                        friendIDs.add(friendship.getSender());
+                }
+                ArrayList<User> userArrayList = new ArrayList<>();
+                friendIDs.forEach(x-> {
+                    try {
+                        userArrayList.add(controller.findUser(x));
+                    } catch (SQLException ex) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setContentText(ex.getMessage());
+                        alert.show();
+                    }
+                });
+                broadcastTable.getItems().setAll(userArrayList);
+                friendNames.setText("Select the friends that you want to omit");
+                friendNames.setMinWidth(broadcastTable.getPrefWidth());
+                broadcastTable.setOnMouseClicked(event -> {
+                    if(broadcastTable.getSelectionModel().getSelectedItem()!=null){
+                        friendIDs.remove(broadcastTable.getSelectionModel().getSelectedItem().getId());
+                        broadcastTable.getItems().remove(broadcastTable.getSelectionModel().getSelectedItem());
+                    }
+                });
+                broadcastTable.setOnKeyPressed(event -> {
+                    if(event.getCode()==KeyCode.ENTER ){
+                        if(!Objects.equals(messageBody.getText(), "")){
+                            try {
+                                controller.sendMessageToIds(userPage.getMainUser().getId(),messageBody.getText(),friendIDs);
+                                messageBody.setText("");
+                                loadMessages();
+                            } catch (ValidateException | BusinessException | SQLException | RepoException ex) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setContentText(ex.getMessage());
+                                alert.show();
+                            }
+                        }
+                        messageFunctionality.getChildren().remove(broadcastTable);
+                    }
+                });
+                broadcastTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+                broadcastTable.setVisible(true);
+                broadcastTable.setMaxHeight(100);
+                messageFunctionality.getChildren().add(0,broadcastTable);
 
+            } catch (SQLException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText(ex.getMessage());
+                alert.show();
+            }
         });
         messageContextMenu.getItems().addAll(deleteMessage,broadcastMessage);
     }
@@ -719,6 +780,7 @@ public class HelloController {
         messageContextMenu.show(messageTable,contextMenuEvent.getScreenX(),contextMenuEvent.getScreenY());
     }
 
+    @FXML
     public void filterFirstName(KeyEvent keyEvent) {
         if(keyEvent.getCode()==KeyCode.ENTER){
             hiddenTable.setItems(FXCollections.observableList(
@@ -727,6 +789,7 @@ public class HelloController {
         }else isBackSpace(keyEvent, firstNameFilter, surnameFilter);
     }
 
+    @FXML
     public void filterSurname(KeyEvent keyEvent) {
         if(keyEvent.getCode()==KeyCode.ENTER) {
             hiddenTable.setItems(FXCollections.observableList(
