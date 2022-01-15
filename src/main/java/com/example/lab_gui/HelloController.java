@@ -658,6 +658,7 @@ public class HelloController {
         try {
             parent = fxmlLoader.load();
             Scene scene = new Scene(parent, 321, 400);
+            scene.getStylesheets().add(HelloApplication.class.getResource("aside.css").toExternalForm());
             PdfController pdfController = fxmlLoader.getController();
             pdfController.setUp(1, userPage.getMainUser().getId(), null);
             Stage stage = new Stage();
@@ -687,6 +688,7 @@ public class HelloController {
             try {
                 parent = fxmlLoader.load();
                 Scene scene = new Scene(parent, 321, 400);
+                scene.getStylesheets().add(HelloApplication.class.getResource("aside.css").toExternalForm());
                 PdfController pdfController = fxmlLoader.getController();
                 pdfController.setUp(2, userPage.getMainUser().getId(), userPage.getMessageUser());
                 Stage stage = new Stage();
@@ -723,6 +725,7 @@ public class HelloController {
         try {
             parent = fxmlLoader.load();
             Scene scene = new Scene(parent, 321, 400);
+            scene.getStylesheets().add(HelloApplication.class.getResource("aside.css").toExternalForm());
             CreateEventController createEventController = fxmlLoader.getController();
             createEventController.setUp(userPage.getMainUser().getId());
             Stage stage = new Stage();
@@ -748,6 +751,7 @@ public class HelloController {
         try {
             parent = fxmlLoader.load();
             Scene scene = new Scene(parent, 321, 400);
+            scene.getStylesheets().add(HelloApplication.class.getResource("aside.css").toExternalForm());
             ShowEventController showEventController = fxmlLoader.getController();
             showEventController.setUp(userPage.getMainUser().getId());
             Stage stage = new Stage();

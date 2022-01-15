@@ -100,6 +100,8 @@ public class LoginController {
         try {
             parent = fxmlLoader.load();
             Scene scene = new Scene(parent, 320, 400);
+            scene.getStylesheets().add(HelloApplication.class.getResource("aside.css")
+                    .toExternalForm());
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.close();
             stage.setTitle("Sign Up");

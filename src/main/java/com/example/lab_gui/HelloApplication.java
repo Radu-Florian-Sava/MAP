@@ -26,6 +26,7 @@ public class HelloApplication extends Application {
         Scene scene;
         try {
             scene = new Scene(fxmlLoader.load(), 320, 400);
+            scene.getStylesheets().add(HelloApplication.class.getResource("aside.css").toExternalForm());
             //makes all windows related to this application to use the same icon
             // given by the relative path
             Window.getWindows().addListener((ListChangeListener<Window>) c -> {

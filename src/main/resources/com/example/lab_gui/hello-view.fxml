@@ -33,8 +33,8 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextField fx:id="firstNameFilter" onKeyPressed="#filterFirstName" />
-                        <TextField fx:id="surnameFilter" onKeyPressed="#filterSurname" GridPane.columnIndex="1" />
+                        <TextField fx:id="firstNameFilter" onKeyPressed="#filterFirstName" promptText="Search by First Name" />
+                        <TextField fx:id="surnameFilter" onKeyPressed="#filterSurname" promptText="Search by Surname" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <AnchorPane />
@@ -209,7 +209,7 @@
                                     </AnchorPane>
                                     <AnchorPane HBox.hgrow="ALWAYS">
                                        <children>
-                                          <TextField fx:id="messageBody" layoutY="-331.0" onKeyPressed="#sendMessageViaEnter" prefHeight="54.4" prefWidth="334.4" style="-fx-background-color: #644ccc; -fx-border-color: midnightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TextField fx:id="messageBody" layoutY="-331.0" onKeyPressed="#sendMessageViaEnter" prefHeight="54.4" prefWidth="334.4" promptText="Type your message here" style="-fx-background-color: #644ccc; -fx-text-fill: cyan; -fx-border-color: midnightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <effect>
                                                 <InnerShadow />
                                              </effect>
