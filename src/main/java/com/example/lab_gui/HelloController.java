@@ -7,23 +7,29 @@ import Exceptions.RepoException;
 import Exceptions.ValidateException;
 import Utils.Constants;
 import Utils.StatusFriendship;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  *  controller of the main window
@@ -40,6 +46,9 @@ public class HelloController {
 
     @FXML
     public Spinner<Integer> pageSpinner;
+
+    @FXML
+    public Label updatingTextLabel;
 
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
@@ -60,6 +69,9 @@ public class HelloController {
 
     @FXML
     private TextField messageBody;
+
+    ContextMenu messageContextMenu = new ContextMenu();
+    MenuItem deleteMessage = new MenuItem("Delete Message");
 
     // all users
     @FXML
@@ -121,6 +133,26 @@ public class HelloController {
             alert.setContentText(e.getMessage());
             alert.show();
         }
+        Runnable runnable =  () -> {
+            while(true){
+                try {
+                    Thread.sleep(Constants.MILLISECONDS_IN_A_MINUTE);
+                    Platform.runLater(()->
+                            updatingTextLabel.setText(Constants.TIPS[new Random().nextInt(Constants.TIPS.length)])
+                    );
+                    Thread.sleep(Constants.MILLISECONDS_IN_A_MINUTE);
+                } catch (InterruptedException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText(e.getMessage());
+                    alert.show();
+                }
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
+        thread.start();
+
     }
 
     private void loadFriends() {
@@ -248,6 +280,24 @@ public class HelloController {
         hiddenSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));
 
         messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().toString()));
+
+        deleteMessage.setOnAction((ActionEvent e) -> {
+            int idToRemove = messageTable.getSelectionModel().getSelectedItem().getId();
+            try {
+                controller.deleteMessage(idToRemove);
+                if(userPage.getIdToReply()==idToRemove){
+                    userPage.setIdToReply(Constants.NO_MESSAGE_ID);
+                    sendMessageButton.setText("Send \nMessage");
+                }
+                loadMessages();
+            } catch (SQLException | RepoException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText(ex.getMessage());
+                alert.show();
+            }
+        });
+        messageContextMenu.getItems().addAll(deleteMessage);
     }
 
     @FXML
@@ -587,13 +637,14 @@ public class HelloController {
 
     @FXML
     public void selectReply() {
+        messageContextMenu.hide();
         if(userPage.getIdToReply()==Constants.NO_MESSAGE_ID
                 && messageTable.getSelectionModel().getSelectedItem() != null)
         {
             userPage.setIdToReply(messageTable.getSelectionModel().getSelectedItem().getId());
             sendMessageButton.setText("Send \nReply");
         }
-        else{
+        else {
             userPage.setIdToReply(Constants.NO_MESSAGE_ID);
             sendMessageButton.setText("Send \nMessage");
         }
@@ -653,5 +704,10 @@ public class HelloController {
     public void changeMessagePage() {
         userPage.setPageNumber(pageSpinner.getValue());
         loadMessages();
+    }
+
+    @FXML
+    public void openMouseContextMenu(ContextMenuEvent contextMenuEvent) {
+        messageContextMenu.show(messageTable,contextMenuEvent.getScreenX(),contextMenuEvent.getScreenY());
     }
 }
