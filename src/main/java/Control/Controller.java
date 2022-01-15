@@ -1051,13 +1051,14 @@ public class Controller {
     }
 
     /**
-     * @param id_user
-     * @param message
-     * @param id_reply
-     * @throws ValidateException
-     * @throws BusinessException
-     * @throws SQLException
-     * @throws RepoException
+     * Reply to all your friends with a message
+     * @param id_user the user who will send the message with that id
+     * @param message the message
+     * @param id_reply the reply id's who will be sent along the message and user
+     * @throws ValidateException if the message validator finds something wrong
+     * @throws BusinessException if the message service finds something wrong
+     * @throws SQLException error from database
+     * @throws RepoException if the repo for messages finds something wrong
      */
     public void replyAll(int id_user, String message, int id_reply) throws ValidateException, BusinessException, SQLException, RepoException {
         ArrayList<Object> params = new ArrayList<>();
